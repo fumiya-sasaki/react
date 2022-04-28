@@ -5,7 +5,6 @@ import "./App.css";
 import Home from "./components/Home";
 
 function App() {
-  const firestoreInstance = getFirestore(useFirebaseApp());
   return (
     <div>
       <h1>Bitcoin Price!!!!</h1>
