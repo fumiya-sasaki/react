@@ -1,45 +1,27 @@
 import { Box, Button, Typography } from "@mui/material";
 import {
   collection,
-  DocumentData,
   getDocs,
   Timestamp,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { increment } from "../slices/counterSlice";
+import { getData, RecipeData } from "../slices/recipe";
 import db from "./core/Firebase";
 
 export const Home = () => {
-  type Content = {
-    imageUrls: string[];
-    text: string;
-    title: string;
-  };
+  const count = useAppSelector((state) => state.count);
+  const dispatch = useAppDispatch();
 
-  type Data = {
-    id: number;
-    createdAt: Timestamp;
-    title: string;
-    contents: Content[];
-  };
 
-  const [contents, setContents] = useState<Data[]>([]);
-  // useEffect(() => {
+  const [contents, setContents] = useState<RecipeData[]>([]);
 
-  // },[]);
   const getColecction = async () => {
-    const getDoc = await getDocs(collection(db, "recipes"));
-    let data = [];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: Data = {
-        id: collection.id,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-      };
-      const newContents = [...contents];
-      setContents([...contents, result]);
-    });
+    const result = dispatch(getData());
+    // console.log(result.data);
+      // const newContents = [...contents];
+      // setContents([...contents, result]);
   };
   return (
     <Box className="App">
