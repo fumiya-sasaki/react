@@ -7,10 +7,7 @@ import { store } from "./slices/store";
 function App() {
   return (
     <Provider store={store}>
-    <div>
-      <h1>Bitcoin Price!!!!</h1>
       <Home />
-    </div>
     </Provider>
   );
 }

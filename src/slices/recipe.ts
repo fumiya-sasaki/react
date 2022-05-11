@@ -13,41 +13,38 @@ export type RecipeData = {
   createdAt: Timestamp;
   title: string;
   contents: Content[];
+  conText: string;
+  mainImageUrl: string;
 };
 
-const initialState:RecipeData[] = [];
+const initialState: RecipeData[] = [];
 
-export const getData = createAsyncThunk(
-  'recipe/getData',
-  async (_: void, thunkAPI) => {
-    const getDoc = await getDocs(collection(db, "recipes"));
-    const newState:RecipeData[] = [];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        id: collection.id,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-      };
-      console.log(result);
-      newState.push(result);
-    });
-    return newState;
-  }
-)
-
+export const getData = createAsyncThunk("recipe/getData", async () => {
+  const getDoc = await getDocs(collection(db, "recipes"));
+  const newState: RecipeData[] = [];
+  getDoc.forEach((doc) => {
+    const collection = doc.data();
+    const result: RecipeData = {
+      id: collection.id,
+      createdAt: collection.createdAt,
+      title: collection.title,
+      contents: collection.contents,
+      conText: collection.conText,
+      mainImageUrl: collection.mainImageUrl,
+    };
+    newState.push(result);
+  });
+  return newState;
+});
 
 const slice = createSlice({
-  name:'recipe',
+  name: "recipe",
   initialState,
-  reducers:{},
+  reducers: {},
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(getData.fulfilled, (state, action) => {
-      // Add user to the state array
-      state = action.payload;
-    })
+      return action.payload;
+    });
   },
 });
 

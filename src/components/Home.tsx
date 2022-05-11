@@ -1,42 +1,31 @@
 import { Box, Button, Typography } from "@mui/material";
-import {
-  collection,
-  getDocs,
-  Timestamp,
-} from "firebase/firestore";
-import React, {  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { increment } from "../slices/counterSlice";
 import { getData, RecipeData } from "../slices/recipe";
-import db from "./core/Firebase";
+import { RootState } from "../slices/store";
 
 export const Home = () => {
-  const count = useAppSelector((state) => state.count);
   const dispatch = useAppDispatch();
-
+  const recipe: RecipeData[] = useAppSelector(
+    (state: RootState) => state.recipe
+  );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
 
   const getColecction = async () => {
-    const result = dispatch(getData());
-    // console.log(result.data);
-      // const newContents = [...contents];
-      // setContents([...contents, result]);
+    dispatch(getData());
   };
+  useEffect(() => {
+    setContents(recipe);
+  }, [recipe]);
   return (
     <Box className="App">
       <Button onClick={getColecction}>get</Button>
       {contents.map((item) => (
         <Box key={item.id}>
-          <Typography>{item.id}</Typography>
           <Typography>{item.title}</Typography>
-          {item.contents.map((content, index) => (
-            <Box key={index}>
-              <Typography>{content.text}</Typography>
-              <Typography>{content.title}</Typography>
-              <Typography>{content.imageUrls[0]}</Typography>
-            </Box>
-          ))}
+          <Typography>{item.conText}</Typography>
+          <img src={item.mainImageUrl} alt="" style={{ height: "20%" }} />
         </Box>
       ))}
     </Box>
