@@ -1,6 +1,7 @@
 import { ViewColumn } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getData, RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
@@ -13,33 +14,26 @@ export const Home = () => {
 
   const [contents, setContents] = useState<RecipeData[]>([]);
 
-  const getColecction = async () => {
-    dispatch(getData());
-  };
   useEffect(() => {
     setContents(recipe);
   }, [recipe]);
+  useEffect(() => {
+    dispatch(getData());
+  }, []);
 
-  const containerS = {
-    display: "flex",
-    // flexDirection:"column",
-    alignItems: "center",
-    justifyContent: "center",
-  };
-
-  const titleS = {
-    fontSize: "50px",
-  };
   return (
-    <Box style={containerS}>
-      <Typography style={titleS}>ももこごはん</Typography>
-      <Button onClick={getColecction}>get</Button>
+    <Box style={styles.container}>
+      <Typography style={styles.titleS}>ももこごはん</Typography>
       <Box>
         {contents.map((item) => (
-          <Box key={item.id}>
-            <Typography>{item.title}</Typography>
-            <Typography>{item.conText}</Typography>
-            <img src={item.mainImageUrl} alt="" style={{ height: "20%" }} />
+          <Box key={item.id} style={styles.itemContainer}>
+            <img src={item.mainImageUrl} alt="" style={styles.image} />
+            <Box>
+              <Link to={"/content/"} state={{ title: item.title }}>
+                <Typography style={styles.menuTitle}>{item.title}</Typography>
+              </Link>
+              <Typography>{item.conText}</Typography>
+            </Box>
           </Box>
         ))}
       </Box>
@@ -48,3 +42,27 @@ export const Home = () => {
 };
 
 export default Home;
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  titleS: {
+    fontSize: "50px",
+  },
+  image: {
+    width: "100px",
+    hight: "100px",
+  },
+  itemContainer: {
+    display: "flex",
+    flexDirection: "row" as "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  menuTitle:{
+    alignItems: "flex-start",
+  }
+};
