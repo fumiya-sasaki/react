@@ -1,12 +1,9 @@
-import { ViewColumn } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
-import { doc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getData, RecipeData, setData } from "../slices/recipe";
+import { getData, RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
-import db from "./core/Firebase";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +33,7 @@ export const Home = () => {
               <Link to={"/content/"} state={{ recipeData: item }}>
                 <Typography style={styles.menuTitle}>{item.title}</Typography>
               </Link>
-              <Typography>{item.conText}</Typography>
+              <Typography>{item.introduction}</Typography>
             </Box>
           </Box>
         ))}

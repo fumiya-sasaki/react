@@ -1,25 +1,29 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box,  Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks";
 import { RecipeData } from "../slices/recipe";
-import { RootState } from "../slices/store";
 
 export const Content = () => {
   const location = useLocation();
-  type Recipe = {
+  type RecipeState = {
     recipeData: RecipeData;
   };
 
-  const { recipeData } = location.state as Recipe;
+  const { recipeData } = location.state as RecipeState;
 
   return (
-    <Box className="App">
-      <Typography>{recipeData.title}</Typography>
+    <Box style={styles.container}>
+      <Typography style={styles.title}>{recipeData.title}</Typography>
       <img src={recipeData.mainImageUrl} alt="" style={styles.image} />
       <Box>
         {recipeData.contents!.map((recipe, index) => (
           <Box key={index}>
-            <Typography>{recipe.title}</Typography>
+            <Typography style={styles.contentTitle}>{recipe.title}</Typography>
+            {recipe.imageUrls.map((url, index) => (
+              <Box key={index}>
+                <img src={url} alt="" style={styles.image} />
+              </Box>
+            ))}
+            <Typography>{recipe.text}</Typography>
           </Box>
         ))}
       </Box>
@@ -35,11 +39,13 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
   },
-  titleS: {
-    fontSize: "50px",
+  title: {
+    fontSize: "20px",
+    marginTop:30,
+    marginBottom:30,
   },
   image: {
-    width: "50%",
+    width: "55%",
     hight: "50%",
   },
   itemContainer: {
@@ -48,7 +54,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
   },
-  menuTitle: {
-    alignItems: "flex-start",
+  contentTitle: {
+   marginTop:20,
   },
 };

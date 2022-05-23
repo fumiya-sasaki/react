@@ -1,31 +1,33 @@
-import {
-  Box,
-  Button,
-  TextareaAutosize,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { getData, RecipeData, setData } from "../slices/recipe";
-import { RootState } from "../slices/store";
+import { useAppDispatch } from "../hooks";
+import { getData, setData } from "../slices/recipe";
 
 export const Article = () => {
-  const location = useLocation();
   const [title, setTitle] = useState<string>("");
-  const [conText, setConText] = useState<string>("");
+  const [introduction, setIntroduction] = useState<string>("");
+  const [event, setEvent] = useState<any>();
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getData());
   }, []);
 
   const setRecipeData = () => {
-    dispatch(setData({ title, conText }));
+    dispatch(setData({ title, introduction, event }));
+  };
+
+  const handleChangeImage = (e: any) => {
+    if (e.target.files[0]) {
+      setEvent(e.target.files[0]);
+    }
   };
   return (
     <Box>
       <Button onClick={setRecipeData}>set</Button>
+      <Button fullWidth variant="contained" component="label">
+        プロフィール画像をアップロード
+        <input type="file" hidden onChange={handleChangeImage} />
+      </Button>
       <TextField
         label="Size"
         id="filled-size-small"
@@ -38,7 +40,7 @@ export const Article = () => {
         aria-label="minimum height"
         minRows={3}
         placeholder="Minimum 3 rows"
-        onChange={(e) => setConText(e.target.value)}
+        onChange={(e) => setIntroduction(e.target.value)}
       />
     </Box>
   );
