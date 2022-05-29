@@ -1,11 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  collection,
-  doc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
 import { RootState } from "./store";
 
@@ -15,13 +10,16 @@ export type Content = {
   title: string;
 };
 
-export type RecipeData = {
-  id: number;
-  createdAt: number;
+export type SubmitRecipe = {
   title: string;
   contents: Content[];
   introduction: string;
   mainImageUrl: string;
+};
+
+export type RecipeData = SubmitRecipe & {
+  id: number;
+  createdAt: number;
 };
 
 const initialState: RecipeData[] = [];
@@ -43,45 +41,79 @@ export const getData = createAsyncThunk("recipe/getData", async () => {
   });
   return newState;
 });
+
 export type Test = {
   title: string;
   conText: string;
 };
-export const setData = createAsyncThunk<
-  RecipeData[],
-  { title: string; introduction: string; event: any }
->("recipe/setData", async ({ title, introduction, event }, thunkApi) => {
-  const recipe: RecipeData[] = (thunkApi.getState() as RootState).recipe;
-  const docId = recipe.length > 0 ? recipe[0].id - 1 : 9999999999;
-  const userDocumentRef = doc(db, "recipes", String(docId));
-  const storageRef = ref(storage, "img/" + event.name);
 
-  await uploadBytes(storageRef, event);
+export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
+  "recipe/setData",
+  async (recipeData, thunkApi) => {
+    const recipe: RecipeData[] = (thunkApi.getState() as RootState).recipe;
+    const docId = recipe.length > 0 ? recipe[0].id - 1 : 9999999999;
+    const userDocumentRef = doc(db, "recipes", String(docId));
+    let mainImageUrl = "";
 
-  let mainImageUrl = "";
-  await getDownloadURL(ref(storage, "img")).then((url) => {
-    mainImageUrl = url;
-  });
-  const result: RecipeData = {
-    introduction,
-    createdAt: 100,
-    id: docId,
-    mainImageUrl,
-    title,
-    contents: [
-      {
-        imageUrls: [
-          "https://recipe.r10s.jp/recipe-space/d/strg/ctrl/3/fe3479d2ab7dae055f26ef02291af5eadcf01cfb.86.2.3.2.jpg?interpolation=lanczos-none&fit=around%7C600:600&crop=600:600;*,*",
-        ],
-        text: "調理時間1時間",
-        title: "調理",
-      },
-    ],
-  };
-  const newRecipe = [...recipe, result];
-  await setDoc(userDocumentRef, result);
-  return newRecipe;
-});
+    if (recipeData.mainImageUrl.indexOf("blob") !== -1) {
+      const storageRef = ref(storage, "img/" + docId + "/mainImage");
+      const fetchMainImage = await fetch(recipeData.mainImageUrl);
+      const mainImageBlob = await fetchMainImage.blob();
+      await uploadBytes(storageRef, mainImageBlob);
+      await getDownloadURL(ref(storage, "img/" + docId + "/mainImage")).then(
+        (url) => {
+          mainImageUrl = url;
+        }
+      );
+    } else {
+      mainImageUrl = recipeData.mainImageUrl;
+    }
+
+    for (let index = 0; index < recipeData.contents.length; index++) {
+      for (
+        let imgIndex = 0;
+        imgIndex < recipeData.contents[index].imageUrls.length;
+        imgIndex++
+      ) {
+        if (
+          recipeData.contents[index].imageUrls[imgIndex].indexOf("blob") !== -1
+        ) {
+          const storageRef = ref(
+            storage,
+            "img/" + docId + "/contentImage/" + index + "/" + imgIndex
+          );
+          const fetchContentImage = await fetch(
+            recipeData.contents[index].imageUrls[imgIndex]
+          );
+          const contentImageBlob = await fetchContentImage.blob();
+          await uploadBytes(storageRef, contentImageBlob);
+          await getDownloadURL(
+            ref(
+              storage,
+              "img/" + docId + "/contentImage/" + index + "/" + imgIndex
+            )
+          ).then((url) => {
+            if (url.indexOf("blob") === -1) {
+              recipeData.contents[index].imageUrls[imgIndex] = url;
+            }
+          });
+        }
+      }
+    }
+
+    const result: RecipeData = {
+      introduction: recipeData.introduction,
+      createdAt: 100,
+      id: docId,
+      mainImageUrl,
+      title: recipeData.title,
+      contents: recipeData.contents,
+    };
+    const newRecipe = [...recipe, result];
+    await setDoc(userDocumentRef, result);
+    return newRecipe;
+  }
+);
 
 const slice = createSlice({
   name: "recipe",
