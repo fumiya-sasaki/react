@@ -15,6 +15,7 @@ export type SubmitRecipe = {
   contents: Content[];
   introduction: string;
   mainImageUrl: string;
+  category: string;
 };
 
 export type RecipeData = SubmitRecipe & {
@@ -36,6 +37,7 @@ export const getData = createAsyncThunk("recipe/getData", async () => {
       contents: collection.contents,
       introduction: collection.introduction,
       mainImageUrl: collection.mainImageUrl,
+      category: collection.category,
     };
     newState.push(result);
   });
@@ -108,6 +110,7 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
       mainImageUrl,
       title: recipeData.title,
       contents: recipeData.contents,
+      category: recipeData.category,
     };
     const newRecipe = [...recipe, result];
     await setDoc(userDocumentRef, result);

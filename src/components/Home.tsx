@@ -1,9 +1,15 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { getData, RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
+import Header from "./Header";
+import main from "../images/main.jpg";
+import peperon from "../images/peperon.jpeg";
+import fresh from "../images/pastaFresh.jpeg";
+import pomodoro from "../images/pomodoro.jpeg";
+import Footer from "./Footer";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -19,25 +25,39 @@ export const Home = () => {
 
   useEffect(() => {
     dispatch(getData());
-  }, []);
-
+  }, [dispatch]);
   return (
-    <Box style={styles.container}>
-      <Button onClick={() => console.log(recipe)}>recipe</Button>
-      <Typography style={styles.titleS}>ももこごはん</Typography>
+    <Box sx={styles.container}>
+      <Header />
+      <Box sx={styles.titleBox}>
+        <Typography sx={{ fontWeight: "bold" }}>春野菜特集</Typography>
+      </Box>
+      <Box sx={styles.imageBox}>
+        <Box sx={styles.imageItemF}>
+          <img src={main} alt="" style={styles.image} />
+          <img src={peperon} alt="" style={styles.image} />
+        </Box>
+        <Box sx={styles.imageItemF}>
+          <img src={fresh} alt="" style={styles.image} />
+          <img src={pomodoro} alt="" style={styles.image} />
+        </Box>
+      </Box>
       <Box>
         {contents.map((item) => (
           <Box key={item.id} style={styles.itemContainer}>
             <img src={item.mainImageUrl} alt="" style={styles.image} />
-            <Box>
+            <Box sx={styles.menuBox}>
               <Link to={"/content/"} state={{ recipeData: item }}>
-                <Typography style={styles.menuTitle}>{item.title}</Typography>
+                <Typography sx={styles.menuTitle}>{item.title}</Typography>
               </Link>
-              <Typography>{item.introduction}</Typography>
+              <Typography sx={styles.introduction}>
+                {item.introduction}
+              </Typography>
             </Box>
           </Box>
         ))}
       </Box>
+      <Footer />
     </Box>
   );
 };
@@ -50,20 +70,53 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
   },
-  titleS: {
-    fontSize: "50px",
+  titleBox: {
+    padding: 3,
+    bgcolor: "whitesmoke",
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
-  image: {
-    width: "100px",
-    hight: "100px",
+  imageBox: {
+    display: "flex",
+    flexDirection: "column" as "column",
+    width: "90%",
+    paddingTop: 7,
+    paddingBottom: 5,
   },
-  itemContainer: {
+  imageItemF: {
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "center",
     justifyContent: "center",
   },
-  menuTitle: {
+  image: {
+    width: "25%",
+    hight: "20%",
+  },
+  itemContainer: {
+    display: "flex",
+    flexDirection: "row" as "row",
     alignItems: "flex-start",
+    justifyContent: "flex-start",
+    paddingLeft: 100,
+    paddingTop: 30,
+    width: "95%",
+  },
+  menuBox: {
+    display: "flex",
+    flexDirection: "column" as "column",
+    paddingLeft: 5,
+  },
+  menuTitle: {
+    fontWeight: "bold",
+    color: "dimgray",
+  },
+  introduction: {
+    fontWeight: "lighter",
+    color: "dimgray",
+    paddingTop: 2,
   },
 };
