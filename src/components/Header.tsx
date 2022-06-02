@@ -1,12 +1,23 @@
 import { Box, Button, Typography } from "@mui/material";
+import { useAppDispatch } from "../hooks";
+import { getData, serchCategory } from "../slices/recipe";
 
 export const Header = () => {
+  const dispatch = useAppDispatch();
+
+  const goHome = () => {
+    dispatch(getData());
+  };
+
+  const serch = () => {
+    dispatch(serchCategory({ category: "春料理" }));
+  };
 
   return (
     <Box style={styles.container}>
-      <Typography style={styles.titleS}>ももこごはん</Typography>
-      <Button>ホーム</Button>
-      <Button>レシピ検索</Button>
+      <Typography style={styles.title}>ももこごはん</Typography>
+      <Button onClick={goHome}>ホーム</Button>
+      <Button onClick={serch}>レシピ検索</Button>
       <Button>活動実績</Button>
       <Button>お仕事依頼</Button>
     </Box>
@@ -20,10 +31,10 @@ const styles = {
     flexDirection: "row" as "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingBottom:15,
-    paddingTop:15,
+    paddingBottom: 15,
+    paddingTop: 15,
   },
-  titleS: {
+  title: {
     fontSize: "30px",
   },
   image: {

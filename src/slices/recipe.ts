@@ -1,6 +1,13 @@
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
 import { RootState } from "./store";
 
@@ -44,10 +51,31 @@ export const getData = createAsyncThunk("recipe/getData", async () => {
   return newState;
 });
 
-export type Test = {
-  title: string;
-  conText: string;
-};
+export const serchCategory = createAsyncThunk<
+  RecipeData[],
+  { category: string }
+>("recipe/serchCategory", async ({ category }) => {
+  const recipesRef = collection(db, "recipes");
+  const getDoc = await getDocs(
+    query(recipesRef, where("category", "==", category))
+  );
+
+  const newState: RecipeData[] = [];
+  getDoc.forEach((doc) => {
+    const collection = doc.data();
+    const result: RecipeData = {
+      id: collection.id,
+      createdAt: collection.createdAt,
+      title: collection.title,
+      contents: collection.contents,
+      introduction: collection.introduction,
+      mainImageUrl: collection.mainImageUrl,
+      category: collection.category,
+    };
+    newState.push(result);
+  });
+  return newState;
+});
 
 export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
   "recipe/setData",
@@ -128,6 +156,9 @@ const slice = createSlice({
         return action.payload;
       })
       .addCase(setData.fulfilled, (state, action) => {
+        return action.payload;
+      })
+      .addCase(serchCategory.fulfilled, (state, action) => {
         return action.payload;
       });
   },

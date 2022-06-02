@@ -1,7 +1,9 @@
-import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../hooks";
 import { Content, getData, setData, SubmitRecipe } from "../slices/recipe";
+import ContentForm from "./fromParts/ContentForm";
+import Preview from "./fromParts/Preview";
 import TopForm from "./fromParts/TopForm";
 
 export const Article = () => {
@@ -71,96 +73,56 @@ export const Article = () => {
   };
 
   return (
-    <Box sx={styles.container}>
-      <TopForm
+    <Box sx={styles.containerWrap}>
+      <Box sx={styles.container}>
+        <TopForm
+          title={title}
+          introduction={introduction}
+          mainImageUrl={mainImageUrl}
+          setTitle={setTitle}
+          setIntroduction={setIntroduction}
+          setMainImage={setMainImage}
+        />
+        <ContentForm
+          recipeContents={recipeContents}
+          onChangeTitle={onChangeTitle}
+          onChangeText={onChangeText}
+          onChangeContentImage={onChangeContentImage}
+          deleteForm={deleteForm}
+        />
+        <Button variant="contained" sx={styles.button} onClick={addForm}>
+          追加
+        </Button>
+        <Button variant="contained" onClick={setRecipeData}>
+          レシピ追加
+        </Button>
+      </Box>
+      <Preview
         title={title}
         introduction={introduction}
+        recipeContents={recipeContents}
         mainImageUrl={mainImageUrl}
-        setTitle={setTitle}
-        setIntroduction={setIntroduction}
-        setMainImage={setMainImage}
       />
-      {recipeContents?.map((content, index) => (
-        <Box key={index} style={styles.itemContainer}>
-          <TextField
-            label="Size"
-            value={content.title}
-            variant="filled"
-            fullWidth
-            onChange={(e) => onChangeTitle(e.target.value, index)}
-          />
-          <TextareaAutosize
-            minRows={10}
-            style={styles.textArea}
-            onChange={(e) => onChangeText(e.target.value, index)}
-            value={content.text}
-          />
-          <Button variant="contained" sx={styles.button} component="label">
-            画像追加
-            <input
-              type="file"
-              hidden
-              onChange={(e) => onChangeContentImage(e, index)}
-            />
-          </Button>
-          {content.imageUrls.map((url, imgIndex) => (
-            <Box key={imgIndex}>
-              <img src={url} alt="" style={styles.image} />
-            </Box>
-          ))}
-          <Button variant="contained" onClick={() => deleteForm(index)}>
-            削除
-          </Button>
-        </Box>
-      ))}
-      <Button variant="contained" sx={styles.button} onClick={addForm}>
-        追加
-      </Button>
-      <Button variant="contained" onClick={setRecipeData}>
-        レシピ追加
-      </Button>
     </Box>
   );
 };
 
 export default Article;
 const styles = {
+  containerWrap: {
+    display: "flex",
+    flexDirection: "row" as "row",
+    alignItems: "flex-start",
+    // justifyContent: "center",
+    // paddingLeft: 5,
+  },
   container: {
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "flex-start",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     paddingLeft: 5,
-  },
-  contentContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "flex-start",
-    width: "40%",
-    paddingTop: 20,
-  },
-  titleS: {
-    fontSize: "50px",
-  },
-  textArea: {
-    marginTop: 20,
-    marginBottom: 20,
-    width: "100%",
-  },
-  image: {
     width: "50%",
-    hight: "50%",
-  },
-  itemContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "flex-start",
-    width: "40%",
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  menuTitle: {
-    alignItems: "flex-start",
   },
   button: {
     marginBottom: 3,

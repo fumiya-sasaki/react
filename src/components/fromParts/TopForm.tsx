@@ -1,17 +1,20 @@
 import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
 
 type TopForm = {
-  title:string,
-  introduction:string,
-  mainImageUrl:string,
-  setTitle:React.Dispatch<React.SetStateAction<string>>,
-  setIntroduction:React.Dispatch<React.SetStateAction<string>>,
-  setMainImage:React.Dispatch<React.SetStateAction<string>>,
-}
+  title: string;
+  introduction: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  setIntroduction: React.Dispatch<React.SetStateAction<string>>;
+  setMainImage: React.Dispatch<React.SetStateAction<string>>;
+};
 
-export const TopForm:React.FC<TopForm> = ({title,introduction,mainImageUrl,setTitle,setIntroduction,setMainImage}) => {
-
+export const TopForm: React.FC<TopForm> = ({
+  title,
+  introduction,
+  setTitle,
+  setIntroduction,
+  setMainImage,
+}) => {
   const onChangeMainImage = (e: any) => {
     if (e.target.files[0]) {
       setMainImage(URL.createObjectURL(e.target.files[0]));
@@ -38,9 +41,6 @@ export const TopForm:React.FC<TopForm> = ({title,introduction,mainImageUrl,setTi
         main画像をアップロード
         <input type="file" hidden onChange={(e) => onChangeMainImage(e)} />
       </Button>
-      <Box>
-        <img src={mainImageUrl} alt="" style={styles.image} />
-      </Box>
     </Box>
   );
 };
@@ -58,7 +58,7 @@ const styles = {
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "flex-start",
-    width: "40%",
+    width: "90%",
     paddingTop: 20,
   },
   titleS: {

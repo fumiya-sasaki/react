@@ -30,7 +30,7 @@ export const Home = () => {
     <Box sx={styles.container}>
       <Header />
       <Box sx={styles.titleBox}>
-        <Typography sx={{ fontWeight: "bold" }}>春野菜特集</Typography>
+        <Typography sx={{ fontWeight: "bold" }}>Topページ</Typography>
       </Box>
       <Box sx={styles.imageBox}>
         <Box sx={styles.imageItemF}>
