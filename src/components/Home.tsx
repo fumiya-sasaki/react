@@ -1,8 +1,8 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Pagination, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getData, RecipeData } from "../slices/recipe";
+import { getData, RecipeData, serchString } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import main from "../images/main.jpg";
@@ -10,22 +10,45 @@ import peperon from "../images/peperon.jpeg";
 import fresh from "../images/pastaFresh.jpeg";
 import pomodoro from "../images/pomodoro.jpeg";
 import Footer from "./Footer";
+import ReactPaginate from "react-paginate";
+import { getRecipeData } from "../slices/screen/homeScreen";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
   const recipe: RecipeData[] = useAppSelector(
     (state: RootState) => state.recipe
   );
+  const screen: RecipeData[] = useAppSelector(
+    (state: RootState) => state.homeScreen
+  );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [tag, setTag] = useState<string>("");
 
-  useEffect(() => {
-    setContents(recipe);
-  }, [recipe]);
+  const serch = () => {
+    dispatch(serchString({ tag }));
+  };
 
   useEffect(() => {
     dispatch(getData());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getRecipeData({ recipe, pageNumber }));
+  }, [recipe]);
+
+  useEffect(() => {
+    setContents(screen);
+  }, [screen]);
+
+  const handlePaginate = (
+    event: React.ChangeEvent<unknown>,
+    pageNumber: number
+  ) => {
+    dispatch(getRecipeData({ recipe, pageNumber }));
+  };
+
   return (
     <Box sx={styles.container}>
       <Header />
@@ -56,7 +79,17 @@ export const Home = () => {
             </Box>
           </Box>
         ))}
+        <Pagination count={10} color="primary" onChange={handlePaginate} />
       </Box>
+      <TextField
+        label="カテゴリー"
+        value={tag}
+        variant="filled"
+        fullWidth
+        // style={styles.category}
+        onChange={(e) => setTag(e.target.value)}
+      />
+      <Button onClick={serch}>test</Button>
       <Footer />
     </Box>
   );

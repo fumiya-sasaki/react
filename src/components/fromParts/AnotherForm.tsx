@@ -1,51 +1,40 @@
 import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
 
-type TopForm = {
-  title: string;
-  introduction: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  setIntroduction: React.Dispatch<React.SetStateAction<string>>;
-  setMainImage: React.Dispatch<React.SetStateAction<string>>;
+type AnotherForm = {
+  tags: string;
+  category: string;
+  setTags: React.Dispatch<React.SetStateAction<string>>;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const TopForm: React.FC<TopForm> = ({
-  title,
-  introduction,
-  setTitle,
-  setIntroduction,
-  setMainImage,
+export const AnotherForm: React.FC<AnotherForm> = ({
+  tags,
+  category,
+  setTags,
+  setCategory,
 }) => {
-  const onChangeMainImage = (e: any) => {
-    if (e.target.files[0]) {
-      setMainImage(URL.createObjectURL(e.target.files[0]));
-    }
-  };
-
   return (
     <Box style={styles.contentContainer}>
       <TextField
-        label="タイトル"
-        value={title}
+        label="カテゴリー"
+        value={category}
         variant="filled"
         fullWidth
-        onChange={(e) => setTitle(e.target.value)}
+        style={styles.category}
+        onChange={(e) => setCategory(e.target.value)}
       />
       <TextareaAutosize
         minRows={10}
         style={styles.textArea}
-        onChange={(e) => setIntroduction(e.target.value)}
-        placeholder="レシピの説明文"
-        value={introduction}
+        onChange={(e) => setTags(e.target.value)}
+        placeholder="タグ"
+        value={tags}
       />
-      <Button variant="contained" component="label">
-        main画像をアップロード
-        <input type="file" hidden onChange={(e) => onChangeMainImage(e)} />
-      </Button>
     </Box>
   );
 };
 
-export default TopForm;
+export default AnotherForm;
 const styles = {
   container: {
     display: "flex",

@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { count } from "./counterSlice";
+import { category } from "./category";
 import { recipe } from "./recipe";
+import { homeScreen } from "./screen/homeScreen";
 
 const reducer = combineReducers({
-  count,
+  category,
   recipe,
+  homeScreen,
 });
 
 export const store = configureStore({

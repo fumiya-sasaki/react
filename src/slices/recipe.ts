@@ -4,11 +4,13 @@ import {
   collection,
   doc,
   getDocs,
+  limit,
   query,
   setDoc,
   where,
 } from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
+import { Category } from "./category";
 import { RootState } from "./store";
 
 export type Content = {
@@ -23,6 +25,7 @@ export type SubmitRecipe = {
   introduction: string;
   mainImageUrl: string;
   category: string;
+  tags: string[];
 };
 
 export type RecipeData = SubmitRecipe & {
@@ -33,7 +36,7 @@ export type RecipeData = SubmitRecipe & {
 const initialState: RecipeData[] = [];
 
 export const getData = createAsyncThunk("recipe/getData", async () => {
-  const getDoc = await getDocs(collection(db, "recipes"));
+  const getDoc = await getDocs(query(collection(db, "recipes"), limit(10)));
   const newState: RecipeData[] = [];
   getDoc.forEach((doc) => {
     const collection = doc.data();
@@ -45,6 +48,7 @@ export const getData = createAsyncThunk("recipe/getData", async () => {
       introduction: collection.introduction,
       mainImageUrl: collection.mainImageUrl,
       category: collection.category,
+      tags: collection.tags,
     };
     newState.push(result);
   });
@@ -71,18 +75,48 @@ export const serchCategory = createAsyncThunk<
       introduction: collection.introduction,
       mainImageUrl: collection.mainImageUrl,
       category: collection.category,
+      tags: collection.tags,
     };
     newState.push(result);
   });
   return newState;
 });
 
+export const serchString = createAsyncThunk<RecipeData[], { tag: string }>(
+  "recipe/serchString",
+  async ({ tag }) => {
+    const recipesRef = collection(db, "recipes");
+    const getDoc = await getDocs(
+      query(recipesRef, where("tags", "array-contains", tag))
+    );
+    const newState: RecipeData[] = [];
+    getDoc.forEach((doc) => {
+      const collection = doc.data();
+      const result: RecipeData = {
+        id: collection.id,
+        createdAt: collection.createdAt,
+        title: collection.title,
+        contents: collection.contents,
+        introduction: collection.introduction,
+        mainImageUrl: collection.mainImageUrl,
+        category: collection.category,
+        tags: collection.tags,
+      };
+      newState.push(result);
+    });
+    return newState;
+  }
+);
+
 export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
   "recipe/setData",
   async (recipeData, thunkApi) => {
     const recipe: RecipeData[] = (thunkApi.getState() as RootState).recipe;
+    const category: string[] = (thunkApi.getState() as RootState).category
+      .category;
     const docId = recipe.length > 0 ? recipe[0].id - 1 : 9999999999;
-    const userDocumentRef = doc(db, "recipes", String(docId));
+    const recipeDocumentRef = doc(db, "recipes", String(docId));
+    const categoryDocumentRef = doc(db, "category", "selectCategory");
     let mainImageUrl = "";
 
     if (recipeData.mainImageUrl.indexOf("blob") !== -1) {
@@ -139,12 +173,44 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
       title: recipeData.title,
       contents: recipeData.contents,
       category: recipeData.category,
+      tags: recipeData.tags,
     };
     const newRecipe = [...recipe, result];
-    await setDoc(userDocumentRef, result);
+    const newCategory = Array.from(new Set([...category, recipeData.category]));
+    await Promise.all([
+      setDoc(recipeDocumentRef, result),
+      setDoc(categoryDocumentRef, { category: newCategory }),
+    ]);
     return newRecipe;
   }
 );
+
+export const kwSerchRecipe = createAsyncThunk<
+  RecipeData[],
+  { category: string }
+>("recipe/kwSerchRecipe", async ({ category }) => {
+  const recipesRef = collection(db, "recipes");
+  const getDoc = await getDocs(
+    query(recipesRef, where("category", "==", category))
+  );
+
+  const newState: RecipeData[] = [];
+  getDoc.forEach((doc) => {
+    const collection = doc.data();
+    const result: RecipeData = {
+      id: collection.id,
+      createdAt: collection.createdAt,
+      title: collection.title,
+      contents: collection.contents,
+      introduction: collection.introduction,
+      mainImageUrl: collection.mainImageUrl,
+      category: collection.category,
+      tags: collection.tags,
+    };
+    newState.push(result);
+  });
+  return newState;
+});
 
 const slice = createSlice({
   name: "recipe",
@@ -159,6 +225,9 @@ const slice = createSlice({
         return action.payload;
       })
       .addCase(serchCategory.fulfilled, (state, action) => {
+        return action.payload;
+      })
+      .addCase(serchString.fulfilled, (state, action) => {
         return action.payload;
       });
   },

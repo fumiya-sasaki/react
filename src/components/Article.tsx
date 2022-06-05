@@ -2,6 +2,7 @@ import { Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../hooks";
 import { Content, getData, setData, SubmitRecipe } from "../slices/recipe";
+import AnotherForm from "./fromParts/AnotherForm";
 import ContentForm from "./fromParts/ContentForm";
 import Preview from "./fromParts/Preview";
 import TopForm from "./fromParts/TopForm";
@@ -11,6 +12,7 @@ export const Article = () => {
   const [introduction, setIntroduction] = useState<string>("");
   const [mainImageUrl, setMainImage] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const [tags, setTags] = useState<string>("");
   const [recipeContents, setRecipeContents] = useState<Content[]>([
     {
       imageUrls: [],
@@ -20,16 +22,18 @@ export const Article = () => {
   ]);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getData());
+    // dispatch(getData());
   }, [dispatch]);
 
   const setRecipeData = () => {
+    const newTags = tags.split("#");
     const newRecipeData: SubmitRecipe = {
       title,
       mainImageUrl,
       introduction,
       contents: recipeContents,
       category,
+      tags: newTags,
     };
     dispatch(setData(newRecipeData));
   };
@@ -56,7 +60,6 @@ export const Article = () => {
 
   const deleteForm = (index: number) => {
     const newRecipeContents: Content[] = recipeContents.splice(index + 1, 1);
-    console.log(newRecipeContents);
     setRecipeContents(newRecipeContents);
   };
 
@@ -93,6 +96,12 @@ export const Article = () => {
         <Button variant="contained" sx={styles.button} onClick={addForm}>
           追加
         </Button>
+        <AnotherForm
+          category={category}
+          setCategory={setCategory}
+          tags={tags}
+          setTags={setTags}
+        />
         <Button variant="contained" onClick={setRecipeData}>
           レシピ追加
         </Button>
