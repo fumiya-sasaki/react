@@ -36,7 +36,7 @@ export type RecipeData = SubmitRecipe & {
 const initialState: RecipeData[] = [];
 
 export const getData = createAsyncThunk("recipe/getData", async () => {
-  const getDoc = await getDocs(query(collection(db, "recipes"), limit(10)));
+  const getDoc = await getDocs(query(collection(db, "recipes"), limit(9)));
   const newState: RecipeData[] = [];
   getDoc.forEach((doc) => {
     const collection = doc.data();
