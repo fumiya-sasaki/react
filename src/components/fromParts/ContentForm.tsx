@@ -1,7 +1,7 @@
 import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
 import { Content } from "../../slices/recipe";
 
-type ContentForm = {
+type ContentFormState = {
   recipeContents: Content[];
   onChangeTitle: (value: string, index: number) => void;
   onChangeText: (value: string, index: number) => void;
@@ -9,7 +9,7 @@ type ContentForm = {
   deleteForm: (index: number) => void;
 };
 
-export const ContentForm: React.FC<ContentForm> = ({
+export const ContentForm: React.FC<ContentFormState> = ({
   recipeContents,
   onChangeTitle,
   onChangeText,

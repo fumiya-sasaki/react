@@ -1,33 +1,39 @@
 import { Box, Button } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
-import { Content, getData, setData, SubmitRecipe } from "../slices/recipe";
+import {
+  Content,
+  RecipeData,
+  setData,
+  SubmitRecipe,
+} from "../slices/recipe";
 import AnotherForm from "./fromParts/AnotherForm";
 import ContentForm from "./fromParts/ContentForm";
 import Preview from "./fromParts/Preview";
 import TopForm from "./fromParts/TopForm";
 
 export const Article = () => {
-  const [title, setTitle] = useState<string>("");
-  const [introduction, setIntroduction] = useState<string>("");
-  const [mainImageUrl, setMainImage] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [tags, setTags] = useState<string>("");
-  const [recipeContents, setRecipeContents] = useState<Content[]>([
-    {
-      imageUrls: [],
-      text: "",
-      title: "",
-    },
-  ]);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    // dispatch(getData());
-  }, [dispatch]);
+  const location = useLocation();
+  type RecipeState = {
+    recipeData: RecipeData;
+  };
 
-  const setRecipeData = () => {
-    const newTags = tags.split("#");
+  const { recipeData } = location.state as RecipeState;
+  const [title, setTitle] = useState<string>(!recipeData.newArticle ? recipeData.title : "");
+  const [introduction, setIntroduction] = useState<string>(!recipeData.newArticle ? recipeData.introduction : "");
+  const [mainImageUrl, setMainImage] = useState<string>(!recipeData.newArticle ? recipeData.mainImageUrl : "");
+  const [category, setCategory] = useState<string>(!recipeData.newArticle ? recipeData.category : "");
+  const [tags, setTags] = useState<string>(!recipeData.newArticle ? "#" + recipeData.tags.join("#") : "");
+  const [recipeContents, setRecipeContents] = useState<Content[]>(!recipeData.newArticle ? recipeData.contents
+    : [{ imageUrls: [], text: "", title: "", },]);
+
+  const dispatch = useAppDispatch();
+
+  const submitRecipeData = () => {
+    const newTags: string[] = tags.split("#");
     const newRecipeData: SubmitRecipe = {
+      id: !recipeData.newArticle ? recipeData.id : 0,
       title,
       mainImageUrl,
       introduction,
@@ -41,9 +47,7 @@ export const Article = () => {
   const onChangeContentImage = async (e: any, index: number) => {
     if (e.target.files[0]) {
       const newRecipeContents: Content[] = [...recipeContents];
-      newRecipeContents[index].imageUrls[
-        newRecipeContents[index].imageUrls.length
-      ] = URL.createObjectURL(e.target.files[0]);
+      newRecipeContents[index].imageUrls.push(URL.createObjectURL(e.target.files[0]));
       setRecipeContents(newRecipeContents);
     }
   };
@@ -60,6 +64,12 @@ export const Article = () => {
 
   const deleteForm = (index: number) => {
     const newRecipeContents: Content[] = recipeContents.splice(index + 1, 1);
+    setRecipeContents(newRecipeContents);
+  };
+
+  const deleteContentImg = (index: number, imgIndex: number) => {
+    const newRecipeContents: Content[] = [...recipeContents];
+    newRecipeContents[index].imageUrls = recipeContents[index].imageUrls.splice(imgIndex + 1, 1);
     setRecipeContents(newRecipeContents);
   };
 
@@ -102,15 +112,14 @@ export const Article = () => {
           tags={tags}
           setTags={setTags}
         />
-        <Button variant="contained" onClick={setRecipeData}>
-          レシピ追加
-        </Button>
+        <Button variant="contained" onClick={submitRecipeData}>レシピ追加</Button>
       </Box>
       <Preview
         title={title}
         introduction={introduction}
         recipeContents={recipeContents}
         mainImageUrl={mainImageUrl}
+        deleteContentImg={deleteContentImg}
       />
     </Box>
   );

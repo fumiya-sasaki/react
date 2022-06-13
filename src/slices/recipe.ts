@@ -10,7 +10,6 @@ import {
   where,
 } from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
-import { Category } from "./category";
 import { RootState } from "./store";
 
 export type Content = {
@@ -20,6 +19,7 @@ export type Content = {
 };
 
 export type SubmitRecipe = {
+  id: number;
   title: string;
   contents: Content[];
   introduction: string;
@@ -29,9 +29,21 @@ export type SubmitRecipe = {
 };
 
 export type RecipeData = SubmitRecipe & {
-  id: number;
   createdAt: number;
+  newArticle?: boolean;
 };
+
+export const initialData = {
+  id: 0,
+  createdAt: 0,
+  title: "",
+  contents: { imageUrls: [], text: "", title: "" },
+  introduction: "",
+  mainImageUrl: "",
+  category: "",
+  tags: [],
+  newArticle: true,
+}
 
 const initialState: RecipeData[] = [];
 
@@ -112,9 +124,9 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
   "recipe/setData",
   async (recipeData, thunkApi) => {
     const recipe: RecipeData[] = (thunkApi.getState() as RootState).recipe;
-    const category: string[] = (thunkApi.getState() as RootState).category
-      .category;
-    const docId = recipe.length > 0 ? recipe[0].id - 1 : 9999999999;
+    const category: string[] = (thunkApi.getState() as RootState).category.category;
+    const docId = recipeData.id !== 0 ? recipeData.id : recipe.length > 0 ? recipe[0].id - 1 : 9999999999;
+
     const recipeDocumentRef = doc(db, "recipes", String(docId));
     const categoryDocumentRef = doc(db, "category", "selectCategory");
     let mainImageUrl = "";
@@ -127,8 +139,7 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
       await getDownloadURL(ref(storage, "img/" + docId + "/mainImage")).then(
         (url) => {
           mainImageUrl = url;
-        }
-      );
+        });
     } else {
       mainImageUrl = recipeData.mainImageUrl;
     }
@@ -177,6 +188,7 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
     };
     const newRecipe = [...recipe, result];
     const newCategory = Array.from(new Set([...category, recipeData.category]));
+    console.log(docId);
     await Promise.all([
       setDoc(recipeDocumentRef, result),
       setDoc(categoryDocumentRef, { category: newCategory }),

@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { create } from "domain";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RecipeData } from "../recipe";
 
 const initialState: RecipeData[] = [];
@@ -16,7 +14,7 @@ export const getRecipeData = createAsyncThunk<
   return newState;
 });
 
-export const counterSlice = createSlice({
+export const slice = createSlice({
   name: "homeScreen",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
@@ -33,4 +31,4 @@ export const counterSlice = createSlice({
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => state.counter.value
 
-export const homeScreen = counterSlice.reducer;
+export const homeScreen = slice.reducer;

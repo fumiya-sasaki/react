@@ -1,18 +1,20 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Content } from "../../slices/recipe";
 
-type Preview = {
+type PreviewState = {
   title: string;
   introduction: string;
   recipeContents: Content[];
   mainImageUrl: string;
+  deleteContentImg: (index: number, imgIndex: number) => void;
 };
 
-export const Preview: React.FC<Preview> = ({
+export const Preview: React.FC<PreviewState> = ({
   title,
   introduction,
   recipeContents,
   mainImageUrl,
+  deleteContentImg,
 }) => {
   return (
     <Box style={styles.container}>
@@ -23,9 +25,12 @@ export const Preview: React.FC<Preview> = ({
         {recipeContents.map((recipe, index) => (
           <Box key={index}>
             <Typography style={styles.contentTitle}>{recipe.title}</Typography>
-            {recipe.imageUrls.map((url, index) => (
-              <Box key={index}>
+            {recipe.imageUrls.map((url, imgIndex) => (
+              <Box key={imgIndex}>
                 <img src={url} alt="" style={styles.contentImage} />
+                {url !== "" &&
+                  <Button onClick={() => deleteContentImg(index, imgIndex)}>画像削除</Button>
+                }
               </Box>
             ))}
             <Typography>{recipe.text}</Typography>
