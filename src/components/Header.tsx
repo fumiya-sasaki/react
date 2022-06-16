@@ -17,11 +17,11 @@ import { Category, getCategory } from "../slices/category";
 import { getData, serchCategory, serchString } from "../slices/recipe";
 import { RootState } from "../slices/store";
 
-type Header = {
-  title?: string;
+type HeaderState = {
+  title: string;
 };
 
-export const Header: React.FC<Header> = ({ title }) => {
+export const Header: React.FC<HeaderState> = ({ title }) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
   const category: Category = useAppSelector(
@@ -45,19 +45,18 @@ export const Header: React.FC<Header> = ({ title }) => {
   const handleChange = (event: SelectChangeEvent) => {
     const category = event.target.value as string;
     setSelectedCategory(category);
-    setTopTitle(category);
     dispatch(serchCategory({ category }));
-    navigation("/serch");
+    navigation("/serch", { state: { title: category } });
   };
 
-  const goHome = () => {
-    navigation("/");
-  };
+  // const goHome = () => {
+  //   navigation("/");
+  // };
   return (
     <>
       <Box style={styles.container}>
         <Typography style={styles.title}>ももこごはん</Typography>
-        <Button onClick={goHome}>ホーム</Button>
+        <Button onClick={() => navigation("/")}>ホーム</Button>
         <FormControl sx={{ width: "100px" }}>
           <InputLabel>カテゴリー検索</InputLabel>
           <Select
@@ -73,7 +72,7 @@ export const Header: React.FC<Header> = ({ title }) => {
           </Select>
         </FormControl>
         <Button>活動実績</Button>
-        <Button>お仕事依頼</Button>
+        <Button onClick={() => navigation("/inquiry")}>お仕事依頼</Button>
       </Box>
       <Box sx={styles.titleBox}>
         <Typography sx={{ fontWeight: "bold" }}>{topTitle}</Typography>

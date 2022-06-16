@@ -7,6 +7,7 @@ import AdminHome from "./components/admin/AdminHome";
 import Article from "./components/Article";
 import Content from "./components/Content";
 import Home from "./components/Home";
+import Inquiry from "./components/Inquiry";
 import Serch from "./components/Serch";
 import { store } from "./slices/store";
 
@@ -22,6 +23,7 @@ function App() {
           <Route path={"admin/article"} element={<Article />} />
           <Route path={"content"} element={<Content />} />
           <Route path={"serch"} element={<Serch />} />
+          <Route path={"inquiry"} element={<Inquiry />} />
         </Routes>
       </Provider>
     </BrowserRouter>

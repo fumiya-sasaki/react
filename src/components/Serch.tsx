@@ -1,18 +1,17 @@
 import { Box, Button, Pagination, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getData, RecipeData, serchString } from "../slices/recipe";
+import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
-import main from "../images/main.jpg";
-import peperon from "../images/peperon.jpeg";
-import fresh from "../images/pastaFresh.jpeg";
-import pomodoro from "../images/pomodoro.jpeg";
 import Footer from "./Footer";
 import { getRecipeData } from "../slices/screen/homeScreen";
 
 export const Serch = () => {
+  const location = useLocation();
+  const { title } = location.state as { title: string };
+
   const dispatch = useAppDispatch();
   const recipe: RecipeData[] = useAppSelector(
     (state: RootState) => state.recipe
@@ -40,7 +39,7 @@ export const Serch = () => {
 
   return (
     <>
-      <Header />
+      <Header title={title} />
       <Box sx={styles.container}>
         <Box sx={styles.contentContainer}>
           {contents.map((item) => (
