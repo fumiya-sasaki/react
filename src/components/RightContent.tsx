@@ -1,23 +1,15 @@
 import {
-  Box,
-  Button,
-  FormControl,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-  Typography,
+  Box, Button, FormControl, IconButton, Input,
+  InputAdornment, InputLabel, Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getData, RecipeData, serchString } from "../slices/recipe";
+import { serchString } from "../slices/recipe";
 import { RootState } from "../slices/store";
-import { getRecipeData } from "../slices/screen/homeScreen";
 import {
-  EmojiFlags,
-  MenuBook,
-  Search,
+  EmojiFlags, Instagram,
+  MenuBook, Search,
 } from "@mui/icons-material";
 import { Category } from "../slices/category";
 
@@ -34,10 +26,7 @@ export const RightContent = () => {
   const serch = (tagItem?: string) => {
     if (tagItem) {
       dispatch(serchString({ tag: tagItem }));
-      navigation("/serch");
-    } else {
-      dispatch(serchString({ tag }));
-      navigation("/serch");
+      navigation("/serch", { state: { title: tagItem } });
     }
   };
 
@@ -67,30 +56,33 @@ export const RightContent = () => {
           />
         </FormControl>
       </Box>
-      <Box>
-        <Box sx={styles.titleBox}>
-          <Box>
-            <Typography sx={{ fontWeight: "bold" }}>
-              <EmojiFlags color={"warning"} />
-            </Typography>
-          </Box>
-          <Typography sx={{ fontWeight: "bold" }}>タグ検索</Typography>
+      {/* <Box> */}
+      <Box sx={styles.titleBox}>
+        <Box>
+          <Typography sx={{ fontWeight: "bold" }}>
+            <EmojiFlags color={"warning"} />
+          </Typography>
         </Box>
-
-        <Box sx={styles.tagBox}>
-          {category.topCategory.map((item) => (
-            <Box key={item} sx={styles.tagItem}>
-              <Button
-                variant="outlined"
-                color={"warning"}
-                onClick={() => serch(item)}
-              >
-                {item}
-              </Button>
-            </Box>
-          ))}
-        </Box>
+        <Typography sx={{ fontWeight: "bold" }}>タグ検索</Typography>
       </Box>
+
+      <Box sx={styles.tagBox}>
+        {category.topCategory.map((item) => (
+          <Box key={item} sx={styles.tagItem}>
+            <Button
+              variant="outlined"
+              color={"warning"}
+              onClick={() => serch(item)}
+            >
+              {item}
+            </Button>
+          </Box>
+        ))}
+      </Box>
+      <IconButton color="primary" aria-label="upload picture" component="span">
+        <a target="_blank" href='https://www.instagram.com/chiacchiere1/'>  <Instagram /></a>
+      </IconButton>
+      {/* </Box> */}
     </>
   );
 };

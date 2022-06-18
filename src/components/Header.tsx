@@ -1,20 +1,13 @@
 import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  SelectChangeEvent,
-  Typography,
+  Box, Button, FormControl, InputLabel,
+  MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { Category, getCategory } from "../slices/category";
-import { getData, serchCategory, serchString } from "../slices/recipe";
+import { serchCategory } from "../slices/recipe";
 import { RootState } from "../slices/store";
 
 type HeaderState = {
@@ -34,7 +27,7 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
   useEffect(() => {
     dispatch(getCategory());
     setCategoris(category.category);
-  }, [category]);
+  }, [category, dispatch]);
 
   useEffect(() => {
     if (title) {
@@ -42,16 +35,13 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
     }
   }, [title]);
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const categorySerch = (event: SelectChangeEvent) => {
     const category = event.target.value as string;
     setSelectedCategory(category);
     dispatch(serchCategory({ category }));
     navigation("/serch", { state: { title: category } });
   };
 
-  // const goHome = () => {
-  //   navigation("/");
-  // };
   return (
     <>
       <Box style={styles.container}>
@@ -61,7 +51,7 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
           <InputLabel>カテゴリー検索</InputLabel>
           <Select
             value={selectedCategory}
-            onChange={handleChange}
+            onChange={categorySerch}
             input={<OutlinedInput label="カテゴリー検索" />}
           >
             {categoris.map((data) => (
@@ -71,7 +61,7 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
             ))}
           </Select>
         </FormControl>
-        <Button>活動実績</Button>
+        <Button onClick={() => navigation("/gallery")}>Instagram Gallery</Button>
         <Button onClick={() => navigation("/inquiry")}>お仕事依頼</Button>
       </Box>
       <Box sx={styles.titleBox}>

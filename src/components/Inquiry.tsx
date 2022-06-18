@@ -1,61 +1,41 @@
 import { Box, Button, Pagination, TextareaAutosize, TextField, Typography } from "@mui/material";
-import React, { FormEvent, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { RecipeData } from "../slices/recipe";
-import { RootState } from "../slices/store";
+import React, { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import { getRecipeData } from "../slices/screen/homeScreen";
 import { init, send } from "emailjs-com";
 import RightContent from "./RightContent";
 
 export const Inquiry = () => {
 
-  const dispatch = useAppDispatch();
-  const recipe: RecipeData[] = useAppSelector(
-    (state: RootState) => state.recipe
-  );
-  const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.homeScreen
-  );
-
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const [fromName, setFromName] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   const onSubmit = async () => {
-    // フォームのデフォルトの動作をキャンセル
-    // e.preventDefault()
-
-    // 必要なIDをそれぞれ環境変数から取得
     const userID = process.env.REACT_APP_USER_ID;
     const serviceID = process.env.REACT_APP_SERVICE_ID;
     const templateID = process.env.REACT_APP_TEMPLATE_ID;
-
-    if (userID && serviceID && templateID) {
-      // emailJS初期化
-      init(userID)
-
-      // emailJS送信データを定義
-      const params = {
-        fromName,
-        email,
-        title,
-        message,
-        phoneNumber,
+    if (name !== "" && email !== "" && message !== "") {
+      if (userID && serviceID && templateID) {
+        init(userID)
+        const params = {
+          name,
+          email,
+          title,
+          message,
+          phoneNumber,
+        }
+        try {
+          await send(serviceID, templateID, params)
+          alert('送信成功')
+        } catch (error) {
+          alert('送信失敗しました。もう一度送信してください。')
+        }
       }
-
-      // emailJS送信
-      try {
-        await send(serviceID, templateID, params)
-        alert('送信成功')
-      } catch (error) {
-        // 送信失敗したらalertで表示
-        console.log(error)
-      }
+    } else {
+      alert('必須項目を入力してもう一度送信ボタンを押してください。')
     }
   }
 
@@ -66,17 +46,10 @@ export const Inquiry = () => {
         <Box sx={styles.leftContainer}>
           <TextField
             label="お名前（必須）"
-            value={fromName}
+            value={name}
             fullWidth
             sx={styles.form}
-            onChange={(e) => setFromName(e.target.value)}
-          />
-          <TextField
-            label="タイトル"
-            value={title}
-            fullWidth
-            sx={styles.form}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
           <TextField
             label="メールアドレス（必須）"
@@ -91,6 +64,13 @@ export const Inquiry = () => {
             fullWidth
             sx={styles.form}
             onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+          <TextField
+            label="タイトル"
+            value={title}
+            fullWidth
+            sx={styles.form}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <TextareaAutosize
             minRows={10}

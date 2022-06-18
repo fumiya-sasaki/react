@@ -6,6 +6,7 @@ import AdminContent from "./components/admin/AdminContent";
 import AdminHome from "./components/admin/AdminHome";
 import Article from "./components/Article";
 import Content from "./components/Content";
+import Gallery from "./components/Gallery";
 import Home from "./components/Home";
 import Inquiry from "./components/Inquiry";
 import Serch from "./components/Serch";
@@ -24,6 +25,7 @@ function App() {
           <Route path={"content"} element={<Content />} />
           <Route path={"serch"} element={<Serch />} />
           <Route path={"inquiry"} element={<Inquiry />} />
+          <Route path={"gallery"} element={<Gallery />} />
         </Routes>
       </Provider>
     </BrowserRouter>
