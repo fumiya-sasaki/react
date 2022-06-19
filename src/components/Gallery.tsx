@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import RightContent from "./RightContent";
+import RightContent from "./RightParts";
 
 const limit = 9;
 export const Gallery = () => {

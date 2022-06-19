@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { init, send } from "emailjs-com";
-import RightContent from "./RightContent";
+import RightContent from "./RightParts";
 
 export const Inquiry = () => {
 

@@ -13,7 +13,7 @@ import Footer from "./Footer";
 import { getRecipeData } from "../slices/screen/homeScreen";
 import { Restaurant } from "@mui/icons-material";
 import { Category } from "../slices/category";
-import RightContent from "./RightContent";
+import RightContent from "./RightParts";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
