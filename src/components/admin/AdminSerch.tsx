@@ -2,9 +2,9 @@ import { Box, Button, Pagination, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getData, RecipeData, serchString } from "../../slices/recipe";
+import { getData, RecipeData } from "../../slices/recipe";
+import { getRecipeData } from "../../slices/screen/serchScreen";
 import { RootState } from "../../slices/store";
-import { getRecipeData } from "../../slices/screen/homeScreen";
 
 export const AdminSerch = () => {
   const dispatch = useAppDispatch();
@@ -12,14 +12,14 @@ export const AdminSerch = () => {
     (state: RootState) => state.recipe
   );
   const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.homeScreen
+    (state: RootState) => state.newArrivalScreen
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  useEffect(() => {
-    dispatch(getRecipeData({ recipe, pageNumber }));
-  }, [recipe]);
+  // useEffect(() => {
+  //   dispatch(getRecipeData({ recipe, pageNumber }));
+  // }, [recipe]);
 
   useEffect(() => {
     setContents(screen);
@@ -29,7 +29,7 @@ export const AdminSerch = () => {
     event: React.ChangeEvent<unknown>,
     pageNumber: number
   ) => {
-    dispatch(getRecipeData({ recipe, pageNumber }));
+    dispatch(getRecipeData({ recipe: screen, pageNumber }));
   };
 
   return (

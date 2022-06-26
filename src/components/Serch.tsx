@@ -1,4 +1,4 @@
-import { Box, Button, Pagination, TextField, Typography } from "@mui/material";
+import { Box, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -6,35 +6,30 @@ import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
-import { getRecipeData } from "../slices/screen/homeScreen";
+import { getRecipeData } from "../slices/screen/serchScreen";
 
 export const Serch = () => {
   const location = useLocation();
   const { title } = location.state as { title: string };
-
-  const dispatch = useAppDispatch();
-  const recipe: RecipeData[] = useAppSelector(
-    (state: RootState) => state.recipe
-  );
-  const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.homeScreen
-  );
-
   const [contents, setContents] = useState<RecipeData[]>([]);
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  useEffect(() => {
-    dispatch(getRecipeData({ recipe, pageNumber }));
-  }, [recipe]);
+  const [totalNumber, setTotalNumber] = useState<number>(1);
+  const dispatch = useAppDispatch();
+  const screen: RecipeData[] = useAppSelector(
+    (state: RootState) => state.serchScreen
+  );
 
   useEffect(() => {
     setContents(screen);
+    if (screen.length > 9) {
+      setTotalNumber(Math.ceil(screen.length));
+    };
   }, [screen]);
 
   const handlePaginate = (
-    event: React.ChangeEvent<unknown>,
+    e: React.ChangeEvent<unknown>,
     pageNumber: number
   ) => {
-    dispatch(getRecipeData({ recipe, pageNumber }));
+    dispatch(getRecipeData({ recipe: screen, pageNumber }));
   };
 
   return (
@@ -53,9 +48,9 @@ export const Serch = () => {
         </Box>
         <Pagination
           sx={styles.pagenate}
-          count={10}
+          count={totalNumber}
           color="primary"
-          onChange={handlePaginate}
+          onChange={(e, pageNumber) => handlePaginate(e, pageNumber)}
         />
       </Box>
       <Footer />

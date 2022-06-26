@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getData, RecipeData } from "../../slices/recipe";
 import { RootState } from "../../slices/store";
-import { getRecipeData } from "../../slices/screen/homeScreen";
 import { Restaurant, } from "@mui/icons-material";
 import AdminRightParts from "./AdminRightParts";
 
@@ -14,7 +13,7 @@ export const AdminHome = () => {
     (state: RootState) => state.recipe
   );
   const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.homeScreen
+    (state: RootState) => state.newArrivalScreen
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
@@ -24,9 +23,9 @@ export const AdminHome = () => {
     dispatch(getData());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getRecipeData({ recipe, pageNumber }));
-  }, [recipe, dispatch]);
+  // useEffect(() => {
+  //   dispatch(getRecipeData({ recipe, pageNumber }));
+  // }, [recipe, dispatch]);
 
   useEffect(() => {
     setContents(screen);

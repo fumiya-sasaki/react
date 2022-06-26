@@ -12,6 +12,7 @@ import Gallery from "./components/Gallery";
 import Home from "./components/Home";
 import Inquiry from "./components/Inquiry";
 import Login from "./components/Login";
+import NewArrival from "./components/NewArrival";
 import Serch from "./components/Serch";
 import { store } from "./slices/store";
 
@@ -27,6 +28,7 @@ function App() {
           <Route path={"admin/article"} element={<PrivateRoute children={<Article />} />} />
           <Route path={"content"} element={<Content />} />
           <Route path={"serch"} element={<Serch />} />
+          <Route path={"newArrival"} element={<NewArrival />} />
           <Route path={"inquiry"} element={<Inquiry />} />
           <Route path={"gallery"} element={<Gallery />} />
           <Route path={"login"} element={<Login />} />

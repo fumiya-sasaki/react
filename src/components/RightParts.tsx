@@ -5,29 +5,27 @@ import {
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { serchString } from "../slices/recipe";
 import { RootState } from "../slices/store";
-import {
-  EmojiFlags, Instagram,
-  MenuBook, Search,
-} from "@mui/icons-material";
+import { EmojiFlags, Instagram, MenuBook, Search } from "@mui/icons-material";
 import { Category } from "../slices/category";
+import { serchString } from "../slices/screen/serchScreen";
 
 export const RightContent = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
-
+  const [tag, setTag] = useState<string>("");
   const category: Category = useAppSelector(
     (state: RootState) => state.category
   );
-
-  const [tag, setTag] = useState<string>("");
 
   const serch = (tagItem?: string) => {
     if (tagItem) {
       dispatch(serchString({ tag: tagItem }));
       navigation("/serch", { state: { title: tagItem } });
-    }
+    } else {
+      dispatch(serchString({ tag }));
+      navigation("/serch", { state: { title: tag } });
+    };
   };
 
   return (

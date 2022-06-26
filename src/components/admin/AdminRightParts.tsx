@@ -5,10 +5,11 @@ import {
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks";
-import { initialData, serchString } from "../../slices/recipe";
+import { initialData } from "../../slices/recipe";
 import { MenuBook, Search } from "@mui/icons-material";
 import { signOut } from "firebase/auth";
 import { auth } from "../core/Firebase";
+import { serchString } from "../../slices/screen/serchScreen";
 
 export const AdminRightParts = () => {
   const dispatch = useAppDispatch();

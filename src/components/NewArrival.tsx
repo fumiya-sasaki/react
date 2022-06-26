@@ -2,51 +2,43 @@ import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { getData, RecipeData } from "../slices/recipe";
+import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
-import main from "../images/main.jpg";
-import peperon from "../images/peperon.jpeg";
-import fresh from "../images/pastaFresh.jpeg";
-import pomodoro from "../images/pomodoro.jpeg";
 import Footer from "./Footer";
+import { nextGetDataScreen } from "../slices/screen/newArrivalScreen";
 import { Restaurant } from "@mui/icons-material";
 import RightContent from "./RightParts";
 
-export const Home = () => {
+export const NewArrival = React.memo(() => {
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
-  const recipe: RecipeData[] = useAppSelector(
-    (state: RootState) => state.recipe
+
+  const screen: RecipeData[] = useAppSelector(
+    (state: RootState) => state.newArrivalScreen
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
 
   useEffect(() => {
-    if (recipe.length === 0) {
-      dispatch(getData());
+    if (screen.length === 0) {
+      dispatch(nextGetDataScreen({}));
     };
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
-    setContents(recipe);
-  }, [recipe]);
+    setContents(screen)
+  }, [screen]);
+
+  const getNext = () => {
+    dispatch(nextGetDataScreen({ endAt: screen[screen.length - 1].createdAt }));
+  };
 
   return (
     <>
       <Header title={"Topページ"} />
       <Box sx={styles.container}>
         <Box sx={styles.leftContainer}>
-          <Box sx={styles.imageBox}>
-            <Box sx={styles.imageItemF}>
-              <img src={main} alt="" style={styles.image} />
-              <img src={peperon} alt="" style={styles.image} />
-            </Box>
-            <Box sx={styles.imageItemF}>
-              <img src={fresh} alt="" style={styles.image} />
-              <img src={pomodoro} alt="" style={styles.image} />
-            </Box>
-          </Box>
           <Box sx={styles.titleBox}>
             <Box>
               <Typography sx={{ fontWeight: "bold" }}>
@@ -65,7 +57,7 @@ export const Home = () => {
               </Box>
             ))}
           </Box>
-          <Button onClick={() => navigation("newArrival")}>new</Button>
+          <Button onClick={getNext}>next</Button>
         </Box>
         <Box sx={styles.rightContainer}>
           <RightContent />
@@ -74,9 +66,9 @@ export const Home = () => {
       <Footer />
     </>
   );
-};
+});
 
-export default Home;
+export default NewArrival;
 const styles = {
   container: {
     display: "flex",

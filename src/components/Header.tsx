@@ -4,10 +4,9 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { Category, getCategory } from "../slices/category";
-import { serchCategory } from "../slices/recipe";
+import { serchCategory } from "../slices/screen/serchScreen";
 import { RootState } from "../slices/store";
 
 type HeaderState = {

@@ -1,12 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { category } from "./category";
 import { recipe } from "./recipe";
-import { homeScreen } from "./screen/homeScreen";
+import { newArrivalScreen } from "./screen/newArrivalScreen";
+import { serchScreen } from "./screen/serchScreen";
 
 const reducer = combineReducers({
   category,
   recipe,
-  homeScreen,
+  newArrivalScreen,
+  serchScreen,
 });
 
 export const store = configureStore({
