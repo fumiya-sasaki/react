@@ -1,5 +1,5 @@
 import { Box, Button, Pagination, TextareaAutosize, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { init, send } from "emailjs-com";
@@ -12,6 +12,7 @@ export const Inquiry = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [isRequired, setIsRequired] = useState<boolean>(true);
 
   const onSubmit = async () => {
     const userID = process.env.REACT_APP_USER_ID;
@@ -37,7 +38,15 @@ export const Inquiry = () => {
     } else {
       alert('必須項目を入力してもう一度送信ボタンを押してください。')
     }
-  }
+  };
+
+  useEffect(() => {
+    if (name !== "" && email !== "" && message !== "") {
+      setIsRequired(false)
+    } else {
+      setIsRequired(true)
+    };
+  }, [name, email, message])
 
   return (
     <>
@@ -79,9 +88,11 @@ export const Inquiry = () => {
             onChange={(e) => setMessage(e.target.value)}
             value={message}
           />
-          <Button variant="contained" component="label" onClick={onSubmit}>
+          {/* <Box sx={styles.buttom}> */}
+          <Button variant="contained" component="label" onClick={onSubmit} sx={styles.buttom} disabled={isRequired}>
             お問い合わせ
           </Button>
+          {/* </Box> */}
         </Box>
         <Box sx={styles.rightContainer}>
           <RightContent />
@@ -107,6 +118,8 @@ const styles = {
     justifyContent: "center",
     width: "70%",
     paddingTop: 5,
+    paddingBottom: 4,
+    // position: "relative",
   },
   titleBox: {
     padding: 3,
@@ -185,5 +198,11 @@ const styles = {
   form: {
     width: "50%",
     paddingBottom: 3,
+  },
+  buttom: {
+    // marginRight: 0,
+    width: "50%",
+    marginTop: 1,
+    marginBottom: 1,
   }
 };

@@ -1,13 +1,9 @@
-import { Box, Button } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useAppDispatch } from "../hooks";
-import {
-  Content,
-  RecipeData,
-  setData,
-  SubmitRecipe,
-} from "../slices/recipe";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../hooks";
+import { setData } from "../../slices/admin";
+import { Content, RecipeData, SubmitRecipe } from "../../slices/recipe";
 import AnotherForm from "./fromParts/AnotherForm";
 import ContentForm from "./fromParts/ContentForm";
 import Preview from "./fromParts/Preview";
@@ -27,21 +23,30 @@ export const Article = () => {
   const [tags, setTags] = useState<string>(!recipeData.newArticle ? "#" + recipeData.tags.join("#") : "");
   const [recipeContents, setRecipeContents] = useState<Content[]>(!recipeData.newArticle ? recipeData.contents
     : [{ imageUrls: [], text: "", title: "", },]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
+  const navigation = useNavigate();
 
-  const submitRecipeData = () => {
+  const submitRecipeData = async () => {
+    setIsLoading(true);
+    setDisabled(true);
     const newTags: string[] = tags.split("#");
     const newRecipeData: SubmitRecipe = {
-      id: !recipeData.newArticle ? recipeData.id : 0,
+      uid: !recipeData.newArticle ? recipeData.uid : 0,
       title,
       mainImageUrl,
       introduction,
       contents: recipeContents,
       category,
       tags: newTags,
+      season: ""
     };
-    dispatch(setData(newRecipeData));
+    await dispatch(setData(newRecipeData));
+    setIsLoading(false);
+    setDisabled(false);
+    navigation("/admin/home");
   };
 
   const onChangeContentImage = async (e: any, index: number) => {
@@ -87,6 +92,9 @@ export const Article = () => {
 
   return (
     <Box sx={styles.containerWrap}>
+      <Backdrop open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box sx={styles.container}>
         <TopForm
           title={title}
@@ -95,6 +103,7 @@ export const Article = () => {
           setTitle={setTitle}
           setIntroduction={setIntroduction}
           setMainImage={setMainImage}
+          disabled={disabled}
         />
         <ContentForm
           recipeContents={recipeContents}
@@ -102,8 +111,9 @@ export const Article = () => {
           onChangeText={onChangeText}
           onChangeContentImage={onChangeContentImage}
           deleteForm={deleteForm}
+          disabled={disabled}
         />
-        <Button variant="contained" sx={styles.button} onClick={addForm}>
+        <Button variant="contained" sx={styles.button} onClick={addForm} disabled={disabled}>
           追加
         </Button>
         <AnotherForm
@@ -112,7 +122,7 @@ export const Article = () => {
           tags={tags}
           setTags={setTags}
         />
-        <Button variant="contained" onClick={submitRecipeData}>レシピ追加</Button>
+        <Button variant="contained" onClick={submitRecipeData} disabled={disabled}>レシピ追加</Button>
       </Box>
       <Preview
         title={title}
@@ -131,8 +141,6 @@ const styles = {
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "flex-start",
-    // justifyContent: "center",
-    // paddingLeft: 5,
   },
   container: {
     display: "flex",

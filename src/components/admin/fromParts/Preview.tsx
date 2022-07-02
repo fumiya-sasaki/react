@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import { Content } from "../../slices/recipe";
+import { Content } from "../../../slices/recipe";
 
 type PreviewState = {
   title: string;

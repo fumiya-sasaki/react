@@ -7,7 +7,7 @@ import { RootState } from "../store";
 const initialState: RecipeData[] = [];
 
 export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }>(
-  "recipe/nextGetDataScreen",
+  "newArrivalScreen/nextGetDataScreen",
   async ({ endAt }, thunkApi) => {
     const getDoc = endAt
       ? await getDocs(query(collection(db, "recipes"), orderBy("createdAt", 'desc'), startAfter(endAt), limit(1)))
@@ -17,7 +17,7 @@ export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }
     getDoc.forEach((doc) => {
       const collection = doc.data();
       const result: RecipeData = {
-        id: collection.id,
+        uid: collection.uid,
         createdAt: collection.createdAt,
         title: collection.title,
         contents: collection.contents,
@@ -25,11 +25,12 @@ export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }
         mainImageUrl: collection.mainImageUrl,
         category: collection.category,
         tags: collection.tags,
+        season: collection.season,
       };
       newState.push(result);
     });
     const afterFilterState = newState.filter((v, i, a) => {
-      return a.findIndex((state) => state.id === v.id) === i;
+      return a.findIndex((state) => state.uid === v.uid) === i;
     })
     return afterFilterState;
   });

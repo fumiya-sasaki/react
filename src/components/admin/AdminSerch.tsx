@@ -8,11 +8,11 @@ import { RootState } from "../../slices/store";
 
 export const AdminSerch = () => {
   const dispatch = useAppDispatch();
-  const recipe: RecipeData[] = useAppSelector(
-    (state: RootState) => state.recipe
-  );
+  // const recipe: RecipeData[] = useAppSelector(
+  //   (state: RootState) => state.recipe
+  // );
   const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.newArrivalScreen
+    (state: RootState) => state.serchScreen
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
@@ -37,7 +37,7 @@ export const AdminSerch = () => {
       <Box sx={styles.container}>
         <Box sx={styles.contentContainer}>
           {contents.map((item) => (
-            <Box key={item.id} style={styles.itemContainer}>
+            <Box key={item.uid} style={styles.itemContainer}>
               <img src={item.mainImageUrl} alt="" style={styles.itemImage} />
               <Link to={"/content/"} state={{ recipeData: item }}>
                 <Typography sx={styles.menuTitle}>{item.title}</Typography>

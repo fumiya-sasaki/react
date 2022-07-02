@@ -6,7 +6,7 @@ import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
-import { getRecipeData } from "../slices/screen/serchScreen";
+import { getRecipeData, serchString } from "../slices/screen/serchScreen";
 
 export const Serch = () => {
   const location = useLocation();
@@ -19,6 +19,9 @@ export const Serch = () => {
   );
 
   useEffect(() => {
+    if (screen.length === 0) {
+      dispatch(serchString({ tag: title }))
+    };
     setContents(screen);
     if (screen.length > 9) {
       setTotalNumber(Math.ceil(screen.length));
@@ -34,11 +37,11 @@ export const Serch = () => {
 
   return (
     <>
-      <Header title={title} />
+      <Header title={"検索結果「 " + title + " 」"} />
       <Box sx={styles.container}>
         <Box sx={styles.contentContainer}>
           {contents.map((item) => (
-            <Box key={item.id} style={styles.itemContainer}>
+            <Box key={item.uid} sx={styles.itemContainer}>
               <img src={item.mainImageUrl} alt="" style={styles.itemImage} />
               <Link to={"/content/"} state={{ recipeData: item }}>
                 <Typography sx={styles.menuTitle}>{item.title}</Typography>
@@ -49,7 +52,8 @@ export const Serch = () => {
         <Pagination
           sx={styles.pagenate}
           count={totalNumber}
-          color="primary"
+          shape="rounded"
+          color="standard"
           onChange={(e, pageNumber) => handlePaginate(e, pageNumber)}
         />
       </Box>
@@ -64,7 +68,7 @@ const styles = {
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   leftContainer: {
     display: "flex",
@@ -85,7 +89,7 @@ const styles = {
   imageBox: {
     display: "flex",
     flexDirection: "column" as "column",
-    width: "90%",
+    width: { xs: "100%", sm: "90%" },
     paddingTop: 7,
     paddingBottom: 5,
   },
@@ -106,19 +110,20 @@ const styles = {
   itemContainer: {
     display: "flex",
     flexDirection: "column" as "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    paddingRight: 20,
-    width: "30%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: "2%",
+    width: { xs: "45%", sm: "31%" },
   },
   contentContainer: {
+    flexWrap: "wrap",
     display: "flex",
     flexDirection: "row" as "row",
-    width: "100%",
+    width: { xs: "95%", sm: "80%" },
     paddingTop: 5,
-    paddingLeft: 5,
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
+    // marginLeft: "5%rem",
+    alignItems: "flex-start",
+    // justifyContent: "center",
   },
   menuBox: {
     display: "flex",

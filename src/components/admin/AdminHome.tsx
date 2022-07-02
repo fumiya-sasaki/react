@@ -1,35 +1,36 @@
-import { Box, Typography, } from "@mui/material";
+import { Box, Button, Typography, } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getData, RecipeData } from "../../slices/recipe";
+import { RecipeData } from "../../slices/recipe";
 import { RootState } from "../../slices/store";
 import { Restaurant, } from "@mui/icons-material";
 import AdminRightParts from "./AdminRightParts";
+import { nextGetDataScreen } from "../../slices/admin";
+import { getCategory } from "../../slices/category";
 
 export const AdminHome = () => {
   const dispatch = useAppDispatch();
-  const recipe: RecipeData[] = useAppSelector(
-    (state: RootState) => state.recipe
-  );
-  const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.newArrivalScreen
+  const admin: RecipeData[] = useAppSelector(
+    (state: RootState) => state.admin
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
-  const [pageNumber] = useState<number>(1);
 
   useEffect(() => {
-    dispatch(getData());
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getRecipeData({ recipe, pageNumber }));
-  // }, [recipe, dispatch]);
+    if (admin.length === 0) {
+      dispatch(getCategory());
+      dispatch(nextGetDataScreen({}));
+    };
+  }, []);
 
   useEffect(() => {
-    setContents(screen);
-  }, [screen]);
+    setContents(admin);
+  }, [admin]);
+
+  const getNext = () => {
+    dispatch(nextGetDataScreen({ endAt: contents[contents.length - 1].createdAt }));
+  };
 
   return (
     <>
@@ -53,6 +54,7 @@ export const AdminHome = () => {
               </Box>
             ))}
           </Box>
+          <Button onClick={getNext}>さらに取得</Button>
         </Box>
         <Box sx={styles.rightContainer}>
           <AdminRightParts />

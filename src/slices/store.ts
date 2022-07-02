@@ -1,6 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { admin } from "./admin";
 import { category } from "./category";
 import { recipe } from "./recipe";
+import { recommendation } from "./recommendation";
 import { newArrivalScreen } from "./screen/newArrivalScreen";
 import { serchScreen } from "./screen/serchScreen";
 
@@ -9,6 +11,8 @@ const reducer = combineReducers({
   recipe,
   newArrivalScreen,
   serchScreen,
+  admin,
+  recommendation,
 });
 
 export const store = configureStore({

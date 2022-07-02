@@ -49,7 +49,7 @@ export const NewArrival = React.memo(() => {
           </Box>
           <Box sx={styles.contentContainer}>
             {contents.map((item) => (
-              <Box key={item.id} style={styles.itemContainer}>
+              <Box key={item.uid} style={styles.itemContainer}>
                 <img src={item.mainImageUrl} alt="" style={styles.itemImage} />
                 <Link to={"/content/"} state={{ recipeData: item }}>
                   <Typography sx={styles.menuTitle}>{item.title}</Typography>

@@ -1,89 +1,56 @@
-import { Box, Button, Icon, IconButton, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { DoubleArrow, Restaurant } from "@mui/icons-material";
+import { Box, Button, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { getData, getPickUp, HomeRecipe, RecipeData } from "../slices/recipe";
-import { RootState } from "../slices/store";
-import Header from "./Header";
-import Footer from "./Footer";
-import { ArrowCircleLeftTwoTone, ArrowCircleRightTwoTone, DoubleArrow, EmojiFlags, Restaurant } from "@mui/icons-material";
-import RightContent from "./RightParts";
+import React from "react";
+import { RecipeData } from "../../slices/recipe";
 import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Category } from "../slices/category";
-import { serchString } from "../slices/screen/serchScreen";
-import { getRecommendation, Recommendation } from "../slices/recommendation";
-import NewArrivalBox from "./homeParts/NewArraivalBox";
-import SeasonBox from "./homeParts/SeasonBox";
-import TagBox from "./homeParts/TagBox";
-import PickUpBox from "./homeParts/PickUpBox";
-import MainImageBox from "./homeParts/MainImageBox";
-export const Home = React.memo(() => {
-  const dispatch = useAppDispatch();
-  const navigation = useNavigate();
-  const recipe: HomeRecipe = useAppSelector(
-    (state: RootState) => state.recipe
-  );
+import main from "../../images/main.jpg";
+import peperon from "../../images/peperon.jpeg";
+import fresh from "../../images/pastaFresh.jpeg";
+import pomodoro from "../../images/pomodoro.jpeg";
+import Slider from "react-slick";
 
-  const recommendation: Recommendation = useAppSelector(
-    (state: RootState) => state.recommendation
-  );
-
-  const [contents, setContents] = useState<RecipeData[]>([]);
-  const [pickUp, setPickUp] = useState<RecipeData[]>([]);
-  const [season, setSason] = useState<RecipeData[]>([]);
-
-  useEffect(() => {
-    dispatch(getRecommendation());
-  }, []);
-
-  useEffect(() => {
-    if (recipe.newArrival.length === 0) {
-      dispatch(getPickUp({ season: recommendation.season, recipeUids: recommendation.recipeUids }));
-    };
-  }, [recommendation]);
-
-  useEffect(() => {
-    if (recipe.newArrival.length !== 0) {
-      setContents(recipe.newArrival);
-      setPickUp(recipe.pickUp);
-      setSason(recipe.seasons);
-    }
-  }, [recipe]);
-  const [tag, setTag] = useState<string>("");
-  const serch = (tagItem?: string) => {
-    if (tagItem) {
-      dispatch(serchString({ tag: tagItem }));
-      navigation("/serch", { state: { title: tagItem } });
-    } else {
-      dispatch(serchString({ tag }));
-      navigation("/serch", { state: { title: tag } });
-    };
-  };
-
+export const MainImageBox = React.memo(() => {
   return (
-    <>
-      <Header title={"Topページ"} />
-      <Box sx={styles.container}>
-        <MainImageBox />
-        <Box sx={styles.mainContainer}>
-          <Box sx={styles.leftContainer}>
-            <NewArrivalBox contents={contents} />
-            <SeasonBox season={season} />
-            <TagBox pickUpIngredients={recommendation.pickUpIngredients} serch={serch} />
-            <PickUpBox pickUp={pickUp} />
-          </Box>
-          <Box sx={styles.rightContainer}>
-            <RightContent />
-          </Box>
+    <Box sx={styles.carousel}>
+      {/* <Slider
+        dots={true}
+        infinite={true}
+        arrows={false}
+        slidesToShow={1}
+        slidesToScroll={1}
+      > */}
+      {/* </Slider> */}
+      <Carousel
+        showThumbs={false}
+        swipeable={true}
+        autoPlay={true}
+        infiniteLoop={true}
+        showArrows={false}
+        emulateTouch={true}
+        centerMode={true}
+        showStatus={false}
+        centerSlidePercentage={30}
+        showIndicators={false}
+      >
+        <Box sx={styles.mainImageBox}>
+          <img src={main} alt="" />
         </Box>
-      </Box>
-      <Footer />
-    </>
+        <Box sx={styles.mainImageBox}>
+          <img src={peperon} alt="" />
+        </Box>
+        <Box sx={styles.mainImageBox}>
+          <img src={fresh} alt="" />
+        </Box>
+        <Box sx={styles.mainImageBox}>
+          <img src={pomodoro} alt="" />
+        </Box>
+      </Carousel>
+    </Box>
   );
 });
 
-export default Home;
+export default MainImageBox;
 const styles = {
   container: {
     display: "flex",

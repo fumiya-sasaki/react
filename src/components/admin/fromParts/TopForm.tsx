@@ -6,6 +6,7 @@ type TopForm = {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   setIntroduction: React.Dispatch<React.SetStateAction<string>>;
   setMainImage: React.Dispatch<React.SetStateAction<string>>;
+  disabled: boolean;
 };
 
 export const TopForm: React.FC<TopForm> = ({
@@ -14,6 +15,7 @@ export const TopForm: React.FC<TopForm> = ({
   setTitle,
   setIntroduction,
   setMainImage,
+  disabled,
 }) => {
   const onChangeMainImage = (e: any) => {
     if (e.target.files[0]) {
@@ -37,7 +39,7 @@ export const TopForm: React.FC<TopForm> = ({
         placeholder="レシピの説明文"
         value={introduction}
       />
-      <Button variant="contained" component="label">
+      <Button variant="contained" component="label" disabled={disabled}>
         main画像をアップロード
         <input type="file" hidden onChange={(e) => onChangeMainImage(e)} />
       </Button>

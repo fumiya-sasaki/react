@@ -54,14 +54,13 @@ export const RightContent = () => {
           />
         </FormControl>
       </Box>
-      {/* <Box> */}
       <Box sx={styles.titleBox}>
         <Box>
           <Typography sx={{ fontWeight: "bold" }}>
             <EmojiFlags color={"warning"} />
           </Typography>
         </Box>
-        <Typography sx={{ fontWeight: "bold" }}>タグ検索</Typography>
+        <Typography sx={{ fontWeight: "bold" }}>人気タグ検索</Typography>
       </Box>
 
       <Box sx={styles.tagBox}>
@@ -77,10 +76,12 @@ export const RightContent = () => {
           </Box>
         ))}
       </Box>
-      <IconButton color="primary" aria-label="upload picture" component="span">
-        <a target="_blank" href='https://www.instagram.com/chiacchiere1/'>  <Instagram /></a>
-      </IconButton>
-      {/* </Box> */}
+      <Box sx={styles.snsBox}>
+        <Typography sx={{ fontWeight: "bold" }}>公式SNS</Typography>
+        <IconButton color="primary" aria-label="upload picture" component="span">
+          <a target="_blank" href='https://www.instagram.com/chiacchiere1/'>  <Instagram /></a>
+        </IconButton>
+      </Box>
     </>
   );
 };
@@ -183,9 +184,14 @@ const styles = {
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    paddingBottom: 1,
   },
   tagItem: {
-    // marginLeft: 1,
+    margin: 1,
+  },
+  snsBox: {
+    paddingTop: 1
   },
 };

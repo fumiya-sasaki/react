@@ -1,5 +1,5 @@
 import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
-import { Content } from "../../slices/recipe";
+import { Content } from "../../../slices/recipe";
 
 type ContentFormState = {
   recipeContents: Content[];
@@ -7,6 +7,7 @@ type ContentFormState = {
   onChangeText: (value: string, index: number) => void;
   onChangeContentImage: (e: any, index: number) => void;
   deleteForm: (index: number) => void;
+  disabled: boolean;
 };
 
 export const ContentForm: React.FC<ContentFormState> = ({
@@ -15,6 +16,7 @@ export const ContentForm: React.FC<ContentFormState> = ({
   onChangeText,
   onChangeContentImage,
   deleteForm,
+  disabled,
 }) => {
   return (
     <>
@@ -33,7 +35,7 @@ export const ContentForm: React.FC<ContentFormState> = ({
             onChange={(e) => onChangeText(e.target.value, index)}
             value={content.text}
           />
-          <Button variant="contained" sx={styles.button} component="label">
+          <Button variant="contained" sx={styles.button} component="label" disabled={disabled}>
             画像追加
             <input
               type="file"
@@ -41,7 +43,7 @@ export const ContentForm: React.FC<ContentFormState> = ({
               onChange={(e) => onChangeContentImage(e, index)}
             />
           </Button>
-          <Button variant="contained" onClick={() => deleteForm(index)}>
+          <Button variant="contained" onClick={() => deleteForm(index)} disabled={disabled}>
             削除
           </Button>
         </Box>

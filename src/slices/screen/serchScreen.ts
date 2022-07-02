@@ -17,7 +17,7 @@ export const serchCategory = createAsyncThunk<RecipeData[], { category: string }
     getDoc.forEach((doc) => {
       const collection = doc.data();
       const result: RecipeData = {
-        id: collection.id,
+        uid: collection.uid,
         createdAt: collection.createdAt,
         title: collection.title,
         contents: collection.contents,
@@ -25,6 +25,7 @@ export const serchCategory = createAsyncThunk<RecipeData[], { category: string }
         mainImageUrl: collection.mainImageUrl,
         category: collection.category,
         tags: collection.tags,
+        season: collection.season,
       };
       newState.push(result);
     });
@@ -42,7 +43,7 @@ export const serchString = createAsyncThunk<RecipeData[], { tag: string }>(
     getDoc.forEach((doc) => {
       const collection = doc.data();
       const result: RecipeData = {
-        id: collection.id,
+        uid: collection.uid,
         createdAt: collection.createdAt,
         title: collection.title,
         contents: collection.contents,
@@ -50,6 +51,7 @@ export const serchString = createAsyncThunk<RecipeData[], { tag: string }>(
         mainImageUrl: collection.mainImageUrl,
         category: collection.category,
         tags: collection.tags,
+        season: collection.season,
       };
       newState.push(result);
     });

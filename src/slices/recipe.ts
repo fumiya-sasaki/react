@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
-  collection, doc, getDocs, limit, query, setDoc,
+  collection, doc, getDoc, getDocs, limit, query, setDoc, where,
 } from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
 import { RootState } from "./store";
@@ -13,13 +13,14 @@ export type Content = {
 };
 
 export type SubmitRecipe = {
-  id: number;
+  uid: number;
   title: string;
   contents: Content[];
   introduction: string;
   mainImageUrl: string;
   category: string;
   tags: string[];
+  season: string;
 };
 
 export type RecipeData = SubmitRecipe & {
@@ -27,8 +28,14 @@ export type RecipeData = SubmitRecipe & {
   newArticle?: boolean;
 };
 
+export type HomeRecipe = {
+  newArrival: RecipeData[],
+  seasons: RecipeData[],
+  pickUp: RecipeData[],
+};
+
 export const initialData = {
-  id: 0,
+  uid: 0,
   createdAt: 0,
   title: "",
   contents: { imageUrls: [], text: "", title: "" },
@@ -37,19 +44,27 @@ export const initialData = {
   category: "",
   tags: [],
   newArticle: true,
-}
+  season: "",
+};
 
-const initialState: RecipeData[] = [];
 
-export const getData = createAsyncThunk(
+
+const initialState: HomeRecipe = {
+  newArrival: [],
+  seasons: [],
+  pickUp: [],
+};
+
+export const getData = createAsyncThunk<HomeRecipe>(
   "recipe/getData",
-  async () => {
-    const getDoc = await getDocs(query(collection(db, "recipes"), limit(6)));
-    const newState: RecipeData[] = [];
+  async (_, thunkApi) => {
+    const getDoc = await getDocs(query(collection(db, "recipes"), limit(8)));
+    const recipe: HomeRecipe = (thunkApi.getState() as RootState).recipe;
+    const newArrival: RecipeData[] = [];
     getDoc.forEach((doc) => {
       const collection = doc.data();
       const result: RecipeData = {
-        id: collection.id,
+        uid: collection.uid,
         createdAt: collection.createdAt,
         title: collection.title,
         contents: collection.contents,
@@ -57,87 +72,85 @@ export const getData = createAsyncThunk(
         mainImageUrl: collection.mainImageUrl,
         category: collection.category,
         tags: collection.tags,
+        season: collection.season,
       };
-      newState.push(result);
+      newArrival.push(result);
     });
+    const newState = { ...recipe, newArrival };
     return newState;
   });
 
-export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
-  "recipe/setData",
-  async (recipeData, thunkApi) => {
-    const recipe: RecipeData[] = (thunkApi.getState() as RootState).recipe;
-    const category: string[] = (thunkApi.getState() as RootState).category.category;
-    const docId = recipeData.id !== 0 ? recipeData.id : recipe.length > 0 ? recipe[0].id - 1 : 9999999999;
+export const getPickUp = createAsyncThunk<HomeRecipe, { season: string, recipeUids: number[] }>(
+  "recipe/getPickUp",
+  async ({ season, recipeUids }, thunkApi) => {
+    const recipesRef = collection(db, "recipes");
+    const docSeason = await getDocs(
+      query(recipesRef, where("season", "==", season))
+    );
 
-    const recipeDocumentRef = doc(db, "recipes", String(docId));
-    const categoryDocumentRef = doc(db, "category", "selectCategory");
-    let mainImageUrl = "";
+    const docPickUp = await getDocs(
+      query(recipesRef, where("uid", "in", recipeUids))
+    );
 
-    if (recipeData.mainImageUrl.indexOf("blob") !== -1) {
-      const storageRef = ref(storage, "img/" + docId + "/mainImage");
-      const fetchMainImage = await fetch(recipeData.mainImageUrl);
-      const mainImageBlob = await fetchMainImage.blob();
-      await uploadBytes(storageRef, mainImageBlob);
-      await getDownloadURL(ref(storage, "img/" + docId + "/mainImage")).then(
-        (url) => {
-          mainImageUrl = url;
-        });
-    } else {
-      mainImageUrl = recipeData.mainImageUrl;
-    }
+    const getDoc = await getDocs(query(collection(db, "recipes"), limit(8)));
 
-    for (let index = 0; index < recipeData.contents.length; index++) {
-      for (
-        let imgIndex = 0;
-        imgIndex < recipeData.contents[index].imageUrls.length;
-        imgIndex++
-      ) {
-        if (
-          recipeData.contents[index].imageUrls[imgIndex].indexOf("blob") !== -1
-        ) {
-          const storageRef = ref(
-            storage,
-            "img/" + docId + "/contentImage/" + index + "/" + imgIndex
-          );
-          const fetchContentImage = await fetch(
-            recipeData.contents[index].imageUrls[imgIndex]
-          );
-          const contentImageBlob = await fetchContentImage.blob();
-          await uploadBytes(storageRef, contentImageBlob);
-          await getDownloadURL(
-            ref(
-              storage,
-              "img/" + docId + "/contentImage/" + index + "/" + imgIndex
-            )
-          ).then((url) => {
-            if (url.indexOf("blob") === -1) {
-              recipeData.contents[index].imageUrls[imgIndex] = url;
-            }
-          });
-        }
-      }
-    }
 
-    const result: RecipeData = {
-      introduction: recipeData.introduction,
-      createdAt: new Date(),
-      id: docId,
-      mainImageUrl,
-      title: recipeData.title,
-      contents: recipeData.contents,
-      category: recipeData.category,
-      tags: recipeData.tags,
-    };
-    const newRecipe = [...recipe, result];
-    const newCategory = Array.from(new Set([...category, recipeData.category]));
-    await Promise.all([
-      setDoc(recipeDocumentRef, result),
-      setDoc(categoryDocumentRef, { category: newCategory }),
-    ]);
-    return newRecipe;
-  }
-);
+    const newArrival: RecipeData[] = [];
+    getDoc.forEach((doc) => {
+      const collection = doc.data();
+      const result: RecipeData = {
+        uid: collection.uid,
+        createdAt: collection.createdAt,
+        title: collection.title,
+        contents: collection.contents,
+        introduction: collection.introduction,
+        mainImageUrl: collection.mainImageUrl,
+        category: collection.category,
+        tags: collection.tags,
+        season: collection.season,
+      };
+      newArrival.push(result);
+    });
+
+    const seasons: RecipeData[] = [];
+    const pickUp: RecipeData[] = [];
+    docSeason.forEach((doc) => {
+      const collection = doc.data();
+      const result: RecipeData = {
+        uid: collection.uid,
+        createdAt: collection.createdAt,
+        title: collection.title,
+        contents: collection.contents,
+        introduction: collection.introduction,
+        mainImageUrl: collection.mainImageUrl,
+        category: collection.category,
+        tags: collection.tags,
+        season: collection.season,
+      };
+      seasons.push(result);
+    });
+
+    docPickUp.forEach((doc) => {
+      const collection = doc.data();
+      const result: RecipeData = {
+        uid: collection.uid,
+        createdAt: collection.createdAt,
+        title: collection.title,
+        contents: collection.contents,
+        introduction: collection.introduction,
+        mainImageUrl: collection.mainImageUrl,
+        category: collection.category,
+        tags: collection.tags,
+        season: collection.season,
+      };
+      pickUp.push(result);
+    });
+
+    const newState: HomeRecipe = { newArrival, seasons, pickUp }
+    console.log("getRecipeData");
+    return newState;
+  });
+
 
 const slice = createSlice({
   name: "recipe",
@@ -148,7 +161,7 @@ const slice = createSlice({
       .addCase(getData.fulfilled, (state, action) => {
         return action.payload;
       })
-      .addCase(setData.fulfilled, (state, action) => {
+      .addCase(getPickUp.fulfilled, (state, action) => {
         return action.payload;
       })
   },
