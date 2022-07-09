@@ -3,6 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import AdminConfig from "./components/admin/AdminConfig";
 import AdminContent from "./components/admin/AdminContent";
 import AdminHome from "./components/admin/AdminHome";
 import AdminSerch from "./components/admin/AdminSerch";
@@ -31,6 +32,7 @@ function App() {
             <Route path={"admin/content"} element={<PrivateRoute children={<AdminContent />} />} />
             <Route path={"admin/serch"} element={<PrivateRoute children={<AdminSerch />} />} />
             <Route path={"admin/article"} element={<PrivateRoute children={<Article />} />} />
+            <Route path={"admin/config"} element={<PrivateRoute children={<AdminConfig />} />} />
             <Route path={"content"} element={<Content />} />
             <Route path={"serch"} element={<Serch />} />
             <Route path={"newArrival"} element={<NewArrival />} />

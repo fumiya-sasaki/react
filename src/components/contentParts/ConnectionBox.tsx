@@ -1,45 +1,72 @@
-import { DoubleArrow, Restaurant } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { ArrowCircleLeftTwoTone, ArrowCircleRightTwoTone, DoubleArrow, Restaurant } from "@mui/icons-material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import { RecipeData } from "../../slices/recipe";
 import { Carousel } from "react-responsive-carousel";
-import main from "../../images/main.jpg";
-import peperon from "../../images/peperon.jpeg";
-import fresh from "../../images/pastaFresh.jpeg";
-import pomodoro from "../../images/pomodoro.jpeg";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-export const MainImageBox = React.memo(({
-  mainImages,
+
+export const ConnectionBox = React.memo(({
+  connection,
 }: {
-  mainImages: string[];
+  connection: RecipeData[];
 }) => {
+  const navigation = useNavigate();
   return (
-    <Box sx={styles.carousel}>
-      <Slider
-        dots={false}
-        infinite={true}
-        arrows={false}
-        slidesToShow={2}
-        slidesToScroll={1}
-        centerMode
-        autoplay
-      >
-        {/* <Box sx={styles.carouselBox}> */}
-        {mainImages.map((img) => (
-          <Box key={img} sx={styles.mainImageBox}>
-            <img src={img} alt="" width={"95%"} />
-          </Box>
-        ))}
-        {/* </Box> */}
-      </Slider>
+    <Box sx={styles.newContentBox}>
+      <Box sx={styles.titleBox}>
+        <Box>
+          <Typography sx={{ fontWeight: "bold" }}>
+            <Restaurant color={"warning"} />
+          </Typography>
+        </Box>
+        <Typography sx={{ fontWeight: "bold" }}>関連レシピ</Typography>
+      </Box>
+      <Box sx={styles.contentContainerSeason}>
+        <Carousel
+          showThumbs={false}
+          swipeable={true}
+          autoPlay={true}
+          infiniteLoop={true}
+          emulateTouch={true}
+          centerMode={true}
+          showStatus={false}
+          centerSlidePercentage={30}
+          renderArrowPrev={(onClickHandler, hasPrev, label) =>
+            hasPrev && (
+              <IconButton onClick={onClickHandler} title={label} style={{
+                position: 'absolute',
+                top: 'calc(80%)',
+                left: 0,
+              }}>
+                <ArrowCircleLeftTwoTone />
+              </IconButton>
+            )
+          }
+          renderArrowNext={(onClickHandler, hasNext, label) =>
+            hasNext && (
+              <IconButton onClick={onClickHandler} title={label} style={{
+                position: 'absolute',
+                top: 'calc(80%)',
+                right: 0,
+              }}>
+                <ArrowCircleRightTwoTone />
+              </IconButton>
+            )}>
+          {connection.map((item) => (
+            <Box key={item.uid} style={styles.itemContainerSason}>
+              <img src={item.mainImageUrl} alt="" />
+              <Link to={"/content/"} state={{ recipeData: item }}>
+                <Typography sx={styles.menuTitleSason}>{item.title}</Typography>
+              </Link>
+            </Box>
+          ))}
+        </Carousel>
+      </Box>
     </Box>
   );
 });
 
-export default MainImageBox;
+export default ConnectionBox;
 const styles = {
   container: {
     display: "flex",
@@ -53,12 +80,10 @@ const styles = {
   },
   carousel: {
     paddingTop: 2,
-    width: "100%",
   },
   mainImageBox: {
     paddingLeft: 1,
     paddingRight: 1,
-    width: "30%"
   },
   leftContainer: {
     display: "flex",
@@ -88,6 +113,7 @@ const styles = {
     flexDirection: "column" as "column",
     width: "90%",
     paddingTop: 7,
+    // paddingBottom: 5,
   },
   imageItemF: {
     display: "flex",
@@ -223,9 +249,5 @@ const styles = {
     height: 40,
     zIndex: 2,
     top: 'calc(50% - 15px)'
-  },
-  carouselBox: {
-    display: "flex",
-    flexDirection: "row" as "row",
   }
 };

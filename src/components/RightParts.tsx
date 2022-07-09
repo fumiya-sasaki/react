@@ -1,14 +1,17 @@
 import {
-  Box, Button, FormControl, IconButton, Input,
+  Box, Button, Divider, FormControl, IconButton, Input,
   InputAdornment, InputLabel, Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { RootState } from "../slices/store";
-import { EmojiFlags, Instagram, MenuBook, Search } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import { Category } from "../slices/category";
 import { serchString } from "../slices/screen/serchScreen";
+import search from "../images/search.png";
+import tagImg from "../images/tag.png";
+import instagram from "../images/instagram.png";
 
 export const RightContent = () => {
   const dispatch = useAppDispatch();
@@ -29,14 +32,10 @@ export const RightContent = () => {
   };
 
   return (
-    <>
+    <Box sx={styles.rightContainer}>
       <Box sx={styles.titleBox}>
-        <Box>
-          <Typography sx={{ fontWeight: "bold" }}>
-            <MenuBook color={"warning"} />
-          </Typography>
-        </Box>
-        <Typography sx={{ fontWeight: "bold" }}>キーワード検索</Typography>
+        <img src={search} alt="" width={"50px"} />
+        <Typography sx={styles.font}>キーワード検索</Typography>
       </Box>
       <Box sx={styles.serchForm}>
         <FormControl variant="standard">
@@ -46,7 +45,7 @@ export const RightContent = () => {
             onChange={(e) => setTag(e.target.value)}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton onClick={() => serch()} edge="end">
+                <IconButton onClick={() => serch()} edge="end" disabled={tag === "" ? true : false}>
                   <Search />
                 </IconButton>
               </InputAdornment>
@@ -55,44 +54,43 @@ export const RightContent = () => {
         </FormControl>
       </Box>
       <Box sx={styles.titleBox}>
-        <Box>
-          <Typography sx={{ fontWeight: "bold" }}>
-            <EmojiFlags color={"warning"} />
-          </Typography>
-        </Box>
-        <Typography sx={{ fontWeight: "bold" }}>人気タグ検索</Typography>
+        <img src={tagImg} alt="" width={"50px"} />
+        <Typography sx={styles.font}>人気タグ検索</Typography>
       </Box>
-
       <Box sx={styles.tagBox}>
         {category.topCategory.map((item) => (
-          <Box key={item} sx={styles.tagItem}>
+          <Box key={item}>
             <Button
-              variant="outlined"
-              color={"warning"}
+              sx={styles.tagItem}
+              // color={"warning"}
               onClick={() => serch(item)}
             >
-              {item}
+              {"＃" + item}
             </Button>
           </Box>
         ))}
       </Box>
       <Box sx={styles.snsBox}>
-        <Typography sx={{ fontWeight: "bold" }}>公式SNS</Typography>
-        <IconButton color="primary" aria-label="upload picture" component="span">
-          <a target="_blank" href='https://www.instagram.com/chiacchiere1/'>  <Instagram /></a>
-        </IconButton>
+        <Typography sx={styles.font}>公式SNS</Typography>
+        <hr style={{ width: "90%" }} />
+
+        <a target="_blank" href='https://www.instagram.com/chiacchiere1/'>  <img src={instagram} alt="" width={"50px"} /></a>
+
       </Box>
-    </>
+    </Box>
   );
 };
 
 export default RightContent;
 const styles = {
-  container: {
+  rightContainer: {
     display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "space-between",
-    justifyContent: "space-between",
+    flexDirection: "column" as "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: "30%",
+    marginRight: 5,
+    // bgcolor: "#f3f3f2",
   },
   leftContainer: {
     display: "flex",
@@ -103,12 +101,12 @@ const styles = {
   },
   titleBox: {
     padding: 1,
-    bgcolor: "#fdeff2",
+    bgcolor: "#f3f3f2",
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "center",
     justifyContent: "center",
-    width: "97%",
+    width: "90%",
     // marginLeft: 3,
     // marginRight: 5,
     marginTop: 5,
@@ -168,30 +166,72 @@ const styles = {
     color: "dimgray",
     paddingTop: 2,
   },
-  rightContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "30%",
-    marginRight: 5,
-  },
+  // rightContainer: {
+  //   display: "flex",
+  //   flexDirection: "column" as "column",
+  //   alignItems: "center",
+  //   justifyContent: "flex-start",
+  //   width: "30%",
+  //   marginRight: 5,
+  // },
   serchForm: {
-    width: "60%",
+    width: "90%",
     paddingTop: 1,
   },
   tagBox: {
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     flexWrap: "wrap",
     paddingBottom: 1,
+    width: "90%",
   },
   tagItem: {
-    margin: 1,
+    fontStyle: "italic",
+    color: "dimgray",
+    fontWeight: "bold",
+    bgcolor: "unset",
+    "&:hover": {
+      bgcolor: "#f5f5f5"
+    }
   },
   snsBox: {
-    paddingTop: 1
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "center",
+    paddingTop: 1,
+    width: "100%"
   },
+  font: {
+    fontStyle: "italic",
+    color: "dimgray",
+    fontWeight: "bold",
+
+  },
+  border: {
+    borderBottom: 1
+  },
+  // form: {
+  //   "&:hover": {
+  //     color: "red"
+  //   },
+  // '& label.Mui-focused': {
+  //   color: 'green',
+  // },
+  // '& .MuiInput-underline:after': {
+  //   borderBottomColor: 'green',
+  // },
+  // '& .MuiOutlinedInput-root': {
+  //   '& fieldset': {
+  //     borderColor: 'red',
+  //   },
+  //   '&:hover fieldset': {
+  //     borderColor: 'yellow',
+  //   },
+  //   '&.Mui-focused fieldset': {
+  //     borderColor: 'green',
+  //   },
+  // },
+  // }
 };

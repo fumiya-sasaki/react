@@ -47,8 +47,6 @@ export const initialData = {
   season: "",
 };
 
-
-
 const initialState: HomeRecipe = {
   newArrival: [],
   seasons: [],
@@ -58,7 +56,7 @@ const initialState: HomeRecipe = {
 export const getData = createAsyncThunk<HomeRecipe>(
   "recipe/getData",
   async (_, thunkApi) => {
-    const getDoc = await getDocs(query(collection(db, "recipes"), limit(8)));
+    const getDoc = await getDocs(query(collection(db, "recipes"), limit(6)));
     const recipe: HomeRecipe = (thunkApi.getState() as RootState).recipe;
     const newArrival: RecipeData[] = [];
     getDoc.forEach((doc) => {
@@ -92,7 +90,7 @@ export const getPickUp = createAsyncThunk<HomeRecipe, { season: string, recipeUi
       query(recipesRef, where("uid", "in", recipeUids))
     );
 
-    const getDoc = await getDocs(query(collection(db, "recipes"), limit(8)));
+    const getDoc = await getDocs(query(collection(db, "recipes"), limit(6)));
 
 
     const newArrival: RecipeData[] = [];
@@ -151,7 +149,37 @@ export const getPickUp = createAsyncThunk<HomeRecipe, { season: string, recipeUi
     return newState;
   });
 
-
+export const getConnectionRecipe = async (tags: string[]): Promise<RecipeData[]> => {
+  try {
+    console.log(tags)
+    const recipesRef = collection(db, "recipes");
+    const docPickUp = await getDocs(
+      query(recipesRef, where("tags", "array-contains-any", tags))
+    );
+    const pickUp: RecipeData[] = [];
+    docPickUp.forEach((doc) => {
+      const collection = doc.data();
+      const result: RecipeData = {
+        uid: collection.uid,
+        createdAt: collection.createdAt,
+        title: collection.title,
+        contents: collection.contents,
+        introduction: collection.introduction,
+        mainImageUrl: collection.mainImageUrl,
+        category: collection.category,
+        tags: collection.tags,
+        season: collection.season,
+      };
+      pickUp.push(result);
+    });
+    console.log(pickUp)
+    return pickUp;
+  } catch {
+    console.log("error")
+    const pickUp: RecipeData[] = [];
+    return pickUp;
+  }
+}
 const slice = createSlice({
   name: "recipe",
   initialState,

@@ -21,10 +21,8 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     padding: 40,
-    // paddingBottom:15,
-    // paddingTop:15,
     background: "#2b2b2b",
-    width: "100%",
+    width: "auto",
   },
   title: {
     fontSize: "15px",
@@ -33,14 +31,5 @@ const styles = {
   image: {
     width: "100px",
     hight: "100px",
-  },
-  itemContainer: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuTitle: {
-    alignItems: "flex-start",
   },
 };

@@ -7,8 +7,9 @@ import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
 import { nextGetDataScreen } from "../slices/screen/newArrivalScreen";
-import { Restaurant } from "@mui/icons-material";
+import { DoubleArrow, Restaurant } from "@mui/icons-material";
 import RightContent from "./RightParts";
+import restaurant from "../images/restaurant.png";
 
 export const NewArrival = React.memo(() => {
   const dispatch = useAppDispatch();
@@ -36,16 +37,12 @@ export const NewArrival = React.memo(() => {
 
   return (
     <>
-      <Header title={"Topページ"} />
+      <Header title={"新着レシピ"} />
       <Box sx={styles.container}>
         <Box sx={styles.leftContainer}>
           <Box sx={styles.titleBox}>
-            <Box>
-              <Typography sx={{ fontWeight: "bold" }}>
-                <Restaurant color={"warning"} />
-              </Typography>
-            </Box>
-            <Typography sx={{ fontWeight: "bold" }}>新着レシピ</Typography>
+            <img src={restaurant} alt="" width={"50px"} />
+            <Typography sx={styles.font}>新着レシピ</Typography>
           </Box>
           <Box sx={styles.contentContainer}>
             {contents.map((item) => (
@@ -57,11 +54,9 @@ export const NewArrival = React.memo(() => {
               </Box>
             ))}
           </Box>
-          <Button onClick={getNext}>next</Button>
+          <Button style={{ width: "80%" }} onClick={getNext}>もっと見る<DoubleArrow /></Button>
         </Box>
-        <Box sx={styles.rightContainer}>
-          <RightContent />
-        </Box>
+        <RightContent />
       </Box>
       <Footer />
     </>
@@ -91,8 +86,6 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     width: "97%",
-    // marginLeft: 3,
-    // marginRight: 5,
     marginTop: 5,
   },
   imageBox: {
@@ -100,7 +93,6 @@ const styles = {
     flexDirection: "column" as "column",
     width: "90%",
     paddingTop: 7,
-    // paddingBottom: 5,
   },
   imageItemF: {
     display: "flex",
@@ -119,21 +111,23 @@ const styles = {
   itemContainer: {
     display: "flex",
     flexDirection: "column" as "column",
-    alignItems: "center",
+    paddingBottom: 10,
     paddingLeft: 10,
     paddingRight: 10,
     // paddingTop: 30,
-    width: "95%",
+    width: "30%",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   contentContainer: {
     display: "flex",
     flexDirection: "row" as "row",
     width: "100%",
-    // paddingLeft: 5,
+    flexWrap: "wrap",
     paddingTop: 3,
     paddingBottom: 5,
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   menuBox: {
     display: "flex",
@@ -141,9 +135,13 @@ const styles = {
     paddingLeft: 5,
   },
   menuTitle: {
+    width: "150px",
     fontWeight: "bold",
     color: "dimgray",
-    paddingTop: 2,
+    paddingTop: 1,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap"
   },
   introduction: {
     fontWeight: "lighter",
@@ -170,5 +168,10 @@ const styles = {
   },
   tagItem: {
     // marginLeft: 1,
+  },
+  font: {
+    fontStyle: "italic",
+    color: "dimgray",
+    fontWeight: "bold"
   },
 };

@@ -1,9 +1,11 @@
-import { Backdrop, Box, Button, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { Backdrop, Box, Button, CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setData } from "../../slices/admin";
+import { Config, getConfig, setRecipeUids } from "../../slices/config";
 import { Content, RecipeData, SubmitRecipe } from "../../slices/recipe";
+import { RootState } from "../../slices/store";
 import AnotherForm from "./fromParts/AnotherForm";
 import ContentForm from "./fromParts/ContentForm";
 import Preview from "./fromParts/Preview";
@@ -16,6 +18,7 @@ export const Article = () => {
   };
 
   const { recipeData } = location.state as RecipeState;
+  const config: Config = useAppSelector((state: RootState) => state.config);
   const [title, setTitle] = useState<string>(!recipeData.newArticle ? recipeData.title : "");
   const [introduction, setIntroduction] = useState<string>(!recipeData.newArticle ? recipeData.introduction : "");
   const [mainImageUrl, setMainImage] = useState<string>(!recipeData.newArticle ? recipeData.mainImageUrl : "");
@@ -25,9 +28,19 @@ export const Article = () => {
     : [{ imageUrls: [], text: "", title: "", },]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [isCheck, setIsCheck] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
+
+  useEffect(() => {
+    dispatch(getConfig());
+  }, []);
+
+  useEffect(() => {
+    if (!recipeData.newArticle
+      && config.recipeUids.includes(recipeData.uid)) setIsCheck(true);
+  }, [config.recipeUids]);
 
   const submitRecipeData = async () => {
     setIsLoading(true);
@@ -90,6 +103,11 @@ export const Article = () => {
     setRecipeContents(newRecipeContents);
   };
 
+  const setPickUpUid = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setRecipeUids({ recipeUid: recipeData.uid }));
+    setIsCheck(event.target.checked);
+  };
+
   return (
     <Box sx={styles.containerWrap}>
       <Backdrop open={isLoading}>
@@ -122,6 +140,7 @@ export const Article = () => {
           tags={tags}
           setTags={setTags}
         />
+        <FormControlLabel checked={isCheck} control={<Switch onChange={setPickUpUid} />} label="おすすめ" />
         <Button variant="contained" onClick={submitRecipeData} disabled={disabled}>レシピ追加</Button>
       </Box>
       <Preview

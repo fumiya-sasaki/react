@@ -32,9 +32,7 @@ export const Gallery = () => {
             ))}
           </Box>
         </Box>
-        <Box sx={styles.rightContainer}>
-          <RightContent />
-        </Box>
+        <RightContent />
       </Box>
       <Footer />
     </>

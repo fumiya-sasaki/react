@@ -88,15 +88,11 @@ export const Inquiry = () => {
             onChange={(e) => setMessage(e.target.value)}
             value={message}
           />
-          {/* <Box sx={styles.buttom}> */}
           <Button variant="contained" component="label" onClick={onSubmit} sx={styles.buttom} disabled={isRequired}>
             お問い合わせ
           </Button>
-          {/* </Box> */}
         </Box>
-        <Box sx={styles.rightContainer}>
-          <RightContent />
-        </Box>
+        <RightContent />
       </Box>
       <Footer />
     </>

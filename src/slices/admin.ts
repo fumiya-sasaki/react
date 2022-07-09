@@ -1,9 +1,9 @@
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter } from "firebase/firestore";
+import { collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
 import { Category } from "./category";
-import { RecipeData, SubmitRecipe } from "./recipe";
+import { getPickUp, RecipeData, SubmitRecipe } from "./recipe";
 import { RootState } from "./store";
 
 const initialState: RecipeData[] = [];
@@ -66,28 +66,17 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
         imgIndex < recipeData.contents[index].imageUrls.length;
         imgIndex++
       ) {
-        if (
-          recipeData.contents[index].imageUrls[imgIndex].indexOf("blob") !== -1
-        ) {
-          const storageRef = ref(
-            storage,
-            "img/" + docId + "/contentImage/" + index + "/" + imgIndex
-          );
-          const fetchContentImage = await fetch(
-            recipeData.contents[index].imageUrls[imgIndex]
-          );
+        if (recipeData.contents[index].imageUrls[imgIndex].indexOf("blob") !== -1) {
+          const storageRef = ref(storage, "img/" + docId + "/contentImage/" + index + "/" + imgIndex);
+          const fetchContentImage = await fetch(recipeData.contents[index].imageUrls[imgIndex]);
           const contentImageBlob = await fetchContentImage.blob();
           await uploadBytes(storageRef, contentImageBlob);
-          await getDownloadURL(
-            ref(
-              storage,
-              "img/" + docId + "/contentImage/" + index + "/" + imgIndex
-            )
-          ).then((url) => {
-            if (url.indexOf("blob") === -1) {
-              recipeData.contents[index].imageUrls[imgIndex] = url;
-            }
-          });
+          await getDownloadURL(ref(storage, "img/" + docId + "/contentImage/" + index + "/" + imgIndex))
+            .then((url) => {
+              if (url.indexOf("blob") === -1) {
+                recipeData.contents[index].imageUrls[imgIndex] = url;
+              }
+            });
         }
       }
     }
@@ -114,6 +103,33 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
   }
 );
 
+export const getPickUpData = async (uids: number[]): Promise<RecipeData[]> => {
+  try {
+
+    const recipesRef = collection(db, "recipes");
+    const docPickUp = await getDocs(query(recipesRef, where("uid", "in", uids)));
+    const newPickUp: RecipeData[] = [];
+    docPickUp.forEach((doc) => {
+      const collection = doc.data();
+      const result: RecipeData = {
+        uid: collection.uid,
+        createdAt: collection.createdAt,
+        title: collection.title,
+        contents: collection.contents,
+        introduction: collection.introduction,
+        mainImageUrl: collection.mainImageUrl,
+        category: collection.category,
+        tags: collection.tags,
+        season: collection.season,
+      };
+      newPickUp.push(result);
+    });
+    return newPickUp;
+  } catch {
+    const pickUp: RecipeData[] = [];
+    return pickUp;
+  }
+};
 
 export const slice = createSlice({
   name: "admin",

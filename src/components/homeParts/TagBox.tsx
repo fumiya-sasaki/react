@@ -3,6 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 import { RecipeData } from "../../slices/recipe";
+import ingredients from "../../images/ingredients.png";
 
 export const TagBox = React.memo(({
   pickUpIngredients,
@@ -15,22 +16,17 @@ export const TagBox = React.memo(({
     <Box sx={styles.tagContainer}>
       <Box sx={styles.tagContentBox}>
         <Box sx={styles.titleBox}>
-          <Box>
-            <Typography sx={{ fontWeight: "bold" }}>
-              <EmojiFlags color={"warning"} />
-            </Typography>
-          </Box>
-          <Typography sx={{ fontWeight: "bold" }}>旬の食材</Typography>
+          <img src={ingredients} alt="" width={"50px"} />
+          <Typography sx={styles.font}>旬の食材</Typography>
         </Box>
         <Box sx={styles.tagBox}>
           {pickUpIngredients.map((item) => (
-            <Box key={item} sx={styles.tagItem}>
+            <Box key={item} >
               <Button
-                variant="outlined"
-                color={"warning"}
+                sx={styles.tagItem}
                 onClick={() => serch(item)}
               >
-                {item}
+                {"＃" + item}
               </Button>
             </Box>
           ))}
@@ -210,12 +206,19 @@ const styles = {
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     flexWrap: "wrap",
     paddingBottom: 1,
+    width: "90%",
   },
   tagItem: {
-    margin: 1,
+    fontStyle: "italic",
+    color: "dimgray",
+    fontWeight: "bold",
+    bgcolor: "unset",
+    "&:hover": {
+      bgcolor: "#f5f5f5"
+    }
   },
   arrowStyles: {
     position: 'absolute',
@@ -223,5 +226,10 @@ const styles = {
     height: 40,
     zIndex: 2,
     top: 'calc(50% - 15px)'
-  }
+  },
+  font: {
+    fontStyle: "italic",
+    color: "dimgray",
+    fontWeight: "bold"
+  },
 };

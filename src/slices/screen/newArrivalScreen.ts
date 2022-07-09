@@ -10,8 +10,8 @@ export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }
   "newArrivalScreen/nextGetDataScreen",
   async ({ endAt }, thunkApi) => {
     const getDoc = endAt
-      ? await getDocs(query(collection(db, "recipes"), orderBy("createdAt", 'desc'), startAfter(endAt), limit(1)))
-      : await getDocs(query(collection(db, "recipes"), limit(1)));
+      ? await getDocs(query(collection(db, "recipes"), orderBy("createdAt", 'desc'), startAfter(endAt), limit(6)))
+      : await getDocs(query(collection(db, "recipes"), limit(6)));
     const recipe: RecipeData[] = (thunkApi.getState() as RootState).newArrivalScreen;
     const newState: RecipeData[] = [...recipe];
     getDoc.forEach((doc) => {

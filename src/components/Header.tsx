@@ -3,11 +3,12 @@ import {
   MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { Category, getCategory } from "../slices/category";
 import { serchCategory } from "../slices/screen/serchScreen";
 import { RootState } from "../slices/store";
+import logo from "../images/logo.png";
 
 type HeaderState = {
   title: string;
@@ -44,27 +45,29 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
   return (
     <>
       <Box style={styles.container}>
-        <Typography style={styles.title}>ももこごはん</Typography>
-        <Button onClick={() => navigation("/")}>ホーム</Button>
-        <FormControl sx={{ width: "100px" }}>
-          <InputLabel>カテゴリー検索</InputLabel>
-          <Select
-            value={selectedCategory}
-            onChange={categorySerch}
-            input={<OutlinedInput label="カテゴリー検索" />}
-          >
-            {categoris.map((data) => (
-              <MenuItem key={data} value={data}>
-                {data}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Button onClick={() => navigation("/gallery")}>Instagram Gallery</Button>
-        <Button onClick={() => navigation("/inquiry")}>お仕事依頼</Button>
+        <Link to={"/"} style={styles.logoBox}> <img src={logo} alt="" width={"40%"} /></Link>
+        <Box sx={styles.navigation}>
+          <Button onClick={() => navigation("/")} sx={styles.font}>ホーム</Button>
+          <FormControl sx={{ width: "20%" }} variant="standard">
+            <InputLabel style={styles.fontCategory}>カテゴリー検索</InputLabel>
+            <Select
+              value={selectedCategory}
+              onChange={categorySerch}
+            // input={<StandardInput label="カテゴリー検索" />}
+            >
+              {categoris.map((data) => (
+                <MenuItem key={data} value={data}>
+                  {data}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button sx={styles.font} onClick={() => navigation("/gallery")}>Instagram Gallery</Button>
+          <Button sx={styles.font} onClick={() => navigation("/inquiry")}>お仕事依頼</Button>
+        </Box>
       </Box>
       <Box sx={styles.titleBox}>
-        <Typography sx={{ fontWeight: "bold" }}>{topTitle}</Typography>
+        <Typography sx={styles.font}>{topTitle}</Typography>
       </Box>
     </>
   );
@@ -74,14 +77,29 @@ export default Header;
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "row" as "row",
+    flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
     paddingBottom: 15,
     paddingTop: 15,
+    width: "100%",
   },
-  title: {
-    fontSize: "30px",
+  logoBox: {
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  font: {
+    fontStyle: "italic",
+    color: "dimgray",
+    fontWeight: "bold"
+  },
+  fontCategory: {
+    fontStyle: "italic",
+    color: "dimgray",
+    fontWeight: "bold",
+    fontSize: "15px"
   },
   image: {
     width: "100px",
@@ -103,6 +121,14 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
+    width: "auto",
+  },
+  navigation: {
     width: "100%",
+    display: "flex",
+    flexDirection: "row" as "row",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    gap: 5,
   },
 };
