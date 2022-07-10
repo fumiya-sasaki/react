@@ -1,14 +1,14 @@
-import {
-  Box, Button, FormControl, InputLabel,
-  MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography
-} from "@mui/material";
+import { Box, SelectChangeEvent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector, useSize } from "../hooks";
 import { Category, getCategory } from "../slices/category";
 import { serchCategory } from "../slices/screen/serchScreen";
 import { RootState } from "../slices/store";
 import logo from "../images/logo.png";
+import React from "react";
+import Mobile from "./headerParts/Mobile";
+import PcSide from "./headerParts/PcSide";
 
 type HeaderState = {
   title: string;
@@ -42,28 +42,17 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
     navigation("/serch", { state: { title: category } });
   };
 
+  const { isMobileSize } = useSize();
+  const menu: JSX.Element = isMobileSize
+    ? <Mobile categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />
+    : <PcSide categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />;
+
   return (
     <>
       <Box style={styles.container}>
-        <Link to={"/"} style={styles.logoBox}> <img src={logo} alt="" width={"40%"} /></Link>
+        <Link to={"/"} style={styles.logoBox}> <img src={logo} alt="" width={"50%"} /></Link>
         <Box sx={styles.navigation}>
-          <Button onClick={() => navigation("/")} sx={styles.font}>ホーム</Button>
-          <FormControl sx={{ width: "20%" }} variant="standard">
-            <InputLabel style={styles.fontCategory}>カテゴリー検索</InputLabel>
-            <Select
-              value={selectedCategory}
-              onChange={categorySerch}
-            // input={<StandardInput label="カテゴリー検索" />}
-            >
-              {categoris.map((data) => (
-                <MenuItem key={data} value={data}>
-                  {data}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button sx={styles.font} onClick={() => navigation("/gallery")}>Instagram Gallery</Button>
-          <Button sx={styles.font} onClick={() => navigation("/inquiry")}>お仕事依頼</Button>
+          {menu}
         </Box>
       </Box>
       <Box sx={styles.titleBox}>
@@ -94,25 +83,6 @@ const styles = {
     fontStyle: "italic",
     color: "dimgray",
     fontWeight: "bold"
-  },
-  fontCategory: {
-    fontStyle: "italic",
-    color: "dimgray",
-    fontWeight: "bold",
-    fontSize: "15px"
-  },
-  image: {
-    width: "100px",
-    hight: "100px",
-  },
-  itemContainer: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuTitle: {
-    alignItems: "flex-start",
   },
   titleBox: {
     padding: 3,

@@ -1,20 +1,18 @@
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
 import { nextGetDataScreen } from "../slices/screen/newArrivalScreen";
-import { DoubleArrow, Restaurant } from "@mui/icons-material";
+import { DoubleArrow } from "@mui/icons-material";
 import RightContent from "./RightParts";
 import restaurant from "../images/restaurant.png";
 
 export const NewArrival = React.memo(() => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigate();
-
   const screen: RecipeData[] = useAppSelector(
     (state: RootState) => state.newArrivalScreen
   );
@@ -22,14 +20,9 @@ export const NewArrival = React.memo(() => {
   const [contents, setContents] = useState<RecipeData[]>([]);
 
   useEffect(() => {
-    if (screen.length === 0) {
-      dispatch(nextGetDataScreen({}));
-    };
-  }, []);
-
-  useEffect(() => {
+    if (screen.length === 0) dispatch(nextGetDataScreen({}));
     setContents(screen)
-  }, [screen]);
+  }, [dispatch, screen]);
 
   const getNext = () => {
     dispatch(nextGetDataScreen({ endAt: screen[screen.length - 1].createdAt }));
@@ -67,16 +60,17 @@ export default NewArrival;
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "space-between",
-    justifyContent: "space-between",
+    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
+    alignItems: { xs: "center", sm: 'unset' },
+    justifyContent: { sm: 'space-around' },
   },
   leftContainer: {
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "70%",
+    width: { xs: '92%', sm: "60%" },
+    // paddingLeft: 2
   },
   titleBox: {
     padding: 1,
@@ -88,22 +82,6 @@ const styles = {
     width: "97%",
     marginTop: 5,
   },
-  imageBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    width: "90%",
-    paddingTop: 7,
-  },
-  imageItemF: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "25%",
-    hight: "20%",
-  },
   itemImage: {
     width: "100%",
     hight: "100%",
@@ -112,10 +90,10 @@ const styles = {
     display: "flex",
     flexDirection: "column" as "column",
     paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: '1%',
+    paddingRight: '1%',
     // paddingTop: 30,
-    width: "30%",
+    width: "31%",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
@@ -129,11 +107,6 @@ const styles = {
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
-  menuBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    paddingLeft: 5,
-  },
   menuTitle: {
     width: "150px",
     fontWeight: "bold",
@@ -142,32 +115,6 @@ const styles = {
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap"
-  },
-  introduction: {
-    fontWeight: "lighter",
-    color: "dimgray",
-    paddingTop: 2,
-  },
-  rightContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "30%",
-    marginRight: 5,
-  },
-  serchForm: {
-    width: "60%",
-    paddingTop: 1,
-  },
-  tagBox: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  tagItem: {
-    // marginLeft: 1,
   },
   font: {
     fontStyle: "italic",

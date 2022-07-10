@@ -31,33 +31,35 @@ export const Content = () => {
     const data = await getConnectionRecipe(recipeData.tags)
     setConnection(data)
     return data;
-  }
+  };
   useEffect(() => {
     getConnection();
   }, [recipeData.tags]);
 
   return (
-    <Box>
+    <>
       <Header title={recipeData.title} />
-      <Box style={styles.container}>
+      <Box sx={styles.container}>
         <Box sx={styles.leftContainer}>
           <Box sx={styles.tagsBox}>
             {recipeData.tags.map((tag: string) => (
-              <IconButton key={tag} onClick={() => serch(tag)} >
+              <IconButton key={tag} onClick={() => serch(tag)} size={'small'}>
                 <DriveFileMove /> {tag}
               </IconButton>
             ))}
           </Box>
-          <img src={recipeData.mainImageUrl} alt="" style={styles.image} />
+
+          <img src={recipeData.mainImageUrl} alt="" width={'95%'} />
           <Typography sx={styles.introduction}>{recipeData.introduction}</Typography>
           <Divider variant="middle" />
+
           {recipeData.contents.map((recipe, index) => (
             <Box key={index} sx={styles.contentBox} mt={1} mb={1}>
               {recipe.imageUrls.map((url, index) => (
                 <img key={index} src={url} alt="" style={styles.contentImage} />
               ))}
               <Typography style={styles.contentTitle}>{recipe.title}</Typography>
-              <Typography>{recipe.text}</Typography>
+              <Typography style={{ wordBreak: 'break-all', width: '80%' }}>{recipe.text}</Typography>
             </Box>
           ))}
           <Divider variant="middle" />
@@ -66,7 +68,7 @@ export const Content = () => {
         <RightContent />
       </Box>
       <Footer />
-    </Box>
+    </>
   );
 };
 
@@ -74,15 +76,17 @@ export default Content;
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "row" as "row",
+    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
+    alignItems: { xs: 'center', sm: 'unset' },
+    justifyContent: "space-between",
   },
   leftContainer: {
     display: "flex",
     flexDirection: "column" as "column",
-    // alignItems: "center",
-    // justifyContent: "center",
-    width: "70%",
-    marginLeft: "10%",
+    alignItems: { xs: 'flex-start', sm: "flex-start" },
+    justifyContent: "center",
+    width: { xs: '92%', sm: "70%" },
+    paddingLeft: { xs: 0, sm: 10 }
   },
   title: {
     fontSize: "20px",
@@ -94,7 +98,7 @@ const styles = {
     hight: "auto",
   },
   contentImage: {
-    width: "50%",
+    width: "60%",
     hight: "auto",
   },
   itemContainer: {
@@ -116,18 +120,23 @@ const styles = {
     marginRight: 5,
   },
   contentBox: {
-    // display: "flex",
-    // flexDirection: "column" as "column",
-    // alignItems: "center",
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: { xs: 'flex-start', sm: 'flex-start' },
+    // paddingLeft: { xs: 10, sm: 0 }
   },
   introduction: {
-    width: "55%",
+    width: { xs: '85%', sm: '70%' },
     flexWrap: "wrap",
     marginTop: 3,
     paddingBottom: 3,
   },
   tagsBox: {
-    width: "20%",
+    // display: "flex",
+    // flexDirection: 'row' as 'row',
+    // alignItems: "space-between",
+    // justifyContent: "space-between",
+    width: '70%',
     flexWrap: "wrap",
     paddingTop: 1,
     paddingBottom: 1,

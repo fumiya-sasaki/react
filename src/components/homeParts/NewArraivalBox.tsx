@@ -45,7 +45,7 @@ const styles = {
     fontWeight: "bold"
   },
   newContentBox: {
-    width: "80%",
+    width: { xs: '95%', sm: "80%" },
     marginTop: 5,
   },
   titleBox: {
@@ -81,12 +81,12 @@ const styles = {
     justifyContent: "space-between",
   },
   menuTitle: {
-    width: "150px",
     fontWeight: "bold",
     color: "dimgray",
     paddingTop: 1,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 1,
+    overflow: 'hidden',
   },
 };

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector, useSize } from "../hooks";
 import { getPickUp, HomeRecipe, RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
@@ -23,7 +23,7 @@ export const Home = React.memo(() => {
   );
 
   const config: Config = useAppSelector((state: RootState) => state.config);
-
+  const { isMobileSize } = useSize();
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [pickUp, setPickUp] = useState<RecipeData[]>([]);
   const [season, setSason] = useState<RecipeData[]>([]);
@@ -40,12 +40,16 @@ export const Home = React.memo(() => {
 
   useEffect(() => {
     if (recipe.newArrival.length !== 0) {
-      setContents(recipe.newArrival);
+      if (isMobileSize) {
+        setContents(recipe.newArrival.slice(0, 3))
+      } else {
+        setContents(recipe.newArrival)
+      };
       setPickUp(recipe.pickUp);
       setSason(recipe.seasons);
     }
   }, [recipe]);
-  const [tag, setTag] = useState<string>("");
+  const [tag, setTag] = useState<string>('');
   const serch = (tagItem?: string) => {
     if (tagItem) {
       dispatch(serchString({ tag: tagItem }));
@@ -57,7 +61,7 @@ export const Home = React.memo(() => {
   };
 
   return (
-    <Box style={{ width: "100%", overflowX: "hidden" }}>
+    <Box sx={{ width: '100%', overflowX: "hidden" }}>
       <Header title={"Topページ"} />
       <Box sx={styles.container}>
         <MainImageBox mainImages={config.topImages} />
@@ -84,7 +88,7 @@ const styles = {
   },
   mainContainer: {
     display: "flex",
-    flexDirection: "row" as "row",
+    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
     alignItems: "space-between",
     justifyContent: "space-between",
   },
@@ -93,6 +97,6 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "70%",
+    width: { xs: '100%', sm: "70%" },
   },
 };

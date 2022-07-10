@@ -4,7 +4,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { init, send } from "emailjs-com";
 import RightContent from "./RightParts";
-
+import InputUnstyled, { InputUnstyledProps } from '@mui/base/InputUnstyled';
+import { styled } from '@mui/system';
 export const Inquiry = () => {
 
   const [title, setTitle] = useState<string>("");
@@ -47,7 +48,21 @@ export const Inquiry = () => {
       setIsRequired(true)
     };
   }, [name, email, message])
-
+  const StyledTextareaElement = styled('textarea', {
+    shouldForwardProp: (prop) =>
+      !['ownerState', 'minRows', 'maxRows'].includes(prop.toString()),
+  })(
+    ({ theme }) => `
+    width: 320px;
+    font-size: 0.875rem;
+    font-family: IBM Plex Sans, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    border-radius: 8px;
+    padding: 12px 12px;
+  
+  `,
+  );
   return (
     <>
       <Header title={"お問い合わせ"} />
@@ -79,15 +94,26 @@ export const Inquiry = () => {
             value={title}
             fullWidth
             sx={styles.form}
+            multiline={true}
+            rows={3}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <TextareaAutosize
+          <TextField
+            label="お問い合わせ内容（必須）"
+            value={message}
+            fullWidth
+            sx={styles.form}
+            multiline={true}
+            minRows={10}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          {/* <TextareaAutosize
             minRows={10}
             placeholder={"お問い合わせ内容（必須）"}
-            style={styles.form}
+            // sx={{ marginTop: 1, width: '50%' }}
             onChange={(e) => setMessage(e.target.value)}
             value={message}
-          />
+          /> */}
           <Button variant="contained" component="label" onClick={onSubmit} sx={styles.buttom} disabled={isRequired}>
             お問い合わせ
           </Button>
@@ -103,8 +129,8 @@ export default Inquiry;
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "row" as "row",
-    // alignItems: "center",
+    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
+    alignItems: "space-between",
     justifyContent: "space-between",
   },
   leftContainer: {
@@ -112,92 +138,18 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "70%",
+    width: { xs: '100%', sm: "70%" },
     paddingTop: 5,
-    paddingBottom: 4,
-    // position: "relative",
-  },
-  titleBox: {
-    padding: 3,
-    bgcolor: "whitesmoke",
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
-  imageBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    width: "90%",
-    paddingTop: 7,
-    paddingBottom: 5,
-  },
-  imageItemF: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "25%",
-    hight: "20%",
-  },
-  itemImage: {
-    width: "100%",
-    hight: "100%",
-  },
-  itemContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    paddingRight: 20,
-    width: "30%",
-  },
-  contentContainer: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    width: "100%",
-    paddingTop: 5,
-    paddingLeft: 5,
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
-  },
-  menuBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    paddingLeft: 5,
-  },
-  menuTitle: {
-    fontWeight: "bold",
-    color: "dimgray",
-    paddingTop: 2,
-  },
-  introduction: {
-    fontWeight: "lighter",
-    color: "dimgray",
-    paddingTop: 2,
-  },
-  pagenate: {
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  rightContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "30%",
-    marginRight: 5,
   },
   form: {
-    width: "50%",
+    width: { xs: '80%', sm: '70%', md: '50%' },
     paddingBottom: 3,
+    'MuiOutlinedInput-root::input': {
+      height: '200px'
+    }
   },
   buttom: {
-    // marginRight: 0,
-    width: "50%",
+    width: { xs: '80%', sm: '70%', md: '50%' },
     marginTop: 1,
     marginBottom: 1,
   }

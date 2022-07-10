@@ -24,7 +24,7 @@ export const Gallery = () => {
         <Box sx={styles.leftContainer}>
           <Box sx={styles.contentContainer}>
             {contents.map((content) => (
-              <Box key={content.id} style={styles.itemContainer}>
+              <Box key={content.id} sx={styles.itemContainer}>
                 <a href={content.permalink} target="qoo_insta">
                   <img src={content.media_url} alt="" style={styles.image} />
                 </a>
@@ -43,8 +43,8 @@ export default Gallery;
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "row" as "row",
-    // alignItems: "center",
+    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
+    alignItems: "space-between",
     justifyContent: "space-between",
   },
   leftContainer: {
@@ -52,9 +52,7 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "70%",
-    paddingTop: 5,
-    paddingBottom: 5,
+    width: { xs: '98%', sm: "70%" },
   },
   image: {
     width: "100%",
@@ -63,24 +61,15 @@ const styles = {
   contentContainer: {
     display: "flex",
     flexDirection: "row" as "row",
+    gap: 2,
+    paddingTop: 2,
     flexWrap: "wrap",
-    width: "90%",
+    width: { xs: '100%', sm: '95%' },
+    paddingLeft: { xs: 2, sm: 0 }
   },
   itemContainer: {
     display: "flex",
     flexDirection: "column" as "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    paddingRight: 20,
-    paddingTop: 17,
     width: "30%",
-  },
-  rightContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "30%",
-    marginRight: 5,
   },
 };

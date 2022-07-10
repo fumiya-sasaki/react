@@ -1,5 +1,5 @@
 import {
-  Box, Button, Divider, FormControl, IconButton, Input,
+  Box, Button, FormControl, IconButton, Input,
   InputAdornment, InputLabel, Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -38,7 +38,7 @@ export const RightContent = () => {
         <Typography sx={styles.font}>キーワード検索</Typography>
       </Box>
       <Box sx={styles.serchForm}>
-        <FormControl variant="standard">
+        <FormControl variant="standard" style={{ width: '100%' }}>
           <InputLabel>料理名・食材から探す</InputLabel>
           <Input
             value={tag}
@@ -62,7 +62,6 @@ export const RightContent = () => {
           <Box key={item}>
             <Button
               sx={styles.tagItem}
-              // color={"warning"}
               onClick={() => serch(item)}
             >
               {"＃" + item}
@@ -73,9 +72,7 @@ export const RightContent = () => {
       <Box sx={styles.snsBox}>
         <Typography sx={styles.font}>公式SNS</Typography>
         <hr style={{ width: "90%" }} />
-
-        <a target="_blank" href='https://www.instagram.com/chiacchiere1/'>  <img src={instagram} alt="" width={"50px"} /></a>
-
+        <a target="_blank" href='https://www.instagram.com/chiacchiere1/'><img src={instagram} alt="" width={"50px"} /></a>
       </Box>
     </Box>
   );
@@ -88,16 +85,9 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    width: "30%",
-    marginRight: 5,
+    width: { xs: '100%', sm: "30%" },
+    marginRight: { sm: 5 },
     // bgcolor: "#f3f3f2",
-  },
-  leftContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "70%",
   },
   titleBox: {
     padding: 1,
@@ -111,69 +101,6 @@ const styles = {
     // marginRight: 5,
     marginTop: 5,
   },
-  imageBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    width: "90%",
-    paddingTop: 7,
-    // paddingBottom: 5,
-  },
-  imageItemF: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "25%",
-    hight: "20%",
-  },
-  itemImage: {
-    width: "100%",
-    hight: "100%",
-  },
-  itemContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    paddingLeft: 10,
-    paddingRight: 10,
-    // paddingTop: 30,
-    width: "95%",
-  },
-  contentContainer: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    width: "100%",
-    // paddingLeft: 5,
-    paddingTop: 3,
-    paddingBottom: 5,
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
-  },
-  menuBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    paddingLeft: 5,
-  },
-  menuTitle: {
-    fontWeight: "bold",
-    color: "dimgray",
-    paddingTop: 2,
-  },
-  introduction: {
-    fontWeight: "lighter",
-    color: "dimgray",
-    paddingTop: 2,
-  },
-  // rightContainer: {
-  //   display: "flex",
-  //   flexDirection: "column" as "column",
-  //   alignItems: "center",
-  //   justifyContent: "flex-start",
-  //   width: "30%",
-  //   marginRight: 5,
-  // },
   serchForm: {
     width: "90%",
     paddingTop: 1,
@@ -207,31 +134,8 @@ const styles = {
     fontStyle: "italic",
     color: "dimgray",
     fontWeight: "bold",
-
   },
   border: {
     borderBottom: 1
   },
-  // form: {
-  //   "&:hover": {
-  //     color: "red"
-  //   },
-  // '& label.Mui-focused': {
-  //   color: 'green',
-  // },
-  // '& .MuiInput-underline:after': {
-  //   borderBottomColor: 'green',
-  // },
-  // '& .MuiOutlinedInput-root': {
-  //   '& fieldset': {
-  //     borderColor: 'red',
-  //   },
-  //   '&:hover fieldset': {
-  //     borderColor: 'yellow',
-  //   },
-  //   '&.Mui-focused fieldset': {
-  //     borderColor: 'green',
-  //   },
-  // },
-  // }
 };
