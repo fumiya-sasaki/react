@@ -72,20 +72,21 @@ export const AdminConfig = () => {
 
   return (
     <>
-      <Button onClick={setConfigData}>set</Button>
-      {pickUpIngredients.map((ingredient, index) => (
-        <Box key={index}>
-          <TextField
-            label='旬の食材'
-            value={ingredient}
-            variant='filled'
-            fullWidth
-            onChange={(e) => onChangeIngredients(e.target.value, index)}
-          />
-          <Button onClick={() => deleteForm(index)}>削除</Button>
-        </Box>
-      ))
-      }
+      <Button onClick={setConfigData}>変更</Button>
+      <Box sx={styles.seasonBox}>
+        {pickUpIngredients.map((ingredient, index) => (
+          <Box key={index} sx={styles.seasonItem}>
+            <TextField
+              label='旬の食材'
+              value={ingredient}
+              variant='filled'
+              fullWidth
+              onChange={(e) => onChangeIngredients(e.target.value, index)}
+            />
+            <Button onClick={() => deleteForm(index)}>削除</Button>
+          </Box>
+        ))}
+      </Box>
       <Button onClick={addForm}>追加</Button>
 
       <Box sx={styles.contentContainer}>
@@ -99,67 +100,30 @@ export const AdminConfig = () => {
         ))}
       </Box>
       <TextField
-        label="タイトル"
+        label='季節'
         value={season}
         variant="filled"
         fullWidth
         onChange={(e) => setSeason(e.target.value)}
+        style={{ width: '20%', paddingBottom: 10 }}
       />
-      <Button variant="contained" component="label" >
-        main画像をアップロード
-        <input type="file" hidden onChange={(e) => onChangeMainImage(e)} />
-      </Button>
-      {topImages.map((image, index) => (
-        <img key={index} src={image} width={'200px'} />
-      ))}
+      <Box sx={styles.imgBox}>
+        <Button variant="contained" component="label" >
+          main画像をアップロード
+          <input type="file" hidden onChange={(e) => onChangeMainImage(e)} />
+        </Button>
+        <Box sx={styles.imgItem}>
+          {topImages.map((image, index) => (
+            <img key={index} src={image} width={'200px'} />
+          ))}
+        </Box>
+      </Box>
     </>
   );
 };
 
 export default AdminConfig;
 const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "space-between",
-    justifyContent: "space-between",
-  },
-  leftContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "70%",
-  },
-  titleBox: {
-    padding: 1,
-    bgcolor: "#fdeff2",
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "97%",
-    // marginLeft: 3,
-    // marginRight: 5,
-    marginTop: 5,
-  },
-  imageBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    width: "90%",
-    paddingTop: 7,
-    // paddingBottom: 5,
-  },
-  imageItemF: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "25%",
-    hight: "20%",
-  },
   itemImage: {
     width: "100%",
     hight: "100%",
@@ -176,47 +140,42 @@ const styles = {
   contentContainer: {
     display: "flex",
     flexDirection: "row" as "row",
-    width: "100%",
+    width: "30%",
     // paddingLeft: 5,
     paddingTop: 3,
     paddingBottom: 5,
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
-  },
-  menuBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    paddingLeft: 5,
+    flexWrap: "wrap",
   },
   menuTitle: {
     fontWeight: "bold",
     color: "dimgray",
     paddingTop: 2,
   },
-  introduction: {
-    fontWeight: "lighter",
-    color: "dimgray",
-    paddingTop: 2,
-  },
-  rightContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "30%",
-    marginRight: 5,
-  },
-  serchForm: {
-    width: "60%",
-    paddingTop: 1,
-  },
-  tagBox: {
+  seasonBox: {
     display: "flex",
     flexDirection: "row" as "row",
-    alignItems: "center",
     justifyContent: "flex-start",
+    width: '100%',
+    flexWrap: "wrap",
   },
-  tagItem: {
-    // marginLeft: 1,
+  seasonItem: {
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "flex-start",
+    width: '20%',
+    paddingRight: 2,
   },
+  imgBox: {
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "flex-start",
+  },
+  imgItem: {
+    display: "flex",
+    flexDirection: "row" as "row",
+    justifyContent: "flex-start",
+    width: '100%',
+    flexWrap: "wrap",
+    gap: 2,
+  }
 };

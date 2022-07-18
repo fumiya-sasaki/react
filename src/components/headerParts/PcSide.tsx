@@ -17,9 +17,9 @@ export const Mobile = React.memo(({
   const navigation = useNavigate();
   return (
     <>
-      <Button onClick={() => navigation("/")} sx={styles.font}>ホーム</Button>
-      <FormControl sx={{ width: "20%" }} variant="standard">
-        <InputLabel style={styles.fontCategory}>カテゴリー検索</InputLabel>
+      <Button onClick={() => navigation("/")} sx={styles.font}>HOME</Button>
+      <FormControl sx={{ width: "150px" }} variant="standard">
+        <InputLabel style={styles.fontCategory}>CATEGORY</InputLabel>
         <Select
           value={selectedCategory}
           onChange={categorySerch}
@@ -31,8 +31,8 @@ export const Mobile = React.memo(({
           ))}
         </Select>
       </FormControl>
-      <Button sx={styles.font} onClick={() => navigation("/gallery")}>Instagram Gallery</Button>
-      <Button sx={styles.font} onClick={() => navigation("/inquiry")}>お仕事依頼</Button>
+      <Button sx={styles.font} onClick={() => navigation("/gallery")}>INSTAGRAM GALLERY</Button>
+      <Button sx={styles.font} onClick={() => navigation("/inquiry")}>CONTACT</Button>
     </>
   );
 });
@@ -42,12 +42,18 @@ const styles = {
   font: {
     fontStyle: "italic",
     color: "dimgray",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    '&:hover': {
+      bgcolor: '#f5f5f5'
+    }
   },
   fontCategory: {
     fontStyle: "italic",
     color: "dimgray",
     fontWeight: "bold",
-    fontSize: "15px"
+    fontSize: "15px",
+    '&:hover': {
+      bgcolor: '#f5f5f5'
+    }
   },
 };

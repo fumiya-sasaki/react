@@ -1,4 +1,5 @@
 import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
+import React from "react";
 import { Content } from "../../../slices/recipe";
 
 type ContentFormState = {
@@ -10,7 +11,7 @@ type ContentFormState = {
   disabled: boolean;
 };
 
-export const ContentForm: React.FC<ContentFormState> = ({
+export const ContentForm: React.FC<ContentFormState> = React.memo(({
   recipeContents,
   onChangeTitle,
   onChangeText,
@@ -23,7 +24,7 @@ export const ContentForm: React.FC<ContentFormState> = ({
       {recipeContents.map((content, index) => (
         <Box key={index} style={styles.container}>
           <TextField
-            label="Size"
+            label='タイトル'
             value={content.title}
             variant="filled"
             fullWidth
@@ -50,7 +51,7 @@ export const ContentForm: React.FC<ContentFormState> = ({
       ))}
     </>
   );
-};
+});
 
 export default ContentForm;
 const styles = {

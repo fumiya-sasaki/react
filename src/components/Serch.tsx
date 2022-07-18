@@ -1,7 +1,7 @@
 import { Box, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector, useSize } from "../hooks";
 import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
@@ -14,6 +14,8 @@ export const Serch = () => {
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [totalNumber, setTotalNumber] = useState<number>(1);
   const dispatch = useAppDispatch();
+  const { isMobileSize } = useSize();
+
   const screen: RecipeData[] = useAppSelector(
     (state: RootState) => state.serchScreen
   );
@@ -42,7 +44,11 @@ export const Serch = () => {
         <Box sx={styles.contentContainer}>
           {contents.map((item) => (
             <Box key={item.uid} sx={styles.itemContainer}>
-              <img src={item.mainImageUrl} alt="" style={styles.itemImage} />
+              <img src={item.mainImageUrl} alt="" style={{
+                width: isMobileSize ? '180px' : '300px',
+                height: isMobileSize ? '180px' : '300px',
+                objectFit: 'cover',
+              }} />
               <Link to={"/content/"} state={{ recipeData: item }}>
                 <Typography sx={styles.menuTitle}>{item.title}</Typography>
               </Link>
@@ -112,8 +118,9 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    paddingLeft: "2%",
-    width: { xs: "45%", sm: "31%" },
+    paddingLeft: "10px",
+    width: { xs: "180px", sm: "300px" },
+    paddingBottom: 2,
   },
   contentContainer: {
     flexWrap: "wrap",

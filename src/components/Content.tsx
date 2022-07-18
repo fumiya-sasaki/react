@@ -2,7 +2,7 @@ import { DriveFileMove } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useSize } from "../hooks";
 import { getConnectionRecipe, RecipeData } from "../slices/recipe";
 import { serchString } from "../slices/screen/serchScreen";
 import ConnectionBox from "./contentParts/ConnectionBox";
@@ -25,6 +25,7 @@ export const Content = () => {
     };
   };
 
+  const { isMobileSize } = useSize();
   const { recipeData } = location.state as RecipeState;
   const [connection, setConnection] = useState<RecipeData[]>([]);
   const getConnection = async (): Promise<RecipeData[]> => {
@@ -33,39 +34,51 @@ export const Content = () => {
     return data;
   };
   useEffect(() => {
-    getConnection();
+    if (connection.length === 0) getConnection();
   }, [recipeData.tags]);
 
   return (
     <>
       <Header title={recipeData.title} />
       <Box sx={styles.container}>
-        <Box sx={styles.leftContainer}>
-          <Box sx={styles.tagsBox}>
-            {recipeData.tags.map((tag: string) => (
-              <IconButton key={tag} onClick={() => serch(tag)} size={'small'}>
-                <DriveFileMove /> {tag}
-              </IconButton>
-            ))}
-          </Box>
-
-          <img src={recipeData.mainImageUrl} alt="" width={'95%'} />
-          <Typography sx={styles.introduction}>{recipeData.introduction}</Typography>
-          <Divider variant="middle" />
-
-          {recipeData.contents.map((recipe, index) => (
-            <Box key={index} sx={styles.contentBox} mt={1} mb={1}>
-              {recipe.imageUrls.map((url, index) => (
-                <img key={index} src={url} alt="" style={styles.contentImage} />
+        <Box sx={styles.contents}>
+          <Box sx={styles.leftContainer}>
+            <Box sx={styles.tagsBox}>
+              {recipeData.tags.map((tag: string) => (
+                <IconButton key={tag} onClick={() => serch(tag)} size={'small'}>
+                  <DriveFileMove /> {tag}
+                </IconButton>
               ))}
-              <Typography style={styles.contentTitle}>{recipe.title}</Typography>
-              <Typography style={{ wordBreak: 'break-all', width: '80%' }}>{recipe.text}</Typography>
             </Box>
-          ))}
-          <Divider variant="middle" />
-          <ConnectionBox connection={connection} />
+            <img src={recipeData.mainImageUrl} alt="" style={{
+              width: isMobileSize ? '100%' : '500px',
+              height: isMobileSize ? '250px' : '380px',
+              objectFit: 'cover',
+            }} />
+            <Typography sx={styles.introduction}>{recipeData.introduction}</Typography>
+            <Divider variant="middle" />
+
+            {recipeData.contents.map((recipe, index) => (
+              <Box key={index} sx={styles.contentBox} mt={1} mb={1}>
+                <Box sx={styles.imgBox}>
+                  {recipe.imageUrls.map((url, index) => (
+                    <img key={index} src={url} alt="" style={{
+                      width: isMobileSize ? '170px' : '200px',
+                      height: isMobileSize ? '140px' : '180px',
+                      objectFit: 'cover',
+                      paddingRight: '10px',
+                    }} />
+                  ))}
+                </Box>
+                <Typography style={styles.contentTitle}>{recipe.title}</Typography>
+                <Typography style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '70%', }}>{recipe.text}</Typography>
+              </Box>
+            ))}
+            <Divider variant="middle" />
+            <ConnectionBox connection={connection} />
+          </Box>
+          <RightContent />
         </Box>
-        <RightContent />
       </Box>
       <Footer />
     </>
@@ -76,9 +89,15 @@ export default Content;
 const styles = {
   container: {
     display: "flex",
+    flexDirection: 'column' as 'column',
+    alignItems: "center",
+  },
+  contents: {
+    display: "flex",
     flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
     alignItems: { xs: 'center', sm: 'unset' },
     justifyContent: "space-between",
+    width: { xs: '100%', md: '1000px' }
   },
   leftContainer: {
     display: "flex",
@@ -93,9 +112,11 @@ const styles = {
     marginTop: 30,
     marginBottom: 30,
   },
-  image: {
-    width: "70%",
-    hight: "auto",
+  imgBox: {
+    display: "flex",
+    flexDirection: "row" as "row",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
   },
   contentImage: {
     width: "60%",
@@ -127,7 +148,8 @@ const styles = {
   },
   introduction: {
     width: { xs: '85%', sm: '70%' },
-    flexWrap: "wrap",
+    whiteSpace: 'pre-wrap',
+    wordWrap: 'break-word',
     marginTop: 3,
     paddingBottom: 3,
   },

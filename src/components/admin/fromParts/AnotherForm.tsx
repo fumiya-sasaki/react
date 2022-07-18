@@ -3,18 +3,30 @@ import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
 type AnotherForm = {
   tags: string;
   category: string;
+  season: string;
   setTags: React.Dispatch<React.SetStateAction<string>>;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
+  setSeason: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const AnotherForm: React.FC<AnotherForm> = ({
   tags,
   category,
+  season,
   setTags,
   setCategory,
+  setSeason
 }) => {
   return (
     <Box style={styles.contentContainer}>
+      <TextField
+        label="旬"
+        value={season}
+        variant="filled"
+        fullWidth
+        style={styles.category}
+        onChange={(e) => setSeason(e.target.value)}
+      />
       <TextField
         label="カテゴリー"
         value={category}

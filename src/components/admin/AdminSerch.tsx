@@ -8,18 +8,19 @@ import { RootState } from "../../slices/store";
 
 export const AdminSerch = () => {
   const dispatch = useAppDispatch();
-  // const recipe: RecipeData[] = useAppSelector(
-  //   (state: RootState) => state.recipe
-  // );
+
   const screen: RecipeData[] = useAppSelector(
     (state: RootState) => state.serchScreen
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  // useEffect(() => {
-  //   dispatch(getRecipeData({ recipe, pageNumber }));
-  // }, [recipe]);
+  const [totalNumber, setTotalNumber] = useState<number>(1);
+  useEffect(() => {
+    setContents(screen);
+    if (screen.length > 9) {
+      setTotalNumber(Math.ceil(screen.length));
+    };
+  }, [screen]);
 
   useEffect(() => {
     setContents(screen);
@@ -37,9 +38,9 @@ export const AdminSerch = () => {
       <Box sx={styles.container}>
         <Box sx={styles.contentContainer}>
           {contents.map((item) => (
-            <Box key={item.uid} style={styles.itemContainer}>
-              <img src={item.mainImageUrl} alt="" style={styles.itemImage} />
-              <Link to={"/content/"} state={{ recipeData: item }}>
+            <Box key={item.uid} sx={styles.itemContainer}>
+              <img src={item.mainImageUrl} alt='' style={styles.itemImage} />
+              <Link to={'admin/content'} state={{ recipeData: item }}>
                 <Typography sx={styles.menuTitle}>{item.title}</Typography>
               </Link>
             </Box>
@@ -47,9 +48,10 @@ export const AdminSerch = () => {
         </Box>
         <Pagination
           sx={styles.pagenate}
-          count={10}
-          color="primary"
-          onChange={handlePaginate}
+          count={totalNumber}
+          shape="rounded"
+          color="standard"
+          onChange={(e, pageNumber) => handlePaginate(e, pageNumber)}
         />
       </Box>
     </>
@@ -62,7 +64,7 @@ const styles = {
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   leftContainer: {
     display: "flex",
@@ -83,7 +85,7 @@ const styles = {
   imageBox: {
     display: "flex",
     flexDirection: "column" as "column",
-    width: "90%",
+    width: { xs: "100%", sm: "90%" },
     paddingTop: 7,
     paddingBottom: 5,
   },
@@ -104,19 +106,20 @@ const styles = {
   itemContainer: {
     display: "flex",
     flexDirection: "column" as "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    paddingRight: 20,
-    width: "30%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: "2%",
+    width: { xs: "45%", sm: "31%" },
   },
   contentContainer: {
+    flexWrap: "wrap",
     display: "flex",
     flexDirection: "row" as "row",
-    width: "100%",
+    width: { xs: "95%", sm: "80%" },
     paddingTop: 5,
-    paddingLeft: 5,
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
+    // marginLeft: "5%rem",
+    alignItems: "flex-start",
+    // justifyContent: "center",
   },
   menuBox: {
     display: "flex",

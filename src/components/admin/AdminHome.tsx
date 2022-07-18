@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { RecipeData } from "../../slices/recipe";
 import { RootState } from "../../slices/store";
-import { Restaurant, } from "@mui/icons-material";
+import { DoubleArrow, Restaurant, } from "@mui/icons-material";
 import AdminRightParts from "./AdminRightParts";
 import { nextGetDataScreen } from "../../slices/admin";
 import { getCategory } from "../../slices/category";
@@ -54,7 +54,7 @@ export const AdminHome = () => {
               </Box>
             ))}
           </Box>
-          <Button onClick={getNext}>さらに取得</Button>
+          <Button style={{ width: "80%" }} onClick={getNext}>もっと見る<DoubleArrow /></Button>
         </Box>
         <Box sx={styles.rightContainer}>
           <AdminRightParts />
@@ -119,17 +119,17 @@ const styles = {
     paddingLeft: 10,
     paddingRight: 10,
     // paddingTop: 30,
-    width: "95%",
+    width: "30%",
   },
   contentContainer: {
     display: "flex",
     flexDirection: "row" as "row",
     width: "100%",
-    // paddingLeft: 5,
+    flexWrap: "wrap",
     paddingTop: 3,
     paddingBottom: 5,
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   menuBox: {
     display: "flex",

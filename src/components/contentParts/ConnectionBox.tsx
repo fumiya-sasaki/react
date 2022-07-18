@@ -5,21 +5,18 @@ import React from "react";
 import { RecipeData } from "../../slices/recipe";
 import { Carousel } from "react-responsive-carousel";
 import peach from "../../images/peach.png";
+import { useSize } from "../../hooks";
 
 export const ConnectionBox = React.memo(({
   connection,
 }: {
   connection: RecipeData[];
 }) => {
+  const { isMobileSize } = useSize();
   return (
     <Box sx={styles.newContentBox}>
       <Box sx={styles.titleBox}>
-        <Box>
-          <Typography sx={{ fontWeight: "bold" }}>
-            <Restaurant color={"warning"} />
-          </Typography>
-        </Box>
-        <Typography sx={{ fontWeight: "bold" }}>関連レシピ</Typography>
+        <Typography sx={styles.font}>関連レシピ</Typography>
       </Box>
       <Box sx={styles.contentContainerSeason}>
         <Carousel
@@ -34,8 +31,11 @@ export const ConnectionBox = React.memo(({
         >
           {connection.map((item) => (
             <Box key={item.uid} style={styles.itemContainerSason}>
-              <img src={item.mainImageUrl} alt="" />
-              <Link to={"/content/"} state={{ recipeData: item }}>
+              <img src={item.mainImageUrl} alt="" style={{
+                height: isMobileSize ? '100px' : '150px',
+                objectFit: 'cover',
+              }} />
+              <Link to={"/content/"} state={{ recipeData: item }} style={{ marginBottom: '50px' }}>
                 <Typography sx={styles.menuTitleSason}>{item.title}</Typography>
               </Link>
             </Box>
@@ -54,10 +54,11 @@ const styles = {
   newContentBox: {
     width: "100%",
     marginTop: 5,
+    overFlowX: 'hidden',
   },
   titleBox: {
     padding: 1,
-    bgcolor: "#fdeff2",
+    bgcolor: '#f3f3f2',
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "center",
@@ -76,13 +77,12 @@ const styles = {
     width: "100%",
     paddingTop: 3,
     paddingBottom: 5,
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
   menuTitleSason: {
     fontWeight: "bold",
     color: "dimgray",
     paddingTop: 1,
-    marginBottom: 5,
     display: '-webkit-box',
     WebkitBoxOrient: 'vertical',
     WebkitLineClamp: 1,

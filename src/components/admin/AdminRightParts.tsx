@@ -32,6 +32,10 @@ export const AdminRightParts = () => {
     navigation("/login");
   };
 
+  const goToConfig = async () => {
+    navigation('/admin/config');
+  };
+
   return (
     <>
       <Box sx={styles.titleBox}>
@@ -61,6 +65,7 @@ export const AdminRightParts = () => {
       <Link to={"/admin/article"} state={{ recipeData: initialData }}>
         <Typography sx={styles.menuTitle}>新記事</Typography>
       </Link>
+      <Button onClick={goToConfig}>INFO</Button>
       <Button onClick={logout}>ログアウト</Button>
     </>
   );

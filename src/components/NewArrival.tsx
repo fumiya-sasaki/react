@@ -9,14 +9,12 @@ import Footer from "./Footer";
 import { nextGetDataScreen } from "../slices/screen/newArrivalScreen";
 import { DoubleArrow } from "@mui/icons-material";
 import RightContent from "./RightParts";
-import restaurant from "../images/restaurant.png";
 
 export const NewArrival = React.memo(() => {
   const dispatch = useAppDispatch();
   const screen: RecipeData[] = useAppSelector(
     (state: RootState) => state.newArrivalScreen
   );
-
   const [contents, setContents] = useState<RecipeData[]>([]);
 
   useEffect(() => {
@@ -32,24 +30,26 @@ export const NewArrival = React.memo(() => {
     <>
       <Header title={"新着レシピ"} />
       <Box sx={styles.container}>
-        <Box sx={styles.leftContainer}>
-          <Box sx={styles.titleBox}>
-            <img src={restaurant} alt="" width={"50px"} />
-            <Typography sx={styles.font}>新着レシピ</Typography>
+        <Box sx={styles.contents}>
+          <Box sx={styles.leftContainer}>
+            <Box sx={styles.contentContainer}>
+              {contents.map((item) => (
+                <Box key={item.uid} style={styles.itemContainer}>
+                  <img src={item.mainImageUrl} alt="" style={{
+                    width: '180px',
+                    height: '140px',
+                    objectFit: 'cover',
+                  }} />
+                  <Link to={"/content/"} state={{ recipeData: item }}>
+                    <Typography sx={styles.menuTitle}>{item.title}</Typography>
+                  </Link>
+                </Box>
+              ))}
+            </Box>
+            <Button sx={styles.moreButton} onClick={getNext}>もっと見る<DoubleArrow /></Button>
           </Box>
-          <Box sx={styles.contentContainer}>
-            {contents.map((item) => (
-              <Box key={item.uid} style={styles.itemContainer}>
-                <img src={item.mainImageUrl} alt="" style={styles.itemImage} />
-                <Link to={"/content/"} state={{ recipeData: item }}>
-                  <Typography sx={styles.menuTitle}>{item.title}</Typography>
-                </Link>
-              </Box>
-            ))}
-          </Box>
-          <Button style={{ width: "80%" }} onClick={getNext}>もっと見る<DoubleArrow /></Button>
+          <RightContent />
         </Box>
-        <RightContent />
       </Box>
       <Footer />
     </>
@@ -60,9 +60,15 @@ export default NewArrival;
 const styles = {
   container: {
     display: "flex",
+    flexDirection: 'column' as 'column',
+    alignItems: "center",
+  },
+  contents: {
+    display: "flex",
     flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
     alignItems: { xs: "center", sm: 'unset' },
     justifyContent: { sm: 'space-around' },
+    width: { xs: '100%', md: '1000px' }
   },
   leftContainer: {
     display: "flex",
@@ -70,7 +76,6 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     width: { xs: '92%', sm: "60%" },
-    // paddingLeft: 2
   },
   titleBox: {
     padding: 1,
@@ -92,8 +97,6 @@ const styles = {
     paddingBottom: 10,
     paddingLeft: '1%',
     paddingRight: '1%',
-    // paddingTop: 30,
-    width: "31%",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
@@ -120,5 +123,14 @@ const styles = {
     fontStyle: "italic",
     color: "dimgray",
     fontWeight: "bold"
+  },
+  moreButton: {
+    fontStyle: 'italic',
+    color: 'dimgray',
+    fontWeight: 'bold',
+    '&:hover': {
+      bgcolor: '#f5f5f5'
+    },
+    marginBottom: 2,
   },
 };

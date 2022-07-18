@@ -23,6 +23,7 @@ export const Article = () => {
   const [introduction, setIntroduction] = useState<string>(!recipeData.newArticle ? recipeData.introduction : "");
   const [mainImageUrl, setMainImage] = useState<string>(!recipeData.newArticle ? recipeData.mainImageUrl : "");
   const [category, setCategory] = useState<string>(!recipeData.newArticle ? recipeData.category : "");
+  const [season, setSeason] = useState<string>(!recipeData.newArticle ? recipeData.season : "");
   const [tags, setTags] = useState<string>(!recipeData.newArticle ? "#" + recipeData.tags.join("#") : "");
   const [recipeContents, setRecipeContents] = useState<Content[]>(!recipeData.newArticle ? recipeData.contents
     : [{ imageUrls: [], text: "", title: "", },]);
@@ -54,7 +55,7 @@ export const Article = () => {
       contents: recipeContents,
       category,
       tags: newTags,
-      season: ""
+      season,
     };
     await dispatch(setData(newRecipeData));
     setIsLoading(false);
@@ -111,7 +112,7 @@ export const Article = () => {
   return (
     <Box sx={styles.containerWrap}>
       <Backdrop open={isLoading}>
-        <CircularProgress color="inherit" />
+        <CircularProgress color='inherit' />
       </Backdrop>
       <Box sx={styles.container}>
         <TopForm
@@ -131,7 +132,7 @@ export const Article = () => {
           deleteForm={deleteForm}
           disabled={disabled}
         />
-        <Button variant="contained" sx={styles.button} onClick={addForm} disabled={disabled}>
+        <Button variant='contained' sx={styles.button} onClick={addForm} disabled={disabled}>
           追加
         </Button>
         <AnotherForm
@@ -139,17 +140,21 @@ export const Article = () => {
           setCategory={setCategory}
           tags={tags}
           setTags={setTags}
+          season={season}
+          setSeason={setSeason}
         />
-        <FormControlLabel checked={isCheck} control={<Switch onChange={setPickUpUid} />} label="おすすめ" />
-        <Button variant="contained" onClick={submitRecipeData} disabled={disabled}>レシピ追加</Button>
+        <FormControlLabel checked={isCheck} control={<Switch onChange={setPickUpUid} />} label='おすすめ' />
+        <Button variant='contained' onClick={submitRecipeData} disabled={disabled}>レシピ追加</Button>
       </Box>
-      <Preview
-        title={title}
-        introduction={introduction}
-        recipeContents={recipeContents}
-        mainImageUrl={mainImageUrl}
-        deleteContentImg={deleteContentImg}
-      />
+      <Box sx={styles.previewBox}>
+        <Preview
+          title={title}
+          introduction={introduction}
+          recipeContents={recipeContents}
+          mainImageUrl={mainImageUrl}
+          deleteContentImg={deleteContentImg}
+        />
+      </Box>
     </Box>
   );
 };
@@ -157,9 +162,9 @@ export const Article = () => {
 export default Article;
 const styles = {
   containerWrap: {
-    display: "flex",
+    display: 'flex',
     flexDirection: "row" as "row",
-    alignItems: "flex-start",
+    justifyContent: "space-between",
   },
   container: {
     display: "flex",
@@ -167,9 +172,13 @@ const styles = {
     alignItems: "flex-start",
     justifyContent: "flex-start",
     paddingLeft: 5,
-    width: "50%",
+    width: "45%",
   },
   button: {
     marginBottom: 3,
   },
+  previewBox: {
+    width: "45%",
+    paddingRight: 5,
+  }
 };

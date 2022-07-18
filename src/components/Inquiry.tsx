@@ -1,4 +1,4 @@
-import { Box, Button, Pagination, TextareaAutosize, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Pagination, TextareaAutosize, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -6,6 +6,7 @@ import { init, send } from "emailjs-com";
 import RightContent from "./RightParts";
 import InputUnstyled, { InputUnstyledProps } from '@mui/base/InputUnstyled';
 import { styled } from '@mui/system';
+
 export const Inquiry = () => {
 
   const [title, setTitle] = useState<string>("");
@@ -14,8 +15,11 @@ export const Inquiry = () => {
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [isRequired, setIsRequired] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async () => {
+    setIsRequired(true);
+    setLoading(true);
     const userID = process.env.REACT_APP_USER_ID;
     const serviceID = process.env.REACT_APP_SERVICE_ID;
     const templateID = process.env.REACT_APP_TEMPLATE_ID;
@@ -30,10 +34,14 @@ export const Inquiry = () => {
           phoneNumber,
         }
         try {
-          await send(serviceID, templateID, params)
-          alert('送信成功')
+          await send(serviceID, templateID, params);
+          setIsRequired(false);
+          setLoading(false);
+          alert('送信成功');
         } catch (error) {
-          alert('送信失敗しました。もう一度送信してください。')
+          setIsRequired(false);
+          setLoading(false);
+          alert('送信失敗しました。もう一度送信してください。');
         }
       }
     } else {
@@ -43,26 +51,12 @@ export const Inquiry = () => {
 
   useEffect(() => {
     if (name !== "" && email !== "" && message !== "") {
-      setIsRequired(false)
+      setIsRequired(false);
     } else {
-      setIsRequired(true)
+      setIsRequired(true);
     };
-  }, [name, email, message])
-  const StyledTextareaElement = styled('textarea', {
-    shouldForwardProp: (prop) =>
-      !['ownerState', 'minRows', 'maxRows'].includes(prop.toString()),
-  })(
-    ({ theme }) => `
-    width: 320px;
-    font-size: 0.875rem;
-    font-family: IBM Plex Sans, sans-serif;
-    font-weight: 400;
-    line-height: 1.5;
-    border-radius: 8px;
-    padding: 12px 12px;
-  
-  `,
-  );
+  }, [name, email, message]);
+  const buttonContent = !loading ? 'お問い合わせ' : <CircularProgress color='inherit' size={23} />;
   return (
     <>
       <Header title={"お問い合わせ"} />
@@ -107,15 +101,8 @@ export const Inquiry = () => {
             minRows={10}
             onChange={(e) => setMessage(e.target.value)}
           />
-          {/* <TextareaAutosize
-            minRows={10}
-            placeholder={"お問い合わせ内容（必須）"}
-            // sx={{ marginTop: 1, width: '50%' }}
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-          /> */}
           <Button variant="contained" component="label" onClick={onSubmit} sx={styles.buttom} disabled={isRequired}>
-            お問い合わせ
+            {buttonContent}
           </Button>
         </Box>
         <RightContent />

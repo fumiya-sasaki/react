@@ -1,10 +1,10 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const Footer = () => {
   return (
     <Box style={styles.container}>
       <Typography style={styles.title}>
-        copyrights© ももこごはん. All Rights Reserved.
+        copyrights© chiacchiere. All Rights Reserved.
       </Typography>
       <Typography style={styles.title}>
         当サイト内の文章・画像等の無断転載及び複製などの行為はご遠慮ください。

@@ -49,7 +49,7 @@ export const Home = React.memo(() => {
       setSason(recipe.seasons);
     }
   }, [recipe]);
-  const [tag, setTag] = useState<string>('');
+  const [tag] = useState<string>('');
   const serch = (tagItem?: string) => {
     if (tagItem) {
       dispatch(serchString({ tag: tagItem }));
@@ -61,18 +61,20 @@ export const Home = React.memo(() => {
   };
 
   return (
-    <Box sx={{ width: '100%', overflowX: "hidden" }}>
-      <Header title={"Topページ"} />
+    <Box>
+      <Header title={"Top"} />
       <Box sx={styles.container}>
-        <MainImageBox mainImages={config.topImages} />
-        <Box sx={styles.mainContainer}>
-          <Box sx={styles.leftContainer}>
-            <NewArrivalBox contents={contents} />
-            <SeasonBox season={season} />
-            <TagBox pickUpIngredients={config.pickUpIngredients} serch={serch} />
-            <PickUpBox pickUp={pickUp} />
+        <Box sx={styles.contents}>
+          <MainImageBox mainImages={config.topImages} />
+          <Box sx={styles.mainContainer}>
+            <Box sx={styles.leftContainer}>
+              <NewArrivalBox contents={contents} />
+              <SeasonBox season={season} />
+              <TagBox pickUpIngredients={config.pickUpIngredients} serch={serch} />
+              <PickUpBox pickUp={pickUp} />
+            </Box>
+            <RightContent />
           </Box>
-          <RightContent />
         </Box>
       </Box>
       <Footer />
@@ -85,6 +87,10 @@ const styles = {
   container: {
     display: "flex",
     flexDirection: "column" as "column",
+    alignItems: "center",
+  },
+  contents: {
+    width: { xs: '100%', md: '1000px' },
   },
   mainContainer: {
     display: "flex",
