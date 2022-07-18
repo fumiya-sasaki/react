@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
+import { useSize } from "../../../hooks";
 import { Content } from "../../../slices/recipe";
 
 type PreviewState = {
@@ -16,24 +17,33 @@ export const Preview: React.FC<PreviewState> = ({
   mainImageUrl,
   deleteContentImg,
 }) => {
+  const { isMobileSize } = useSize();
   return (
     <Box style={styles.container}>
       <Typography style={styles.title}>{title}</Typography>
       <Typography style={styles.title}>{introduction}</Typography>
-      <img src={mainImageUrl} alt="" style={styles.image} />
+      <img src={mainImageUrl} alt="" style={{
+        width: isMobileSize ? '250px' : '400px',
+        height: isMobileSize ? '200px' : '320px',
+        objectFit: 'cover',
+      }} />
       <Box>
         {recipeContents.map((recipe, index) => (
           <Box key={index}>
-            <Typography style={styles.contentTitle}>{recipe.title}</Typography>
+            <Typography sx={styles.introduction}>{recipe.title}</Typography>
             {recipe.imageUrls.map((url, imgIndex) => (
               <Box key={imgIndex}>
-                <img src={url} alt="" style={styles.contentImage} />
+                <img src={url} alt="" style={{
+                  width: isMobileSize ? '200px' : '300px',
+                  height: isMobileSize ? '160px' : '250px',
+                  objectFit: 'cover',
+                }} />
                 {url !== "" &&
                   <Button onClick={() => deleteContentImg(index, imgIndex)}>画像削除</Button>
                 }
               </Box>
             ))}
-            <Typography>{recipe.text}</Typography>
+            <Typography sx={styles.text}>{recipe.text}</Typography>
           </Box>
         ))}
       </Box>
@@ -64,5 +74,17 @@ const styles = {
   contentImage: {
     width: "300px",
     hight: "300px",
+  },
+  text: {
+    whiteSpace: 'pre-wrap',
+    wordWrap: 'break-word',
+    width: '70%',
+  },
+  introduction: {
+    width: { xs: '100%', sm: '45%' },
+    whiteSpace: 'pre-wrap',
+    wordWrap: 'break-word',
+    marginTop: 3,
+    paddingBottom: 3,
   },
 };

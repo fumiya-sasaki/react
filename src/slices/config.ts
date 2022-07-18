@@ -1,9 +1,6 @@
-import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  collection, doc, getDoc, getDocs, limit, query, setDoc,
-} from "firebase/firestore";
-import { ArrayDestructuringAssignment } from "typescript";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
 import { RootState } from "./store";
 
@@ -43,19 +40,28 @@ export const setConfig = createAsyncThunk
     "config/setConfig",
     async ({ topImages, pickUpIngredients, recipeUids, season }, thunkApi) => {
       const configDoc = doc(db, "config", "topData");
-
+      const config: Config = (thunkApi.getState() as RootState).config;
+      const deleteImages = config.topImages.filter((img) => !topImages.includes(img));
+      // console.log(deleteImages);
       for (let index = 0; index < topImages.length; index++) {
         if (topImages[index].indexOf("blob") !== -1) {
-          const storageRef = ref(storage, "config/topImg/" + index);
+          const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + index);
           const fetchContentImage = await fetch(topImages[index]);
           const contentImageBlob = await fetchContentImage.blob();
           await uploadBytes(storageRef, contentImageBlob);
-          await getDownloadURL(ref(storage, "config/topImg/" + index))
+          await getDownloadURL(ref(storage, "config/topImg/" + 'imgNumber' + index))
             .then((url) => {
               if (url.indexOf("blob") === -1) topImages[index] = url;
             });
         }
-      }
+      };
+      for (let index = 0; index < deleteImages.length; index++) {
+        const storageNumber: string =
+          deleteImages[index].slice(deleteImages[index].indexOf('imgNumber') + 9,
+            deleteImages[index].indexOf('?alt='));
+        const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + storageNumber);
+        await deleteObject(storageRef).then(() => console.log('OK!'));
+      };
       const newConfig: Config = { topImages, pickUpIngredients, recipeUids, season };
       await setDoc(configDoc, newConfig);
       return newConfig;

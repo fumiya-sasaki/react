@@ -1,14 +1,14 @@
-import { Box, Button, Pagination, TextField, Typography } from "@mui/material";
+import { Box, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getData, RecipeData } from "../../slices/recipe";
+import { useAppDispatch, useAppSelector, useSize } from "../../hooks";
+import { RecipeData } from "../../slices/recipe";
 import { getRecipeData } from "../../slices/screen/serchScreen";
 import { RootState } from "../../slices/store";
 
 export const AdminSerch = () => {
   const dispatch = useAppDispatch();
-
+  const { isMobileSize } = useSize();
   const screen: RecipeData[] = useAppSelector(
     (state: RootState) => state.serchScreen
   );
@@ -39,8 +39,12 @@ export const AdminSerch = () => {
         <Box sx={styles.contentContainer}>
           {contents.map((item) => (
             <Box key={item.uid} sx={styles.itemContainer}>
-              <img src={item.mainImageUrl} alt='' style={styles.itemImage} />
-              <Link to={'admin/content'} state={{ recipeData: item }}>
+              <img src={item.mainImageUrl} alt='' style={{
+                width: isMobileSize ? '185px' : '300px',
+                height: isMobileSize ? '155px' : '250px',
+                objectFit: 'cover',
+              }} />
+              <Link to={'/admin/article'} state={{ recipeData: item }}>
                 <Typography sx={styles.menuTitle}>{item.title}</Typography>
               </Link>
             </Box>

@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from "firebase/firestore";
 import { db, storage } from "../components/core/Firebase";
 import { Category } from "./category";
-import { getPickUp, RecipeData, SubmitRecipe } from "./recipe";
+import { RecipeData, SubmitRecipe } from "./recipe";
 import { RootState } from "./store";
 
 const initialState: RecipeData[] = [];
@@ -12,8 +12,8 @@ export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }
   "admin/nextGetDataScreen",
   async ({ endAt }, thunkApi) => {
     const getDoc = endAt
-      ? await getDocs(query(collection(db, "recipes"), orderBy("createdAt", 'desc'), startAfter(endAt), limit(1)))
-      : await getDocs(query(collection(db, "recipes"), limit(1)));
+      ? await getDocs(query(collection(db, "recipes"), orderBy("createdAt", 'desc'), startAfter(endAt), limit(3)))
+      : await getDocs(query(collection(db, "recipes"), limit(3)));
     const recipe: RecipeData[] = (thunkApi.getState() as RootState).admin;
     const newState: RecipeData[] = [...recipe];
     getDoc.forEach((doc) => {

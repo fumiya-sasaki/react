@@ -35,7 +35,7 @@ export const Content = () => {
   };
   useEffect(() => {
     if (connection.length === 0) getConnection();
-  }, [recipeData.tags]);
+  }, [recipeData.tags, connection.length]);
 
   return (
     <>
@@ -70,8 +70,8 @@ export const Content = () => {
                     }} />
                   ))}
                 </Box>
-                <Typography style={styles.contentTitle}>{recipe.title}</Typography>
-                <Typography style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', width: '70%', }}>{recipe.text}</Typography>
+                <Typography sx={styles.contentTitle}>{recipe.title}</Typography>
+                <Typography sx={styles.text}>{recipe.text}</Typography>
               </Box>
             ))}
             <Divider variant="middle" />
@@ -125,8 +125,6 @@ const styles = {
   itemContainer: {
     display: "flex",
     flexDirection: "row" as "row",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   contentTitle: {
     marginTop: 20,
@@ -154,13 +152,14 @@ const styles = {
     paddingBottom: 3,
   },
   tagsBox: {
-    // display: "flex",
-    // flexDirection: 'row' as 'row',
-    // alignItems: "space-between",
-    // justifyContent: "space-between",
     width: '70%',
     flexWrap: "wrap",
     paddingTop: 1,
     paddingBottom: 1,
+  },
+  text: {
+    whiteSpace: 'pre-wrap',
+    wordWrap: 'break-word',
+    width: '70%',
   }
 };

@@ -36,12 +36,12 @@ export const Article = () => {
 
   useEffect(() => {
     dispatch(getConfig());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!recipeData.newArticle
       && config.recipeUids.includes(recipeData.uid)) setIsCheck(true);
-  }, [config.recipeUids]);
+  }, [config.recipeUids, recipeData.newArticle, recipeData.uid]);
 
   const submitRecipeData = async () => {
     setIsLoading(true);
@@ -163,22 +163,23 @@ export default Article;
 const styles = {
   containerWrap: {
     display: 'flex',
-    flexDirection: "row" as "row",
-    justifyContent: "space-between",
+    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
+    alignItems: 'space-between',
+    justifyContent: 'space-between',
   },
   container: {
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    paddingLeft: 5,
-    width: "45%",
+    paddingLeft: { xs: 1, sm: 5 },
+    width: { xs: '100%', sm: '45%' },
   },
   button: {
     marginBottom: 3,
   },
   previewBox: {
-    width: "45%",
-    paddingRight: 5,
+    width: { xs: '100%', sm: '45%' },
+    paddingRight: { xs: 1, sm: 5 },
   }
 };

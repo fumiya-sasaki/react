@@ -1,9 +1,6 @@
-import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  collection, doc, getDoc, getDocs, limit, query, setDoc, where,
-} from "firebase/firestore";
-import { db, storage } from "../components/core/Firebase";
+import { collection, getDocs, limit, query, where, } from "firebase/firestore";
+import { db } from "../components/core/Firebase";
 import { RootState } from "./store";
 
 export type Content = {
@@ -151,7 +148,6 @@ export const getPickUp = createAsyncThunk<HomeRecipe, { season: string, recipeUi
 
 export const getConnectionRecipe = async (tags: string[]): Promise<RecipeData[]> => {
   try {
-    console.log(tags)
     const recipesRef = collection(db, "recipes");
     const docPickUp = await getDocs(
       query(recipesRef, where("tags", "array-contains-any", tags))
@@ -172,7 +168,6 @@ export const getConnectionRecipe = async (tags: string[]): Promise<RecipeData[]>
       };
       pickUp.push(result);
     });
-    console.log(pickUp)
     return pickUp;
   } catch {
     console.log("error")

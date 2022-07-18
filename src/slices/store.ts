@@ -3,7 +3,6 @@ import { admin } from "./admin";
 import { category } from "./category";
 import { config } from "./config";
 import { recipe } from "./recipe";
-import { recommendation } from "./recommendation";
 import { newArrivalScreen } from "./screen/newArrivalScreen";
 import { serchScreen } from "./screen/serchScreen";
 
@@ -13,7 +12,6 @@ const reducer = combineReducers({
   newArrivalScreen,
   serchScreen,
   admin,
-  recommendation,
   config,
 });
 

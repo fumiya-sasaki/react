@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks";
 import { initialData } from "../../slices/recipe";
-import { MenuBook, Search } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import { signOut } from "firebase/auth";
 import { auth } from "../core/Firebase";
 import { serchString } from "../../slices/screen/serchScreen";
@@ -37,13 +37,8 @@ export const AdminRightParts = () => {
   };
 
   return (
-    <>
+    <Box sx={styles.container}>
       <Box sx={styles.titleBox}>
-        <Box>
-          <Typography sx={{ fontWeight: "bold" }}>
-            <MenuBook color={"warning"} />
-          </Typography>
-        </Box>
         <Typography sx={{ fontWeight: "bold" }}>キーワード検索</Typography>
       </Box>
       <Box sx={styles.serchForm}>
@@ -67,15 +62,24 @@ export const AdminRightParts = () => {
       </Link>
       <Button onClick={goToConfig}>INFO</Button>
       <Button onClick={logout}>ログアウト</Button>
-    </>
+    </Box>
   );
 };
 
 export default AdminRightParts;
 const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: { xs: '100%', sm: '30%' },
+    marginRight: { sm: 5 },
+    marginBottom: 5,
+  },
   titleBox: {
     padding: 1,
-    bgcolor: "#fdeff2",
+    bgcolor: '#f3f3f2',
     display: "flex",
     flexDirection: "row" as "row",
     alignItems: "center",

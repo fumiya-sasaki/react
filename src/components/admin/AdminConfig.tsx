@@ -41,7 +41,6 @@ export const AdminConfig = () => {
   const addForm = () => {
     const newPickUpIngredients: string[] = [...pickUpIngredients];
     newPickUpIngredients.push('');
-    console.log(newPickUpIngredients);
     setPickUpIngredients(newPickUpIngredients);
   };
 
@@ -61,9 +60,14 @@ export const AdminConfig = () => {
     if (e.target.files[0]) {
       const newImages = [...topImages];
       newImages.push(URL.createObjectURL(e.target.files[0]));
-      console.log(newImages);
       setTopImages(newImages);
     }
+  };
+
+  const deleteTopImg = (index: number) => {
+    const newImages: string[] = [...topImages];
+    newImages.splice(index, 1);
+    setTopImages(newImages);
   };
 
   const setConfigData = () => {
@@ -114,7 +118,14 @@ export const AdminConfig = () => {
         </Button>
         <Box sx={styles.imgItem}>
           {topImages.map((image, index) => (
-            <img key={index} src={image} width={'200px'} />
+            <Box key={index}>
+              <img src={image} style={{
+                width: '290px',
+                height: '240px',
+                objectFit: 'cover',
+              }} />
+              <Button onClick={() => deleteTopImg(index)}>削除</Button>
+            </Box>
           ))}
         </Box>
       </Box>
