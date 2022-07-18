@@ -1,15 +1,15 @@
-import { Backdrop, Box, Button, CircularProgress, FormControlLabel, Switch } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { setData } from "../../slices/admin";
-import { Config, getConfig, setRecipeUids } from "../../slices/config";
-import { Content, RecipeData, SubmitRecipe } from "../../slices/recipe";
-import { RootState } from "../../slices/store";
-import AnotherForm from "./fromParts/AnotherForm";
-import ContentForm from "./fromParts/ContentForm";
-import Preview from "./fromParts/Preview";
-import TopForm from "./fromParts/TopForm";
+import { Backdrop, Box, Button, CircularProgress, FormControlLabel, Switch } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setData } from '../../slices/admin';
+import { Config, getConfig, setRecipeUids } from '../../slices/config';
+import { Content, RecipeData, SubmitRecipe } from '../../slices/recipe';
+import { RootState } from '../../slices/store';
+import AnotherForm from './fromParts/AnotherForm';
+import ContentForm from './fromParts/ContentForm';
+import Preview from './fromParts/Preview';
+import TopForm from './fromParts/TopForm';
 
 export const Article = () => {
   const location = useLocation();
@@ -19,14 +19,14 @@ export const Article = () => {
 
   const { recipeData } = location.state as RecipeState;
   const config: Config = useAppSelector((state: RootState) => state.config);
-  const [title, setTitle] = useState<string>(!recipeData.newArticle ? recipeData.title : "");
-  const [introduction, setIntroduction] = useState<string>(!recipeData.newArticle ? recipeData.introduction : "");
-  const [mainImageUrl, setMainImage] = useState<string>(!recipeData.newArticle ? recipeData.mainImageUrl : "");
-  const [category, setCategory] = useState<string>(!recipeData.newArticle ? recipeData.category : "");
-  const [season, setSeason] = useState<string>(!recipeData.newArticle ? recipeData.season : "");
-  const [tags, setTags] = useState<string>(!recipeData.newArticle ? "#" + recipeData.tags.join("#") : "");
+  const [title, setTitle] = useState<string>(!recipeData.newArticle ? recipeData.title : '');
+  const [introduction, setIntroduction] = useState<string>(!recipeData.newArticle ? recipeData.introduction : '');
+  const [mainImageUrl, setMainImage] = useState<string>(!recipeData.newArticle ? recipeData.mainImageUrl : '');
+  const [category, setCategory] = useState<string>(!recipeData.newArticle ? recipeData.category : '');
+  const [season, setSeason] = useState<string>(!recipeData.newArticle ? recipeData.season : '');
+  const [tags, setTags] = useState<string>(!recipeData.newArticle ? '#' + recipeData.tags.join('#') : '');
   const [recipeContents, setRecipeContents] = useState<Content[]>(!recipeData.newArticle ? recipeData.contents
-    : [{ imageUrls: [], text: "", title: "", },]);
+    : [{ imageUrls: [], text: '', title: '', },]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(false);
   const [isCheck, setIsCheck] = useState<boolean>(false);
@@ -46,7 +46,7 @@ export const Article = () => {
   const submitRecipeData = async () => {
     setIsLoading(true);
     setDisabled(true);
-    const newTags: string[] = tags.split("#");
+    const newTags: string[] = tags.split('#').filter((item) => item !== '');
     const newRecipeData: SubmitRecipe = {
       uid: !recipeData.newArticle ? recipeData.uid : 0,
       title,
@@ -60,7 +60,7 @@ export const Article = () => {
     await dispatch(setData(newRecipeData));
     setIsLoading(false);
     setDisabled(false);
-    navigation("/admin/home");
+    navigation('/admin/home');
   };
 
   const onChangeContentImage = async (e: any, index: number) => {
@@ -74,8 +74,8 @@ export const Article = () => {
   const addForm = () => {
     const newContent: Content = {
       imageUrls: [],
-      text: "",
-      title: "",
+      text: '',
+      title: '',
     };
     const newRecipeContents: Content[] = [...recipeContents, newContent];
     setRecipeContents(newRecipeContents);
@@ -143,7 +143,9 @@ export const Article = () => {
           season={season}
           setSeason={setSeason}
         />
-        <FormControlLabel checked={isCheck} control={<Switch onChange={setPickUpUid} />} label='おすすめ' />
+        {recipeData.uid !== 0 &&
+          <FormControlLabel checked={isCheck} control={<Switch onChange={setPickUpUid} />} label='おすすめ' />
+        }
         <Button variant='contained' onClick={submitRecipeData} disabled={disabled}>レシピ追加</Button>
       </Box>
       <Box sx={styles.previewBox}>
@@ -168,10 +170,10 @@ const styles = {
     justifyContent: 'space-between',
   },
   container: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     paddingLeft: { xs: 1, sm: 5 },
     width: { xs: '100%', sm: '45%' },
   },

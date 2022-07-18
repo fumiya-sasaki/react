@@ -1,14 +1,14 @@
-import { DriveFileMove } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useSize } from "../hooks";
-import { getConnectionRecipe, RecipeData } from "../slices/recipe";
-import { serchString } from "../slices/screen/serchScreen";
-import ConnectionBox from "./contentParts/ConnectionBox";
-import Footer from "./Footer";
-import Header from "./Header";
-import RightContent from "./RightParts";
+import { DriveFileMove } from '@mui/icons-material';
+import { Box, Divider, IconButton, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useSize } from '../hooks';
+import { getConnectionRecipe, RecipeData } from '../slices/recipe';
+import { serchString } from '../slices/screen/serchScreen';
+import ConnectionBox from './contentParts/ConnectionBox';
+import Footer from './Footer';
+import Header from './Header';
+import RightContent from './RightParts';
 
 export const Content = () => {
   const location = useLocation();
@@ -21,7 +21,7 @@ export const Content = () => {
   const serch = (tagItem: string) => {
     if (tagItem) {
       dispatch(serchString({ tag: tagItem }));
-      navigation("/serch", { state: { title: tagItem } });
+      navigation('/serch', { state: { title: tagItem } });
     };
   };
 
@@ -50,19 +50,19 @@ export const Content = () => {
                 </IconButton>
               ))}
             </Box>
-            <img src={recipeData.mainImageUrl} alt="" style={{
+            <img src={recipeData.mainImageUrl} alt='' style={{
               width: isMobileSize ? '100%' : '500px',
               height: isMobileSize ? '250px' : '380px',
               objectFit: 'cover',
             }} />
             <Typography sx={styles.introduction}>{recipeData.introduction}</Typography>
-            <Divider variant="middle" />
+            <Divider variant='middle' />
 
             {recipeData.contents.map((recipe, index) => (
               <Box key={index} sx={styles.contentBox} mt={1} mb={1}>
                 <Box sx={styles.imgBox}>
                   {recipe.imageUrls.map((url, index) => (
-                    <img key={index} src={url} alt="" style={{
+                    <img key={index} src={url} alt='' style={{
                       width: isMobileSize ? '170px' : '200px',
                       height: isMobileSize ? '140px' : '180px',
                       objectFit: 'cover',
@@ -74,7 +74,7 @@ export const Content = () => {
                 <Typography sx={styles.text}>{recipe.text}</Typography>
               </Box>
             ))}
-            <Divider variant="middle" />
+            <Divider variant='middle' />
             <ConnectionBox connection={connection} />
           </Box>
           <RightContent />
@@ -88,59 +88,59 @@ export const Content = () => {
 export default Content;
 const styles = {
   container: {
-    display: "flex",
+    display: 'flex',
     flexDirection: 'column' as 'column',
-    alignItems: "center",
+    alignItems: 'center',
   },
   contents: {
-    display: "flex",
+    display: 'flex',
     flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
     alignItems: { xs: 'center', sm: 'unset' },
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     width: { xs: '100%', md: '1000px' }
   },
   leftContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: { xs: 'flex-start', sm: "flex-start" },
-    justifyContent: "center",
-    width: { xs: '92%', sm: "70%" },
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: { xs: 'flex-start', sm: 'flex-start' },
+    justifyContent: 'center',
+    width: { xs: '92%', sm: '70%' },
     paddingLeft: { xs: 0, sm: 10 }
   },
   title: {
-    fontSize: "20px",
+    fontSize: '20px',
     marginTop: 30,
     marginBottom: 30,
   },
   imgBox: {
-    display: "flex",
-    flexDirection: "row" as "row",
-    justifyContent: "flex-start",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexDirection: 'row' as 'row',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
   },
   contentImage: {
-    width: "60%",
-    hight: "auto",
+    width: '60%',
+    hight: 'auto',
   },
   itemContainer: {
-    display: "flex",
-    flexDirection: "row" as "row",
+    display: 'flex',
+    flexDirection: 'row' as 'row',
   },
   contentTitle: {
     marginTop: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   rightContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "30%",
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '30%',
     marginRight: 5,
   },
   contentBox: {
-    display: "flex",
-    flexDirection: "column" as "column",
+    display: 'flex',
+    flexDirection: 'column' as 'column',
     alignItems: { xs: 'flex-start', sm: 'flex-start' },
     // paddingLeft: { xs: 10, sm: 0 }
   },
@@ -153,13 +153,13 @@ const styles = {
   },
   tagsBox: {
     width: '70%',
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
     paddingTop: 1,
     paddingBottom: 1,
   },
   text: {
     whiteSpace: 'pre-wrap',
     wordWrap: 'break-word',
-    width: '70%',
+    // width: '70%',
   }
 };

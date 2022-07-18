@@ -30,7 +30,7 @@ export const Preview: React.FC<PreviewState> = ({
       <Box>
         {recipeContents.map((recipe, index) => (
           <Box key={index}>
-            <Typography sx={styles.introduction}>{recipe.title}</Typography>
+            <Typography sx={styles.contentsTitle}>{recipe.title}</Typography>
             {recipe.imageUrls.map((url, imgIndex) => (
               <Box key={imgIndex}>
                 <img src={url} alt="" style={{
@@ -78,12 +78,8 @@ const styles = {
   text: {
     whiteSpace: 'pre-wrap',
     wordWrap: 'break-word',
-    width: '70%',
   },
-  introduction: {
-    width: { xs: '100%', sm: '45%' },
-    whiteSpace: 'pre-wrap',
-    wordWrap: 'break-word',
+  contentsTitle: {
     marginTop: 3,
     paddingBottom: 3,
   },
