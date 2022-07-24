@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../hooks";
 import { initialData } from "../../slices/recipe";
 import { Search } from "@mui/icons-material";
 import { signOut } from "firebase/auth";
-import { auth } from "../core/Firebase";
+import { auth } from "../core/firebase";
 import { serchString } from "../../slices/screen/serchScreen";
 
 export const AdminRightParts = () => {

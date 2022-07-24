@@ -1,9 +1,9 @@
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from "firebase/firestore";
-import { db, storage } from "../components/core/Firebase";
+import { db, storage } from "../components/core/firebase";
 import { Category } from "./category";
-import { RecipeData, SubmitRecipe } from "./recipe";
+import { getRecipeDataResult, RecipeData, SubmitRecipe } from "./recipe";
 import { RootState } from "./store";
 
 const initialState: RecipeData[] = [];
@@ -15,25 +15,8 @@ export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }
       ? await getDocs(query(collection(db, "recipes"), orderBy("createdAt", 'desc'), startAfter(endAt), limit(3)))
       : await getDocs(query(collection(db, "recipes"), limit(3)));
     const recipe: RecipeData[] = (thunkApi.getState() as RootState).admin;
-    const newState: RecipeData[] = [...recipe];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: ""
-      };
-      newState.push(result);
-    });
-    const afterFilterState = newState.filter((v, i, a) => {
-      return a.findIndex((state) => state.uid === v.uid) === i;
-    });
+    const newState: RecipeData[] = recipe.concat(getRecipeDataResult(getDoc));
+    const afterFilterState = newState.filter((v, i, a) => a.findIndex((state) => state.uid === v.uid) === i);
     return afterFilterState;
   });
 
@@ -90,7 +73,7 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
       contents: recipeData.contents,
       category: recipeData.category,
       tags: recipeData.tags,
-      season: "",
+      season: recipeData.season,
     };
     const newRecipe = [result, ...recipe];
     const newCategory = { ...category, category: Array.from(new Set([...category.category, recipeData.category])) };

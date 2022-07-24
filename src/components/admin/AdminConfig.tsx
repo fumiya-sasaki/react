@@ -21,7 +21,7 @@ export const AdminConfig = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(getConfig());
+    if (config.pickUpIngredients.length === 0) dispatch(getConfig());
   }, []);
 
   const promiseGetPickUp = async (): Promise<RecipeData[]> => {

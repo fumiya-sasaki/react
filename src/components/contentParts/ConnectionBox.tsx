@@ -1,10 +1,8 @@
-import { ArrowCircleLeftTwoTone, ArrowCircleRightTwoTone, DoubleArrow, Restaurant } from "@mui/icons-material";
-import { Box, Button, IconButton, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import React from "react";
 import { RecipeData } from "../../slices/recipe";
 import { Carousel } from "react-responsive-carousel";
-import peach from "../../images/peach.png";
 import { useSize } from "../../hooks";
 
 export const ConnectionBox = React.memo(({
@@ -24,7 +22,7 @@ export const ConnectionBox = React.memo(({
           swipeable={true}
           autoPlay={true}
           infiniteLoop={true}
-          emulateTouch={true}
+          // emulateTouch={true}
           centerMode={true}
           showStatus={false}
           centerSlidePercentage={40}

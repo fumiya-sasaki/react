@@ -1,7 +1,7 @@
 import { onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { auth } from "./Firebase";
+import { auth } from "./firebase";
 
 type Props = {
   children: JSX.Element;

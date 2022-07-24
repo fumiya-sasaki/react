@@ -35,7 +35,7 @@ export const Article = () => {
   const navigation = useNavigate();
 
   useEffect(() => {
-    dispatch(getConfig());
+    if (config.pickUpIngredients.length === 0) dispatch(getConfig());
   }, [dispatch]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../components/core/Firebase";
+import { db } from "../components/core/firebase";
 
 export type Category = {
   category: string[];

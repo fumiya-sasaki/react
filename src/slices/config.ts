@@ -1,7 +1,7 @@
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db, storage } from "../components/core/Firebase";
+import { db, storage } from "../components/core/firebase";
 import { RootState } from "./store";
 
 export type Config = {

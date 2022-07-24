@@ -27,7 +27,7 @@ export const Home = React.memo(() => {
   const [season, setSason] = useState<RecipeData[]>([]);
 
   useEffect(() => {
-    dispatch(getConfig());
+    if (config.topImages.length === 0) dispatch(getConfig());
   }, []);
 
   useEffect(() => {

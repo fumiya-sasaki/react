@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
-import { db } from "../../components/core/Firebase";
+import { db } from "../../components/core/firebase";
 import { getRecipeDataResult, RecipeData } from "../recipe";
 import { RootState } from "../store";
 

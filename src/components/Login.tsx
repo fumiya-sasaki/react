@@ -1,6 +1,6 @@
 import { Box, Button, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { auth } from "./core/Firebase";
+import { auth } from "./core/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 

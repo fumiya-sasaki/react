@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, DocumentData, getDocs, limit, query, QuerySnapshot, where, } from "firebase/firestore";
-import { db } from "../components/core/Firebase";
-import { RootState } from "./store";
+import { db } from "../components/core/firebase";
 
 export type Content = {
   imageUrls: string[];
@@ -71,24 +70,15 @@ export const getRecipeDataResult = (docs: QuerySnapshot<DocumentData>) => {
   return recipeDates;
 };
 
-export const getData = createAsyncThunk<HomeRecipe>(
-  "recipe/getData",
-  async (_, thunkApi) => {
-    const getDoc = await getDocs(query(collection(db, "recipes"), limit(6)));
-    const recipe: HomeRecipe = (thunkApi.getState() as RootState).recipe;
-    const newArrival: RecipeData[] = getRecipeDataResult(getDoc);
-    const newState = { ...recipe, newArrival };
-    return newState;
-  });
-
-
 export const getHomeRecipes = createAsyncThunk<HomeRecipe, { season: string, recipeUids: number[] }>(
   "recipe/getHomeRecipes",
   async ({ season, recipeUids }, thunkApi) => {
     const recipesRef = collection(db, "recipes");
-    const docSeason = await getDocs(query(recipesRef, where("season", "==", season)));
-    const docPickUp = await getDocs(query(recipesRef, where("uid", "in", recipeUids)));
-    const getDoc = await getDocs(query(collection(db, "recipes"), limit(6)));
+    const [docSeason, docPickUp, getDoc] = await Promise.all([
+      getDocs(query(recipesRef, where("season", "==", season))),
+      getDocs(query(recipesRef, where("uid", "in", recipeUids))),
+      getDocs(query(collection(db, "recipes"), limit(6)))
+    ]);
     const newArrival: RecipeData[] = getRecipeDataResult(getDoc);
     const seasons: RecipeData[] = getRecipeDataResult(docSeason);
     const pickUp: RecipeData[] = getRecipeDataResult(docPickUp);
@@ -114,9 +104,6 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getData.fulfilled, (state, action) => {
-        return action.payload;
-      })
       .addCase(getHomeRecipes.fulfilled, (state, action) => {
         return action.payload;
       })

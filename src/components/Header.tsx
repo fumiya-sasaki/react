@@ -21,9 +21,8 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
   const [categoris, setCategoris] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [topTitle] = useState<string>(title);
-
   useEffect(() => {
-    dispatch(getCategory());
+    if (categoryState.category.length === 0) dispatch(getCategory());
   }, [dispatch]);
 
   useEffect(() => {

@@ -22,10 +22,6 @@ export const AdminSerch = () => {
     };
   }, [screen]);
 
-  useEffect(() => {
-    setContents(screen);
-  }, [screen]);
-
   const handlePaginate = (
     event: React.ChangeEvent<unknown>,
     pageNumber: number
