@@ -17,23 +17,18 @@ type HeaderState = {
 export const Header: React.FC<HeaderState> = ({ title }) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
-  const category: Category = useAppSelector(
-    (state: RootState) => state.category
-  );
-
+  const categoryState: Category = useAppSelector((state: RootState) => state.category);
   const [categoris, setCategoris] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [topTitle, setTopTitle] = useState<string>('');
-  useEffect(() => {
-    dispatch(getCategory());
-    setCategoris(category.category);
-  }, [category, dispatch]);
+  const [topTitle] = useState<string>(title);
 
   useEffect(() => {
-    if (title) {
-      setTopTitle(title);
-    }
-  }, [title]);
+    dispatch(getCategory());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setCategoris(categoryState.category);
+  }, [categoryState, dispatch]);
 
   const categorySerch = (event: SelectChangeEvent) => {
     const category = event.target.value as string;

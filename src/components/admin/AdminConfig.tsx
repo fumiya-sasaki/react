@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography, } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress, TextField, Typography, } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -18,7 +18,7 @@ export const AdminConfig = () => {
   const [pickUpData, setPickUpData] = useState<RecipeData[]>([]);
   const [season, setSeason] = useState<string>('');
   const [topImages, setTopImages] = useState<string[]>([]);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getConfig());
@@ -70,12 +70,17 @@ export const AdminConfig = () => {
     setTopImages(newImages);
   };
 
-  const setConfigData = () => {
-    dispatch(setConfig({ topImages, pickUpIngredients, recipeUids, season }))
-  }
+  const setConfigData = async () => {
+    setIsLoading(true);
+    await dispatch(setConfig({ topImages, pickUpIngredients, recipeUids, season }));
+    setIsLoading(false);
+  };
 
   return (
     <>
+      <Backdrop open={isLoading}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
       <Button onClick={setConfigData}>変更</Button>
       <Box sx={styles.seasonBox}>
         {pickUpIngredients.map((ingredient, index) => (

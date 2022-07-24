@@ -1,11 +1,9 @@
-import { Box, Button, CircularProgress, IconButton, Pagination, TextareaAutosize, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { init, send } from "emailjs-com";
 import RightContent from "./RightParts";
-import InputUnstyled, { InputUnstyledProps } from '@mui/base/InputUnstyled';
-import { styled } from '@mui/system';
 
 export const Inquiry = () => {
 
@@ -23,29 +21,19 @@ export const Inquiry = () => {
     const userID = process.env.REACT_APP_USER_ID;
     const serviceID = process.env.REACT_APP_SERVICE_ID;
     const templateID = process.env.REACT_APP_TEMPLATE_ID;
-    if (name !== "" && email !== "" && message !== "") {
-      if (userID && serviceID && templateID) {
-        init(userID)
-        const params = {
-          name,
-          email,
-          title,
-          message,
-          phoneNumber,
-        }
-        try {
-          await send(serviceID, templateID, params);
-          setIsRequired(false);
-          setLoading(false);
-          alert('送信成功');
-        } catch (error) {
-          setIsRequired(false);
-          setLoading(false);
-          alert('送信失敗しました。もう一度送信してください。');
-        }
+    if (userID && serviceID && templateID) {
+      init(userID)
+      const params = { name, email, title, message, phoneNumber }
+      try {
+        await send(serviceID, templateID, params);
+        setIsRequired(false);
+        setLoading(false);
+        alert('送信成功');
+      } catch (error) {
+        setIsRequired(false);
+        setLoading(false);
+        alert('送信失敗しました。もう一度送信してください。');
       }
-    } else {
-      alert('必須項目を入力してもう一度送信ボタンを押してください。')
     }
   };
 

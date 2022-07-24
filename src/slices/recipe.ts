@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs, limit, query, where, } from "firebase/firestore";
+import { collection, DocumentData, getDocs, limit, query, QuerySnapshot, where, } from "firebase/firestore";
 import { db } from "../components/core/Firebase";
 import { RootState } from "./store";
 
@@ -50,127 +50,60 @@ const initialState: HomeRecipe = {
   pickUp: [],
 };
 
+
+export const getRecipeDataResult = (docs: QuerySnapshot<DocumentData>) => {
+  const recipeDates: RecipeData[] = [];
+  docs.forEach((doc) => {
+    const collection = doc.data();
+    const result: RecipeData = {
+      uid: collection.uid,
+      createdAt: collection.createdAt,
+      title: collection.title,
+      contents: collection.contents,
+      introduction: collection.introduction,
+      mainImageUrl: collection.mainImageUrl,
+      category: collection.category,
+      tags: collection.tags,
+      season: collection.season,
+    };
+    recipeDates.push(result);
+  });
+  return recipeDates;
+};
+
 export const getData = createAsyncThunk<HomeRecipe>(
   "recipe/getData",
   async (_, thunkApi) => {
     const getDoc = await getDocs(query(collection(db, "recipes"), limit(6)));
     const recipe: HomeRecipe = (thunkApi.getState() as RootState).recipe;
-    const newArrival: RecipeData[] = [];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      newArrival.push(result);
-    });
+    const newArrival: RecipeData[] = getRecipeDataResult(getDoc);
     const newState = { ...recipe, newArrival };
     return newState;
   });
 
-export const getPickUp = createAsyncThunk<HomeRecipe, { season: string, recipeUids: number[] }>(
-  "recipe/getPickUp",
+
+export const getHomeRecipes = createAsyncThunk<HomeRecipe, { season: string, recipeUids: number[] }>(
+  "recipe/getHomeRecipes",
   async ({ season, recipeUids }, thunkApi) => {
     const recipesRef = collection(db, "recipes");
-    const docSeason = await getDocs(
-      query(recipesRef, where("season", "==", season))
-    );
-
-    const docPickUp = await getDocs(
-      query(recipesRef, where("uid", "in", recipeUids))
-    );
-
+    const docSeason = await getDocs(query(recipesRef, where("season", "==", season)));
+    const docPickUp = await getDocs(query(recipesRef, where("uid", "in", recipeUids)));
     const getDoc = await getDocs(query(collection(db, "recipes"), limit(6)));
-
-
-    const newArrival: RecipeData[] = [];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      newArrival.push(result);
-    });
-
-    const seasons: RecipeData[] = [];
-    const pickUp: RecipeData[] = [];
-    docSeason.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      seasons.push(result);
-    });
-
-    docPickUp.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      pickUp.push(result);
-    });
-
+    const newArrival: RecipeData[] = getRecipeDataResult(getDoc);
+    const seasons: RecipeData[] = getRecipeDataResult(docSeason);
+    const pickUp: RecipeData[] = getRecipeDataResult(docPickUp);
     const newState: HomeRecipe = { newArrival, seasons, pickUp }
-    console.log("getRecipeData");
     return newState;
   });
 
 export const getConnectionRecipe = async (tags: string[]): Promise<RecipeData[]> => {
   try {
     const recipesRef = collection(db, "recipes");
-    const docPickUp = await getDocs(
-      query(recipesRef, where("tags", "array-contains-any", tags))
-    );
-    const pickUp: RecipeData[] = [];
-    docPickUp.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      pickUp.push(result);
-    });
+    const docPickUp = await getDocs(query(recipesRef, where("tags", "array-contains-any", tags)));
+    const pickUp: RecipeData[] = getRecipeDataResult(docPickUp);
     return pickUp;
   } catch {
-    console.log("error")
+    console.log("error");
     const pickUp: RecipeData[] = [];
     return pickUp;
   }
@@ -184,7 +117,7 @@ const slice = createSlice({
       .addCase(getData.fulfilled, (state, action) => {
         return action.payload;
       })
-      .addCase(getPickUp.fulfilled, (state, action) => {
+      .addCase(getHomeRecipes.fulfilled, (state, action) => {
         return action.payload;
       })
   },

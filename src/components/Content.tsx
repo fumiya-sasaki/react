@@ -127,7 +127,7 @@ const styles = {
     flexDirection: 'row' as 'row',
   },
   contentTitle: {
-    marginTop: 20,
+    marginTop: 5,
     fontWeight: 'bold',
   },
   rightContainer: {

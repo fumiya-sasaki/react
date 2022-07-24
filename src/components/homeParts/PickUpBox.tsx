@@ -68,7 +68,7 @@ const styles = {
   },
   contentContainer: {
     display: 'flex',
-    flexDirection: 'row' as 'row',
+    flexDirection: 'column' as 'column',
     width: '100%',
     paddingTop: 3,
     alignItems: 'center',

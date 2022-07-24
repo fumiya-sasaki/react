@@ -6,9 +6,7 @@ import RightContent from "./RightParts";
 
 const limit = 9;
 export const Gallery = () => {
-
   const [contents, setContents] = useState<any[]>([]);
-
   useEffect(() => {
     const businessID = process.env.REACT_APP_BUSINESS_ID;
     const businessToken = process.env.REACT_APP_BUSINESS_TOKEN;

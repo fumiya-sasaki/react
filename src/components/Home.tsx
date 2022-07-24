@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector, useSize } from "../hooks";
-import { getPickUp, HomeRecipe, RecipeData } from "../slices/recipe";
+import { getHomeRecipes, HomeRecipe, RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -15,13 +15,11 @@ import TagBox from "./homeParts/TagBox";
 import PickUpBox from "./homeParts/PickUpBox";
 import MainImageBox from "./homeParts/MainImageBox";
 import { Config, getConfig } from "../slices/config";
+
 export const Home = React.memo(() => {
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
-  const recipe: HomeRecipe = useAppSelector(
-    (state: RootState) => state.recipe
-  );
-
+  const recipe: HomeRecipe = useAppSelector((state: RootState) => state.recipe);
   const config: Config = useAppSelector((state: RootState) => state.config);
   const { isMobileSize } = useSize();
   const [contents, setContents] = useState<RecipeData[]>([]);
@@ -34,34 +32,25 @@ export const Home = React.memo(() => {
 
   useEffect(() => {
     if (recipe.newArrival.length === 0) {
-      dispatch(getPickUp({ season: config.season, recipeUids: config.recipeUids }));
+      dispatch(getHomeRecipes({ season: config.season, recipeUids: config.recipeUids }));
     };
   }, [config]);
 
   useEffect(() => {
     if (recipe.newArrival.length !== 0) {
-      if (isMobileSize) {
-        setContents(recipe.newArrival.slice(0, 3))
-      } else {
-        setContents(recipe.newArrival)
-      };
+      setContents(isMobileSize ? recipe.newArrival.slice(0, 3) : recipe.newArrival)
       setPickUp(recipe.pickUp);
       setSason(recipe.seasons);
     }
   }, [recipe]);
-  const [tag] = useState<string>('');
-  const serch = (tagItem?: string) => {
-    if (tagItem) {
-      dispatch(serchString({ tag: tagItem }));
-      navigation("/serch", { state: { title: tagItem } });
-    } else {
-      dispatch(serchString({ tag }));
-      navigation("/serch", { state: { title: tag } });
-    };
-  };
+
+  const serch = useCallback((tag: string) => {
+    dispatch(serchString({ tag }));
+    navigation("/serch", { state: { title: tag } });
+  }, []);
 
   return (
-    <Box>
+    <>
       <Header title={"Top"} />
       <Box sx={styles.container}>
         <Box sx={styles.contents}>
@@ -78,7 +67,7 @@ export const Home = React.memo(() => {
         </Box>
       </Box>
       <Footer />
-    </Box>
+    </>
   );
 });
 

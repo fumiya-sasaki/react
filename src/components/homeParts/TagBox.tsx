@@ -12,7 +12,6 @@ export const TagBox = React.memo(({
     <Box sx={styles.tagContainer}>
       <Box sx={styles.tagContentBox}>
         <Box sx={styles.titleBox}>
-          {/* <img src={ingredients} alt='' width={'50px'} /> */}
           <Typography sx={styles.font}>Season Item</Typography>
         </Box>
         <Box sx={styles.tagBox}>

@@ -1,5 +1,17 @@
 {
   "projects": {
-    "default": "recipe-d58ba"
+    "default": "chiacchiere-71c24s"
+  },
+  "targets": {
+    "chiacchiere-71c24": {
+      "hosting": {
+        "develope": [
+          "chiacchiere-71c24s"
+        ],
+        "product": [
+          "chiacchiere-recipe"
+        ]
+      }
+    }
   }
 }

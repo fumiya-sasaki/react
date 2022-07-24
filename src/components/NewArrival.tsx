@@ -6,24 +6,27 @@ import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
-import { nextGetDataScreen } from "../slices/screen/newArrivalScreen";
+import { newArrivalScreenState, nextGetDataScreen } from "../slices/screen/newArrivalScreen";
 import { DoubleArrow } from "@mui/icons-material";
 import RightContent from "./RightParts";
 
 export const NewArrival = React.memo(() => {
   const dispatch = useAppDispatch();
-  const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.newArrivalScreen
-  );
+  const screen: newArrivalScreenState = useAppSelector((state: RootState) => state.newArrivalScreen);
   const [contents, setContents] = useState<RecipeData[]>([]);
+  const [disabled, setDisabled] = useState<boolean>(false);
 
   useEffect(() => {
-    if (screen.length === 0) dispatch(nextGetDataScreen({}));
-    setContents(screen)
-  }, [dispatch, screen]);
+    if (screen.recipeData.length === 0) dispatch(nextGetDataScreen({}));
+    setContents(screen.recipeData)
+  }, [dispatch, screen.recipeData]);
+
+  useEffect(() => {
+    setDisabled(screen.lastData);
+  }, [screen.lastData]);
 
   const getNext = () => {
-    dispatch(nextGetDataScreen({ endAt: screen[screen.length - 1].createdAt }));
+    dispatch(nextGetDataScreen({ endAt: screen.recipeData[screen.recipeData.length - 1].createdAt }));
   };
 
   return (
@@ -46,7 +49,7 @@ export const NewArrival = React.memo(() => {
                 </Box>
               ))}
             </Box>
-            <Button sx={styles.moreButton} onClick={getNext}>もっと見る<DoubleArrow /></Button>
+            <Button sx={styles.moreButton} onClick={getNext} disabled={disabled}>もっと見る<DoubleArrow /></Button>
           </Box>
           <RightContent />
         </Box>

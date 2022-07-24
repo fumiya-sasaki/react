@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../components/core/Firebase";
-import { RecipeData } from "../recipe";
+import { getRecipeDataResult, RecipeData } from "../recipe";
 
 const initialState: RecipeData[] = [];
 
@@ -12,23 +12,7 @@ export const serchCategory = createAsyncThunk<RecipeData[], { category: string }
     const getDoc = await getDocs(
       query(recipesRef, where("category", "==", category))
     );
-
-    const newState: RecipeData[] = [];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      newState.push(result);
-    });
+    const newState: RecipeData[] = getRecipeDataResult(getDoc);
     return newState;
   });
 
@@ -39,22 +23,7 @@ export const serchString = createAsyncThunk<RecipeData[], { tag: string }>(
     const getDoc = await getDocs(
       query(recipesRef, where("tags", "array-contains", tag))
     );
-    const newState: RecipeData[] = [];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      newState.push(result);
-    });
+    const newState: RecipeData[] = getRecipeDataResult(getDoc);
     return newState;
   }
 );

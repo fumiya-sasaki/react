@@ -23,8 +23,6 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-
-
         <Provider store={store}>
           <Routes>
             <Route path={"/"} element={<Home />} />

@@ -9,8 +9,6 @@ import { RootState } from '../slices/store';
 import { Search } from '@mui/icons-material';
 import { Category } from '../slices/category';
 import { serchString } from '../slices/screen/serchScreen';
-// import search from '../images/search.png';
-// import tagImg from '../images/tag.png';
 import instagram from '../images/instagram.png';
 
 export const RightContent = () => {
@@ -34,7 +32,6 @@ export const RightContent = () => {
   return (
     <Box sx={styles.rightContainer}>
       <Box sx={styles.titleBox}>
-        {/* <img src={search} alt='' width={'50px'} /> */}
         <Typography sx={styles.font}>Key Word</Typography>
       </Box>
       <Box sx={styles.serchForm}>
@@ -54,7 +51,6 @@ export const RightContent = () => {
         </FormControl>
       </Box>
       <Box sx={styles.titleBox}>
-        {/* <img src={tagImg} alt='' width={'50px'} /> */}
         <Typography sx={styles.font}>Top Tags</Typography>
       </Box>
       <Box sx={styles.tagBox}>
@@ -96,8 +92,6 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
-    // marginLeft: 3,
-    // marginRight: 5,
     marginTop: 5,
   },
   serchForm: {

@@ -1,40 +1,33 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 import { db } from "../../components/core/Firebase";
-import { RecipeData } from "../recipe";
+import { getRecipeDataResult, RecipeData } from "../recipe";
 import { RootState } from "../store";
 
-const initialState: RecipeData[] = [];
+export type newArrivalScreenState = {
+  recipeData: RecipeData[];
+  lastData: boolean;
+};
 
-export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }>(
+const initialState: newArrivalScreenState = {
+  recipeData: [],
+  lastData: false
+};
+
+export const nextGetDataScreen = createAsyncThunk<newArrivalScreenState, { endAt?: Date }>(
   "newArrivalScreen/nextGetDataScreen",
   async ({ endAt }, thunkApi) => {
     const getDoc = endAt
       ? await getDocs(query(collection(db, "recipes"), orderBy("createdAt", 'desc'), startAfter(endAt), limit(6)))
       : await getDocs(query(collection(db, "recipes"), limit(6)));
-    const recipe: RecipeData[] = (thunkApi.getState() as RootState).newArrivalScreen;
-    const newState: RecipeData[] = [...recipe];
-    getDoc.forEach((doc) => {
-      const collection = doc.data();
-      const result: RecipeData = {
-        uid: collection.uid,
-        createdAt: collection.createdAt,
-        title: collection.title,
-        contents: collection.contents,
-        introduction: collection.introduction,
-        mainImageUrl: collection.mainImageUrl,
-        category: collection.category,
-        tags: collection.tags,
-        season: collection.season,
-      };
-      newState.push(result);
-    });
-    const afterFilterState = newState.filter((v, i, a) => {
-      return a.findIndex((state) => state.uid === v.uid) === i;
-    })
-    return afterFilterState;
+    const state: newArrivalScreenState = (thunkApi.getState() as RootState).newArrivalScreen;
+    const newRecipeData: RecipeData[] = getRecipeDataResult(getDoc);
+    const afterConcat: RecipeData[] = state.recipeData.concat(newRecipeData);
+    const recipeData = afterConcat.filter((v, i, a) => a.findIndex((state) => state.uid === v.uid) === i);
+    const lastData: boolean = newRecipeData.length === 6 ? false : true;
+    const newState: newArrivalScreenState = { recipeData, lastData };
+    return newState;
   });
-
 
 export const slice = createSlice({
   name: "newArrivalScreen",
