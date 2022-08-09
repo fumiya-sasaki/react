@@ -10,20 +10,24 @@ import React from 'react';
 import Mobile from './headerParts/Mobile';
 import PcSide from './headerParts/PcSide';
 
-type HeaderState = {
+export const Header = React.memo(({
+  title
+}: {
   title: string;
-};
-
-export const Header: React.FC<HeaderState> = ({ title }) => {
+}) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
   const categoryState: Category = useAppSelector((state: RootState) => state.category);
   const [categoris, setCategoris] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [topTitle] = useState<string>(title);
+  const [topTitle, setTopTitle] = useState<string>(title);
   useEffect(() => {
     if (categoryState.category.length === 0) dispatch(getCategory());
   }, [dispatch]);
+
+  useEffect(() => {
+    setTopTitle(title);
+  }, [title]);
 
   useEffect(() => {
     setCategoris(categoryState.category);
@@ -54,7 +58,7 @@ export const Header: React.FC<HeaderState> = ({ title }) => {
       </Box>
     </>
   );
-};
+});
 
 export default Header;
 const styles = {

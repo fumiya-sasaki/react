@@ -14,7 +14,7 @@ export const SeasonBox = React.memo(({
   return (
     <Box sx={styles.newContentBox}>
       <Box sx={styles.titleBox}>
-        <Typography sx={styles.font}>Season Recipe</Typography>
+        <Typography sx={styles.font}>Season</Typography>
       </Box>
       <Box sx={styles.contentContainerSeason}>
         <Carousel
@@ -28,13 +28,12 @@ export const SeasonBox = React.memo(({
           centerSlidePercentage={40}
         >
           {season.map((item) => (
-            <Box key={item.uid} style={styles.itemContainerSason}>
-              <img src={item.mainImageUrl} alt='' style={{
-                height: isMobileSize ? '100px' : '150px',
-                objectFit: 'cover',
-              }} />
-              <Link to={'/content/'} state={{ recipeData: item }} style={{ marginBottom: '50px' }}>
-                <Typography sx={styles.menuTitleSason}>{item.title}</Typography>
+            <Box key={item.uid} style={{ marginBottom: 50 }}>
+              <Link to={'/content/'} style={styles.itemContainerSason} state={{ recipeData: item }} >
+                <img src={item.mainImageUrl} alt='' style={{
+                  height: isMobileSize ? '150px' : '200px',
+                  objectFit: 'cover',
+                }} />
               </Link>
             </Box>
           ))}

@@ -1,14 +1,12 @@
 import { Box } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector, useSize } from "../hooks";
 import { getHomeRecipes, HomeRecipe, RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
-import RightContent from "./RightParts";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { serchString } from "../slices/screen/serchScreen";
 import NewArrivalBox from "./homeParts/NewArraivalBox";
 import SeasonBox from "./homeParts/SeasonBox";
 import TagBox from "./homeParts/TagBox";
@@ -18,12 +16,10 @@ import { Config, getConfig } from "../slices/config";
 
 export const Home = React.memo(() => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigate();
   const recipe: HomeRecipe = useAppSelector((state: RootState) => state.recipe);
   const config: Config = useAppSelector((state: RootState) => state.config);
   const { isMobileSize } = useSize();
   const [contents, setContents] = useState<RecipeData[]>([]);
-  const [pickUp, setPickUp] = useState<RecipeData[]>([]);
   const [season, setSason] = useState<RecipeData[]>([]);
 
   useEffect(() => {
@@ -39,31 +35,20 @@ export const Home = React.memo(() => {
   useEffect(() => {
     if (recipe.newArrival.length !== 0) {
       setContents(isMobileSize ? recipe.newArrival.slice(0, 3) : recipe.newArrival)
-      setPickUp(recipe.pickUp);
       setSason(recipe.seasons);
     }
   }, [recipe]);
 
-  const serch = useCallback((tag: string) => {
-    dispatch(serchString({ tag }));
-    navigation("/serch", { state: { title: tag } });
-  }, []);
-
   return (
     <>
-      <Header title={"Top"} />
+      <Header title={"Home"} />
       <Box sx={styles.container}>
-        <Box sx={styles.contents}>
-          <MainImageBox mainImages={config.topImages} />
-          <Box sx={styles.mainContainer}>
-            <Box sx={styles.leftContainer}>
-              <NewArrivalBox contents={contents} />
-              <SeasonBox season={season} />
-              <TagBox pickUpIngredients={config.pickUpIngredients} serch={serch} />
-              <PickUpBox pickUp={pickUp} />
-            </Box>
-            <RightContent />
-          </Box>
+        <MainImageBox mainImages={config.topImages} />
+        <Box sx={styles.mainContainer}>
+          <NewArrivalBox contents={contents} />
+          <SeasonBox season={season} />
+          {/* <TagBox pickUpIngredients={config.pickUpIngredients} serch={serch} /> */}
+          {/* <PickUpBox pickUp={pickUp} /> */}
         </Box>
       </Box>
       <Footer />
@@ -78,20 +63,11 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
   },
-  contents: {
-    width: { xs: '100%', md: '1000px' },
-  },
   mainContainer: {
     display: "flex",
-    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
-    alignItems: "space-between",
-    justifyContent: "space-between",
-  },
-  leftContainer: {
-    display: "flex",
-    flexDirection: "column" as "column",
+    flexDirection: 'column' as 'column',
     alignItems: "center",
-    justifyContent: "center",
-    width: { xs: '100%', sm: "70%" },
+    justifyContent: "space-between",
+    width: { xs: '100%', md: '1000px' },
   },
 };

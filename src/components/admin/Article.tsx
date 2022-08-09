@@ -67,6 +67,7 @@ export const Article = () => {
     if (e.target.files[0]) {
       const newRecipeContents: Content[] = [...recipeContents];
       newRecipeContents[index].imageUrls.push(URL.createObjectURL(e.target.files[0]));
+      console.log(newRecipeContents);
       setRecipeContents(newRecipeContents);
     }
   };
@@ -82,13 +83,14 @@ export const Article = () => {
   };
 
   const deleteForm = (index: number) => {
-    const newRecipeContents: Content[] = recipeContents.splice(index + 1, 1);
+    const newRecipeContents: Content[] = [...recipeContents];
+    newRecipeContents.splice(index, 1);
     setRecipeContents(newRecipeContents);
   };
 
   const deleteContentImg = (index: number, imgIndex: number) => {
     const newRecipeContents: Content[] = [...recipeContents];
-    newRecipeContents[index].imageUrls = recipeContents[index].imageUrls.splice(imgIndex + 1, 1);
+    recipeContents[index].imageUrls.splice(imgIndex, 1);
     setRecipeContents(newRecipeContents);
   };
 

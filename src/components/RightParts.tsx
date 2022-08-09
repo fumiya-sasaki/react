@@ -1,14 +1,14 @@
 import {
   Box, Button, FormControl, IconButton, Input,
-  InputAdornment, InputLabel, Typography,
+  InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { RootState } from '../slices/store';
 import { Search } from '@mui/icons-material';
 import { Category } from '../slices/category';
-import { serchString } from '../slices/screen/serchScreen';
+import { serchCategory, serchString } from '../slices/screen/serchScreen';
 import instagram from '../images/instagram.png';
 
 export const RightContent = () => {
@@ -18,6 +18,8 @@ export const RightContent = () => {
   const category: Category = useAppSelector(
     (state: RootState) => state.category
   );
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [categoris, setCategoris] = useState<string[]>([]);
 
   const serch = (tagItem?: string) => {
     if (tagItem) {
@@ -29,8 +31,34 @@ export const RightContent = () => {
     };
   };
 
+  const categorySerch = (event: SelectChangeEvent) => {
+    const category = event.target.value as string;
+    setSelectedCategory(category);
+    dispatch(serchCategory({ category }));
+    navigation('/serch', { state: { title: category } });
+  };
+  useEffect(() => {
+    setCategoris(category.category);
+  }, [category, dispatch]);
   return (
     <Box sx={styles.rightContainer}>
+      <Box sx={styles.titleBox}>
+        <Typography sx={styles.font}>Categorry</Typography>
+      </Box>
+      <Box sx={styles.serchForm}>
+        <FormControl sx={{ width: "100%" }} variant="standard">
+          <Select
+            value={selectedCategory}
+            onChange={categorySerch}
+          >
+            {categoris.map((data) => (
+              <MenuItem key={data} value={data}>
+                {data}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
       <Box sx={styles.titleBox}>
         <Typography sx={styles.font}>Key Word</Typography>
       </Box>

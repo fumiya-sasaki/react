@@ -7,6 +7,7 @@ import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
 import { getRecipeData, serchString } from "../slices/screen/serchScreen";
+import RightContent from "./RightParts";
 
 export const Serch = () => {
   const location = useLocation();
@@ -41,27 +42,30 @@ export const Serch = () => {
     <>
       <Header title={"検索結果「 " + title + " 」"} />
       <Box sx={styles.container}>
-        <Box sx={styles.contentContainer}>
-          {contents.map((item) => (
-            <Box key={item.uid} sx={styles.itemContainer}>
-              <img src={item.mainImageUrl} alt="" style={{
-                width: isMobileSize ? '180px' : '300px',
-                height: isMobileSize ? '180px' : '300px',
-                objectFit: 'cover',
-              }} />
-              <Link to={"/content/"} state={{ recipeData: item }}>
-                <Typography sx={styles.menuTitle}>{item.title}</Typography>
-              </Link>
-            </Box>
-          ))}
+        <Box sx={styles.leftContainer}>
+          <Box sx={styles.contentContainer}>
+            {contents.map((item) => (
+              <Box key={item.uid} sx={styles.itemContainer}>
+                <img src={item.mainImageUrl} alt="" style={{
+                  width: '100%',
+                  height: isMobileSize ? '180px' : '300px',
+                  objectFit: 'cover',
+                }} />
+                <Link to={"/content/"} state={{ recipeData: item }}>
+                  <Typography sx={styles.menuTitle}>{item.title}</Typography>
+                </Link>
+              </Box>
+            ))}
+          </Box>
+          <Pagination
+            sx={styles.pagenate}
+            count={totalNumber}
+            shape="rounded"
+            color="standard"
+            onChange={(e, pageNumber) => handlePaginate(e, pageNumber)}
+          />
         </Box>
-        <Pagination
-          sx={styles.pagenate}
-          count={totalNumber}
-          shape="rounded"
-          color="standard"
-          onChange={(e, pageNumber) => handlePaginate(e, pageNumber)}
-        />
+        <RightContent />
       </Box>
       <Footer />
     </>
@@ -72,16 +76,16 @@ export default Serch;
 const styles = {
   container: {
     display: "flex",
-    flexDirection: "column" as "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
+    alignItems: "space-between",
+    justifyContent: "space-between",
   },
   leftContainer: {
     display: "flex",
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "70%",
+    width: { xs: '100%', sm: "70%" },
   },
   titleBox: {
     padding: 3,
@@ -119,7 +123,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     paddingLeft: "10px",
-    width: { xs: "180px", sm: "300px" },
+    width: { xs: "180px", sm: "30%" },
     paddingBottom: 2,
   },
   contentContainer: {
@@ -128,9 +132,7 @@ const styles = {
     flexDirection: "row" as "row",
     width: { xs: "95%", sm: "80%" },
     paddingTop: 5,
-    // marginLeft: "5%rem",
     alignItems: "flex-start",
-    // justifyContent: "center",
   },
   menuBox: {
     display: "flex",
@@ -149,6 +151,6 @@ const styles = {
   },
   pagenate: {
     marginTop: 5,
-    marginBottom: 10,
+    marginBottom: 5,
   },
 };

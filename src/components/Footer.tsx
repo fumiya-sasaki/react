@@ -1,8 +1,10 @@
 import { Box, Typography } from "@mui/material";
+import instagram from '../images/instagram.png';
 
 export const Footer = () => {
   return (
     <Box style={styles.container}>
+      <a target='_blank' href='https://www.instagram.com/chiacchiere1/'><img src={instagram} alt='' width={'50px'} /></a>
       <Typography style={styles.title}>
         copyrights© chiacchiere. All Rights Reserved.
       </Typography>
@@ -20,7 +22,10 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: 40,
+    paddingTop: 10,
+    paddingBottom: 40,
+    paddingLeft: 40,
+    paddingRight: 40,
     background: "#2b2b2b",
     width: "auto",
   },

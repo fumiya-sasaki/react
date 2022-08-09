@@ -10,9 +10,6 @@ export const MainImageBox = React.memo(({
   mainImages: string[];
 }) => {
   const { isMobileSize } = useSize();
-  const width: string = isMobileSize ? '150px' : '290px';
-  const height: string = isMobileSize ? '130px' : '240px';
-  const slidesToShow: number = isMobileSize ? 2 : 3;
 
   return (
     <Box sx={styles.carousel}>
@@ -20,7 +17,7 @@ export const MainImageBox = React.memo(({
         dots={false}
         infinite={true}
         arrows={false}
-        slidesToShow={slidesToShow}
+        slidesToShow={isMobileSize ? 2 : 3}
         slidesToScroll={1}
         centerMode
         autoplay
@@ -28,8 +25,8 @@ export const MainImageBox = React.memo(({
         {mainImages.map((img) => (
           <Box key={img} sx={styles.mainImageBox}>
             <img src={img} alt="" style={{
-              width,
-              height,
+              width: '96%',
+              height: isMobileSize ? '130px' : '240px',
               objectFit: 'cover',
             }} />
           </Box>

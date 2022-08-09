@@ -1,14 +1,12 @@
 import { DriveFileMove } from '@mui/icons-material';
-import { Box, Divider, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useSize } from '../hooks';
-import { getConnectionRecipe, RecipeData } from '../slices/recipe';
+import { RecipeData } from '../slices/recipe';
 import { serchString } from '../slices/screen/serchScreen';
-import ConnectionBox from './contentParts/ConnectionBox';
 import Footer from './Footer';
 import Header from './Header';
-import RightContent from './RightParts';
 
 export const Content = () => {
   const location = useLocation();
@@ -19,65 +17,55 @@ export const Content = () => {
   };
 
   const serch = (tagItem: string) => {
-    if (tagItem) {
       dispatch(serchString({ tag: tagItem }));
       navigation('/serch', { state: { title: tagItem } });
-    };
   };
 
   const { isMobileSize } = useSize();
   const { recipeData } = location.state as RecipeState;
-  const [connection, setConnection] = useState<RecipeData[]>([]);
-  const getConnection = async (): Promise<RecipeData[]> => {
-    const data = await getConnectionRecipe(recipeData.tags)
-    setConnection(data)
-    return data;
-  };
+  const [tags, setTags] = useState<string[]>([]);
   useEffect(() => {
-    if (connection.length === 0) getConnection();
-  }, [recipeData.tags, connection.length]);
+    const newTsgs: string[] = [...recipeData.tags];
+    newTsgs.length = newTsgs.length > 4 ? 4 : newTsgs.length;
+    setTags(newTsgs);
+  }, [recipeData.tags]);
 
   return (
     <>
       <Header title={recipeData.title} />
       <Box sx={styles.container}>
-        <Box sx={styles.contents}>
-          <Box sx={styles.leftContainer}>
-            <Box sx={styles.tagsBox}>
-              {recipeData.tags.map((tag: string) => (
-                <IconButton key={tag} onClick={() => serch(tag)} size={'small'}>
-                  <DriveFileMove /> {tag}
-                </IconButton>
-              ))}
-            </Box>
-            <img src={recipeData.mainImageUrl} alt='' style={{
-              width: isMobileSize ? '100%' : '500px',
-              height: isMobileSize ? '250px' : '380px',
-              objectFit: 'cover',
-            }} />
-            <Typography sx={styles.introduction}>{recipeData.introduction}</Typography>
-            <Divider variant='middle' />
-
-            {recipeData.contents.map((recipe, index) => (
-              <Box key={index} sx={styles.contentBox} mt={1} mb={1}>
-                <Box sx={styles.imgBox}>
-                  {recipe.imageUrls.map((url, index) => (
-                    <img key={index} src={url} alt='' style={{
-                      width: isMobileSize ? '170px' : '200px',
-                      height: isMobileSize ? '140px' : '180px',
-                      objectFit: 'cover',
-                      paddingRight: '10px',
-                    }} />
-                  ))}
-                </Box>
-                <Typography sx={styles.contentTitle}>{recipe.title}</Typography>
-                <Typography sx={styles.text}>{recipe.text}</Typography>
-              </Box>
+        <Box sx={styles.box} >
+          <Box sx={styles.tagsBox}>
+            {tags.map((tag: string) => (
+              <IconButton key={tag} onClick={() => serch(tag)} size={'small'}>
+                <DriveFileMove /> {tag}
+              </IconButton>
             ))}
-            <Divider variant='middle' />
-            <ConnectionBox connection={connection} />
           </Box>
-          <RightContent />
+          <img src={recipeData.mainImageUrl} alt='' style={{
+            width: isMobileSize ? '96%' : '50%',
+            height: 'auto',
+            objectFit: 'cover',
+          }} />
+          <Typography sx={styles.introduction}>{recipeData.introduction}</Typography>
+
+          {recipeData.contents.map((recipe, index) => (
+            <Box key={index} sx={styles.contentBox} mt={1} mb={1}>
+              <Box sx={styles.imgBox}>
+                {recipe.imageUrls.map((url, index) => (
+                  <img key={index} src={url} alt='' style={{
+                    width: isMobileSize ? '70%' : '40%',
+                    height: 'auto',
+                    objectFit: 'cover',
+                    paddingBottom: '2%',
+                    paddingLeft: 10,
+                  }} />
+                ))}
+              </Box>
+              <Typography sx={styles.contentTitle}>{recipe.title}</Typography>
+              <Typography sx={styles.text}>{recipe.text}</Typography>
+            </Box>
+          ))}
         </Box>
       </Box>
       <Footer />
@@ -91,21 +79,14 @@ const styles = {
     display: 'flex',
     flexDirection: 'column' as 'column',
     alignItems: 'center',
-  },
-  contents: {
-    display: 'flex',
-    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
-    alignItems: { xs: 'center', sm: 'unset' },
-    justifyContent: 'space-between',
-    width: { xs: '100%', md: '1000px' }
-  },
-  leftContainer: {
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: { xs: 'flex-start', sm: 'flex-start' },
     justifyContent: 'center',
-    width: { xs: '92%', sm: '70%' },
-    paddingLeft: { xs: 0, sm: 10 }
+    // paddingLeft: { xs: 0, sm: 10 }
+  },
+  box: {
+    width: { xs: '100%', md: '1000px' },
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "center",
   },
   title: {
     fontSize: '20px',
@@ -115,8 +96,11 @@ const styles = {
   imgBox: {
     display: 'flex',
     flexDirection: 'row' as 'row',
-    justifyContent: 'flex-start',
+    // justifyContent: 'space-around',
     flexWrap: 'wrap',
+    width: '100%',
+    gap: '20%',
+    // paddingLeft: { xs: 1, sm: 0 }
   },
   contentImage: {
     width: '60%',
@@ -142,6 +126,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column' as 'column',
     alignItems: { xs: 'flex-start', sm: 'flex-start' },
+    width: '100%',
     // paddingLeft: { xs: 10, sm: 0 }
   },
   introduction: {
@@ -155,7 +140,7 @@ const styles = {
     width: '70%',
     flexWrap: 'wrap',
     paddingTop: 1,
-    paddingBottom: 1,
+    paddingBottom: 2,
   },
   text: {
     whiteSpace: 'pre-wrap',

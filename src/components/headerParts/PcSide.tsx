@@ -19,7 +19,7 @@ export const Mobile = React.memo(({
     <>
       <Button onClick={() => navigation("/")} sx={styles.font}>HOME</Button>
       <FormControl sx={{ width: "150px" }} variant="standard">
-        <InputLabel style={styles.fontCategory}>CATEGORY</InputLabel>
+        <InputLabel style={styles.fontCategory}>SEARCH</InputLabel>
         <Select
           value={selectedCategory}
           onChange={categorySerch}
@@ -54,6 +54,7 @@ const styles = {
     fontSize: "15px",
     '&:hover': {
       bgcolor: '#f5f5f5'
-    }
+    },
+    paddingRight: 1,
   },
 };

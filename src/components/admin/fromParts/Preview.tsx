@@ -23,8 +23,8 @@ export const Preview: React.FC<PreviewState> = ({
       <Typography style={styles.title}>{title}</Typography>
       <Typography style={styles.title}>{introduction}</Typography>
       <img src={mainImageUrl} alt="" style={{
-        width: isMobileSize ? '250px' : '400px',
-        height: isMobileSize ? '200px' : '320px',
+        width: isMobileSize ? '100%' : '75%',
+        height: '100%',
         objectFit: 'cover',
       }} />
       <Box>
@@ -34,8 +34,9 @@ export const Preview: React.FC<PreviewState> = ({
             {recipe.imageUrls.map((url, imgIndex) => (
               <Box key={imgIndex}>
                 <img src={url} alt="" style={{
-                  width: isMobileSize ? '200px' : '300px',
-                  height: isMobileSize ? '160px' : '250px',
+                  width: isMobileSize ? '70%' : '60%',
+                  // height: isMobileSize ? '160px' : '250px',
+                  paddingBottom: '2%',
                   objectFit: 'cover',
                 }} />
                 {url !== "" &&

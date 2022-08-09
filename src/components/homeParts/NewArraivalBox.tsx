@@ -12,31 +12,27 @@ export const NewArrivalBox = React.memo(({
 }) => {
   const navigation = useNavigate();
   const { isMobileSize } = useSize();
-  const width: string = isMobileSize ? '125px' : '165px';
-  const height: string = isMobileSize ? '100px' : '130px';
 
   return (
     <Box sx={styles.newContentBox}>
       <Box sx={styles.titleBox}>
-        <Typography sx={styles.font}>New Recipe</Typography>
+        <Typography sx={styles.font}>New Arrival</Typography>
       </Box>
       <Box sx={styles.contentContainer}>
         {contents.map((item) => (
-          <Box key={item.uid} style={styles.itemContainer}>
+          <Link to={'/content/'} key={item.uid} style={styles.itemContainer} state={{ recipeData: item }}>
             <img src={item.mainImageUrl} alt='' style={{
-              width,
-              height,
+              width: '100%',
+              height: isMobileSize ? '150px' : '200px',
               objectFit: 'cover',
+              paddingBottom: '10px',
             }} />
-            <Link to={'/content/'} state={{ recipeData: item }}>
-              <Typography sx={styles.menuTitle}>{item.title}</Typography>
-            </Link>
-          </Box>
+          </Link>
         ))}
       </Box>
       <Box sx={styles.buttonBox}>
         <Button onClick={() => navigation('newArrival')} sx={styles.moreButton}>
-          <>新着レシピをもっと見る<DoubleArrow /></></Button>
+          <>more look<DoubleArrow /></></Button>
       </Box>
     </Box>
   );
@@ -69,8 +65,8 @@ const styles = {
   itemContainer: {
     display: 'flex',
     flexDirection: 'column' as 'column',
-    width: '32%',
-    alignItems: 'flex-start',
+    width: '31%',
+    alignItems: 'space-between',
     paddingBottom: 2,
   },
   contentContainer: {
@@ -80,8 +76,8 @@ const styles = {
     flexWrap: 'wrap',
     paddingTop: 3,
     paddingBottom: 3,
-    alignItems: 'center',
-    justifyContent: { xs: 'space-between', sm: 'unset' },
+    alignItems: 'space-between',
+    justifyContent: 'space-between',
   },
   menuTitle: {
     fontWeight: 'bold',

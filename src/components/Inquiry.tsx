@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { init, send } from "emailjs-com";
-import RightContent from "./RightParts";
 
 export const Inquiry = () => {
 
@@ -28,7 +27,7 @@ export const Inquiry = () => {
         await send(serviceID, templateID, params);
         setIsRequired(false);
         setLoading(false);
-        alert('送信成功');
+        alert('お問い合わせありがとうございます。\n随時確認の上ご連絡させていただきます。');
       } catch (error) {
         setIsRequired(false);
         setLoading(false);
@@ -49,7 +48,7 @@ export const Inquiry = () => {
     <>
       <Header title={"お問い合わせ"} />
       <Box sx={styles.container}>
-        <Box sx={styles.leftContainer}>
+        <Box sx={styles.box}>
           <TextField
             label="お名前（必須）"
             value={name}
@@ -93,7 +92,6 @@ export const Inquiry = () => {
             {buttonContent}
           </Button>
         </Box>
-        <RightContent />
       </Box>
       <Footer />
     </>
@@ -104,27 +102,27 @@ export default Inquiry;
 const styles = {
   container: {
     display: "flex",
-    flexDirection: { xs: 'column' as 'column', sm: 'row' as 'row' },
-    alignItems: "space-between",
-    justifyContent: "space-between",
-  },
-  leftContainer: {
-    display: "flex",
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: { xs: '100%', sm: "70%" },
+    width: { xs: '100%', sm: "100%" },
     paddingTop: 5,
   },
+  box: {
+    width: { xs: '100%', md: '1000px' },
+    display: "flex",
+    flexDirection: "column" as "column",
+    alignItems: "center",
+  },
   form: {
-    width: { xs: '80%', sm: '70%', md: '50%' },
+    width: { xs: '80%', sm: '60%' },
     paddingBottom: 3,
     'MuiOutlinedInput-root::input': {
       height: '200px'
     }
   },
   buttom: {
-    width: { xs: '80%', sm: '70%', md: '50%' },
+    width: { xs: '80%', sm: '60%' },
     marginTop: 1,
     marginBottom: 1,
   }
