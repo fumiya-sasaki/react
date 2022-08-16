@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, useSize } from '../hooks';
 import { Category, getCategory } from '../slices/category';
-import { serchCategory } from '../slices/screen/serchScreen';
+import { searchCategory } from '../slices/screen/searchScreen';
 import { RootState } from '../slices/store';
 import logo from '../images/chiacchiere.png';
 import React from 'react';
@@ -36,8 +36,8 @@ export const Header = React.memo(({
   const categorySerch = (event: SelectChangeEvent) => {
     const category = event.target.value as string;
     setSelectedCategory(category);
-    dispatch(serchCategory({ category }));
-    navigation('/serch', { state: { title: category } });
+    dispatch(searchCategory({ category }));
+    navigation('/search', { state: { title: category } });
   };
 
   const { isMobileSize } = useSize();

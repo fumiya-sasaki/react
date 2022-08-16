@@ -3,30 +3,28 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector, useSize } from "../../hooks";
 import { RecipeData } from "../../slices/recipe";
-import { getRecipeData } from "../../slices/screen/serchScreen";
 import { RootState } from "../../slices/store";
 
-export const AdminSerch = () => {
-  const dispatch = useAppDispatch();
+const contentsNumber = 10;
+export const AdminSearch = () => {
   const { isMobileSize } = useSize();
   const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.serchScreen
+    (state: RootState) => state.searchScreen
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [totalNumber, setTotalNumber] = useState<number>(1);
   useEffect(() => {
-    setContents(screen);
-    if (screen.length > 9) {
-      setTotalNumber(Math.ceil(screen.length));
-    };
-  }, [screen]);
+    setContents(screen.slice(0, contentsNumber));
+    setTotalNumber(Math.ceil(screen.length / contentsNumber));
+  }, [screen.length]);
 
   const handlePaginate = (
     event: React.ChangeEvent<unknown>,
     pageNumber: number
   ) => {
-    dispatch(getRecipeData({ recipe: screen, pageNumber }));
+    setContents(screen.slice((pageNumber - 1) * contentsNumber,
+      (pageNumber - 1) * contentsNumber + contentsNumber));
   };
 
   return (
@@ -58,7 +56,7 @@ export const AdminSerch = () => {
   );
 };
 
-export default AdminSerch;
+export default AdminSearch;
 const styles = {
   container: {
     display: "flex",

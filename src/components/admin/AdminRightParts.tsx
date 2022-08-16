@@ -1,15 +1,15 @@
 import {
   Box, Button, FormControl, IconButton,
-  Input, InputAdornment, InputLabel, Typography
+  Input, InputAdornment, InputLabel, TextField, Typography
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks";
 import { initialData } from "../../slices/recipe";
 import { Search } from "@mui/icons-material";
 import { signOut } from "firebase/auth";
 import { auth } from "../core/firebase";
-import { serchString } from "../../slices/screen/serchScreen";
+import { searchString } from "../../slices/screen/searchScreen";
 
 export const AdminRightParts = () => {
   const dispatch = useAppDispatch();
@@ -17,13 +17,13 @@ export const AdminRightParts = () => {
 
   const [tag, setTag] = useState<string>("");
 
-  const serch = (tagItem?: string) => {
+  const search = (tagItem?: string) => {
     if (tagItem) {
-      dispatch(serchString({ tag: tagItem }));
-      navigation("/admin/serchh");
+      dispatch(searchString({ tag: tagItem }));
+      navigation("/admin/searchh");
     } else {
-      dispatch(serchString({ tag }));
-      navigation("/admin/serch");
+      dispatch(searchString({ tag }));
+      navigation("/admin/search");
     }
   };
 
@@ -41,7 +41,7 @@ export const AdminRightParts = () => {
       <Box sx={styles.titleBox}>
         <Typography sx={{ fontWeight: "bold" }}>キーワード検索</Typography>
       </Box>
-      <Box sx={styles.serchForm}>
+      <Box sx={styles.searchForm}>
         <FormControl variant="standard">
           <InputLabel>料理名・食材から探す</InputLabel>
           <Input
@@ -49,7 +49,7 @@ export const AdminRightParts = () => {
             onChange={(e) => setTag(e.target.value)}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton onClick={() => serch()} edge="end">
+                <IconButton onClick={() => search()} edge="end">
                   <Search />
                 </IconButton>
               </InputAdornment>
@@ -92,7 +92,7 @@ const styles = {
     color: "dimgray",
     paddingTop: 2,
   },
-  serchForm: {
+  searchForm: {
     width: "60%",
     paddingTop: 1,
   },

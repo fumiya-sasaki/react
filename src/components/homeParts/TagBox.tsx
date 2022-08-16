@@ -3,10 +3,10 @@ import React from 'react';
 
 export const TagBox = React.memo(({
   pickUpIngredients,
-  serch,
+  search,
 }: {
   pickUpIngredients: string[];
-  serch: (value: string) => void;
+    search: (value: string) => void;
 }) => {
   return (
     <Box sx={styles.tagContainer}>
@@ -19,7 +19,7 @@ export const TagBox = React.memo(({
             <Box key={item} >
               <Button
                 sx={styles.tagItem}
-                onClick={() => serch(item)}
+                onClick={() => search(item)}
               >
                 {'＃' + item}
               </Button>

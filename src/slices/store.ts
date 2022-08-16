@@ -4,13 +4,13 @@ import { category } from "./category";
 import { config } from "./config";
 import { recipe } from "./recipe";
 import { newArrivalScreen } from "./screen/newArrivalScreen";
-import { serchScreen } from "./screen/serchScreen";
+import { searchScreen } from "./screen/searchScreen";
 
 const reducer = combineReducers({
   category,
   recipe,
   newArrivalScreen,
-  serchScreen,
+  searchScreen,
   admin,
   config,
 });

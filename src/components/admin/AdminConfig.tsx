@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { RecipeData } from "../../slices/recipe";
 import { RootState } from "../../slices/store";
-import { getPickUpData, nextGetDataScreen } from "../../slices/admin";
-import { Config, getConfig, setConfig } from "../../slices/config";
+import { getPickUpData } from "../../slices/admin";
+import { Config, getConfig, setConfig, changePickUpWord } from "../../slices/config";
 
 export const AdminConfig = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +17,7 @@ export const AdminConfig = () => {
   const [recipeUids, setRecipeUids] = useState<number[]>([]);
   const [pickUpData, setPickUpData] = useState<RecipeData[]>([]);
   const [season, setSeason] = useState<string>('');
+  const [pickUpWord, setPickUpWord] = useState<string>('');
   const [topImages, setTopImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -36,6 +37,7 @@ export const AdminConfig = () => {
     setRecipeUids(config.recipeUids);
     setTopImages(config.topImages);
     setSeason(config.season);
+    setPickUpWord(config.pickUpWord);
   }, [config]);
 
   const addForm = () => {
@@ -76,11 +78,27 @@ export const AdminConfig = () => {
     setIsLoading(false);
   };
 
+  const onChangePickUpWord = async () => {
+    setIsLoading(true);
+    await dispatch(changePickUpWord({ pickUpWord }));
+    setIsLoading(false);
+  };
+
   return (
     <>
       <Backdrop open={isLoading}>
         <CircularProgress color='inherit' />
       </Backdrop>
+      <Box>
+        <TextField
+          label='特集'
+          value={pickUpWord}
+          variant="filled"
+          onChange={(e) => setPickUpWord(e.target.value)}
+          style={{ width: '200px', paddingBottom: 10 }}
+        />
+        <Button onClick={onChangePickUpWord}>特集ワード変更</Button>
+      </Box>
       <Button onClick={setConfigData}>変更</Button>
       <Box sx={styles.seasonBox}>
         {pickUpIngredients.map((ingredient, index) => (

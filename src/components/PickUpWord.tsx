@@ -1,46 +1,37 @@
 import { Box, Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector, useSize } from "../hooks";
+import { Link } from "react-router-dom";
+import { useAppSelector, useSize } from "../hooks";
 import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "./Header";
 import Footer from "./Footer";
-import { getRecipeData, serchString } from "../slices/screen/serchScreen";
-import RightContent from "./RightParts";
-
-export const Serch = () => {
-  const location = useLocation();
-  const { title } = location.state as { title: string };
+const contentsNumber = 10;
+export const PickUpWord = () => {
   const [contents, setContents] = useState<RecipeData[]>([]);
-  const [totalNumber, setTotalNumber] = useState<number>(1);
-  const dispatch = useAppDispatch();
+  const [totalNumber, setTotalNumber] = useState<number>(0);
   const { isMobileSize } = useSize();
 
-  const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.serchScreen
+  const pickUpWord: RecipeData[] = useAppSelector(
+    (state: RootState) => state.recipe.pickUpWords
   );
 
   useEffect(() => {
-    if (screen.length === 0) {
-      dispatch(serchString({ tag: title }))
-    };
-    setContents(screen);
-    if (screen.length > 9) {
-      setTotalNumber(Math.ceil(screen.length));
-    };
-  }, [screen]);
+    setContents(pickUpWord.slice(0, contentsNumber));
+    setTotalNumber(Math.ceil(pickUpWord.length / contentsNumber));
+  }, [pickUpWord.length]);
 
   const handlePaginate = (
     e: React.ChangeEvent<unknown>,
     pageNumber: number
   ) => {
-    dispatch(getRecipeData({ recipe: screen, pageNumber }));
+    setContents(pickUpWord.slice((pageNumber - 1) * contentsNumber,
+      (pageNumber - 1) * contentsNumber + contentsNumber));
   };
 
   return (
     <>
-      <Header title={"検索結果「 " + title + " 」"} />
+      <Header title={"PickUp"} />
       <Box sx={styles.container}>
         <Box sx={styles.leftContainer}>
           <Box sx={styles.contentContainer}>
@@ -65,14 +56,13 @@ export const Serch = () => {
             onChange={(e, pageNumber) => handlePaginate(e, pageNumber)}
           />
         </Box>
-        <RightContent />
       </Box>
       <Footer />
     </>
   );
 };
 
-export default Serch;
+export default PickUpWord;
 const styles = {
   container: {
     display: "flex",
@@ -85,7 +75,7 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: { xs: '100%', sm: "70%" },
+    width: { xs: '100%', sm: "100%" },
   },
   titleBox: {
     padding: 3,

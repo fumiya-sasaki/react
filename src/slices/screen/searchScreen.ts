@@ -5,8 +5,8 @@ import { getRecipeDataResult, RecipeData } from "../recipe";
 
 const initialState: RecipeData[] = [];
 
-export const serchCategory = createAsyncThunk<RecipeData[], { category: string }>(
-  "serchScreen/serchCategory",
+export const searchCategory = createAsyncThunk<RecipeData[], { category: string }>(
+  "searchScreen/searchCategory",
   async ({ category }) => {
     const recipesRef = collection(db, "recipes");
     const getDoc = await getDocs(
@@ -16,8 +16,8 @@ export const serchCategory = createAsyncThunk<RecipeData[], { category: string }
     return newState;
   });
 
-export const serchString = createAsyncThunk<RecipeData[], { tag: string }>(
-  "serchScreen/serchString",
+export const searchString = createAsyncThunk<RecipeData[], { tag: string }>(
+  "searchScreen/searchString",
   async ({ tag }) => {
     const recipesRef = collection(db, "recipes");
     const getDoc = await getDocs(
@@ -29,7 +29,7 @@ export const serchString = createAsyncThunk<RecipeData[], { tag: string }>(
 );
 
 export const getRecipeData = createAsyncThunk<RecipeData[], { recipe: RecipeData[]; pageNumber: number }>(
-  "serchScreen/getRecipeData",
+  "searchScreen/getRecipeData",
   async ({ recipe, pageNumber }) => {
     const indexNumber = (pageNumber - 1) * 10;
     const newState = recipe.slice(indexNumber, indexNumber + 10);
@@ -37,15 +37,15 @@ export const getRecipeData = createAsyncThunk<RecipeData[], { recipe: RecipeData
   });
 
 export const slice = createSlice({
-  name: "serchScreen",
+  name: "searchScreen",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(serchCategory.fulfilled, (state, action) => {
+      .addCase(searchCategory.fulfilled, (state, action) => {
         return action.payload;
       })
-      .addCase(serchString.fulfilled, (state, action) => {
+      .addCase(searchString.fulfilled, (state, action) => {
         return action.payload;
       })
       .addCase(getRecipeData.fulfilled, (state, action) => {
@@ -54,4 +54,4 @@ export const slice = createSlice({
   },
 });
 
-export const serchScreen = slice.reducer;
+export const searchScreen = slice.reducer;

@@ -1,6 +1,6 @@
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../components/core/firebase";
 import { RootState } from "./store";
 
@@ -9,6 +9,7 @@ export type Config = {
   season: string;
   pickUpIngredients: string[];
   topImages: string[];
+  pickUpWord: string;
 };
 
 
@@ -17,6 +18,7 @@ const initialState: Config = {
   season: "",
   pickUpIngredients: [],
   topImages: [],
+  pickUpWord: '',
 };
 
 export const getConfig = createAsyncThunk(
@@ -30,8 +32,9 @@ export const getConfig = createAsyncThunk(
         season: configDoc.data().season,
         pickUpIngredients: configDoc.data().pickUpIngredients,
         topImages: configDoc.data().topImages,
+        pickUpWord: configDoc.data().pickUpWord,
       }
-      : { recipeUids: "", season: "", pickUpIngredients: [], topImages: [] };
+      : { recipeUids: "", season: "", pickUpIngredients: [], topImages: [], pickUpWord: '' };
     return newRecommendations;
   });
 
@@ -42,7 +45,6 @@ export const setConfig = createAsyncThunk
       const configDoc = doc(db, "config", "topData");
       const config: Config = (thunkApi.getState() as RootState).config;
       const deleteImages = config.topImages.filter((img) => !topImages.includes(img));
-      // console.log(deleteImages);
       for (let index = 0; index < topImages.length; index++) {
         if (topImages[index].indexOf("blob") !== -1) {
           const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + index);
@@ -62,20 +64,10 @@ export const setConfig = createAsyncThunk
         const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + storageNumber);
         await deleteObject(storageRef).then(() => console.log('OK!'));
       };
-      const newConfig: Config = { topImages, pickUpIngredients, recipeUids, season };
+      const newConfig: Config = { topImages, pickUpIngredients, recipeUids, season, pickUpWord: '' };
       await setDoc(configDoc, newConfig);
       return newConfig;
     });
-
-export const setPickUpIngredients = createAsyncThunk<Config, { pickUpIngredients: string[] }>(
-  "config/setPickUpIngredients",
-  async ({ pickUpIngredients }, thunkApi) => {
-    const config: Config = (thunkApi.getState() as RootState).config;
-    const configDoc = doc(db, "config", "topData");
-    const newConfig = { ...config, pickUpIngredients };
-    await setDoc(configDoc, newConfig);
-    return newConfig;
-  });
 
 export const setRecipeUids = createAsyncThunk<Config, { recipeUid: number }>(
   "config/setRecipeUids",
@@ -86,17 +78,18 @@ export const setRecipeUids = createAsyncThunk<Config, { recipeUid: number }>(
       ? [...config.recipeUids, recipeUid]
       : [...config.recipeUids].filter(uid => uid !== recipeUid);
     const newConfig = { ...config, recipeUids };
-    await setDoc(configDoc, newConfig);
+    await updateDoc(configDoc, { recipeUids });
     return newConfig;
   });
 
-export const setSeason = createAsyncThunk<Config, { season: string }>(
-  "config/setSeason",
-  async ({ season }, thunkApi) => {
-    const config: Config = (thunkApi.getState() as RootState).config;
+export const changePickUpWord = createAsyncThunk<Config, { pickUpWord: string }>(
+  "config/changePickUpWord",
+  async ({ pickUpWord }, thunkApi) => {
     const configDoc = doc(db, "config", "topData");
-    const newConfig = { ...config, season };
-    await setDoc(configDoc, newConfig);
+    const config: Config = (thunkApi.getState() as RootState).config;
+
+    const newConfig = { ...config, pickUpWord };
+    await updateDoc(configDoc, { pickUpWord });
     return newConfig;
   });
 
@@ -112,13 +105,10 @@ const slice = createSlice({
       .addCase(setConfig.fulfilled, (state, action) => {
         return action.payload;
       })
-      .addCase(setPickUpIngredients.fulfilled, (state, action) => {
-        return action.payload;
-      })
       .addCase(setRecipeUids.fulfilled, (state, action) => {
         return action.payload;
       })
-      .addCase(setSeason.fulfilled, (state, action) => {
+      .addCase(changePickUpWord.fulfilled, (state, action) => {
         return action.payload;
       })
   },

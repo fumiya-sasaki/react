@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { RootState } from '../slices/store';
 import { Search } from '@mui/icons-material';
 import { Category } from '../slices/category';
-import { serchCategory, serchString } from '../slices/screen/serchScreen';
+import { searchCategory, searchString } from '../slices/screen/searchScreen';
 import instagram from '../images/instagram.png';
 
 export const RightContent = () => {
@@ -21,21 +21,21 @@ export const RightContent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [categoris, setCategoris] = useState<string[]>([]);
 
-  const serch = (tagItem?: string) => {
+  const search = (tagItem?: string) => {
     if (tagItem) {
-      dispatch(serchString({ tag: tagItem }));
-      navigation('/serch', { state: { title: tagItem } });
+      dispatch(searchString({ tag: tagItem }));
+      navigation('/search', { state: { title: tagItem } });
     } else {
-      dispatch(serchString({ tag }));
-      navigation('/serch', { state: { title: tag } });
+      dispatch(searchString({ tag }));
+      navigation('/search', { state: { title: tag } });
     };
   };
 
   const categorySerch = (event: SelectChangeEvent) => {
     const category = event.target.value as string;
     setSelectedCategory(category);
-    dispatch(serchCategory({ category }));
-    navigation('/serch', { state: { title: category } });
+    dispatch(searchCategory({ category }));
+    navigation('/search', { state: { title: category } });
   };
   useEffect(() => {
     setCategoris(category.category);
@@ -45,7 +45,7 @@ export const RightContent = () => {
       <Box sx={styles.titleBox}>
         <Typography sx={styles.font}>Categorry</Typography>
       </Box>
-      <Box sx={styles.serchForm}>
+      <Box sx={styles.searchForm}>
         <FormControl sx={{ width: "100%" }} variant="standard">
           <Select
             value={selectedCategory}
@@ -62,7 +62,7 @@ export const RightContent = () => {
       <Box sx={styles.titleBox}>
         <Typography sx={styles.font}>Key Word</Typography>
       </Box>
-      <Box sx={styles.serchForm}>
+      <Box sx={styles.searchForm}>
         <FormControl variant='standard' style={{ width: '100%' }}>
           <InputLabel>料理名・食材から探す</InputLabel>
           <Input
@@ -70,7 +70,7 @@ export const RightContent = () => {
             onChange={(e) => setTag(e.target.value)}
             endAdornment={
               <InputAdornment position='end'>
-                <IconButton onClick={() => serch()} edge='end' disabled={tag === '' ? true : false}>
+                <IconButton onClick={() => search()} edge='end' disabled={tag === '' ? true : false}>
                   <Search />
                 </IconButton>
               </InputAdornment>
@@ -86,7 +86,7 @@ export const RightContent = () => {
           <Box key={item}>
             <Button
               sx={styles.tagItem}
-              onClick={() => serch(item)}
+              onClick={() => search(item)}
             >
               {'＃' + item}
             </Button>
@@ -122,7 +122,7 @@ const styles = {
     width: '90%',
     marginTop: 5,
   },
-  serchForm: {
+  searchForm: {
     width: '90%',
     paddingTop: 1,
   },

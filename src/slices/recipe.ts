@@ -26,8 +26,7 @@ export type RecipeData = SubmitRecipe & {
 
 export type HomeRecipe = {
   newArrival: RecipeData[],
-  seasons: RecipeData[],
-  pickUp: RecipeData[],
+  pickUpWords: RecipeData[],
 };
 
 export const initialData = {
@@ -45,8 +44,7 @@ export const initialData = {
 
 const initialState: HomeRecipe = {
   newArrival: [],
-  seasons: [],
-  pickUp: [],
+  pickUpWords: [],
 };
 
 
@@ -70,20 +68,22 @@ export const getRecipeDataResult = (docs: QuerySnapshot<DocumentData>) => {
   return recipeDates;
 };
 
-export const getHomeRecipes = createAsyncThunk<HomeRecipe, { season: string, recipeUids: number[] }>(
+export const getHomeRecipes = createAsyncThunk<HomeRecipe, { pickUpWord: string }>(
   "recipe/getHomeRecipes",
-  async ({ season, recipeUids }, thunkApi) => {
-    const recipesRef = collection(db, "recipes");
-    const [docSeason, docPickUp, getDoc] = await Promise.all([
-      getDocs(query(recipesRef, where("season", "==", season))),
-      getDocs(query(recipesRef, where("uid", "in", recipeUids))),
-      getDocs(query(collection(db, "recipes"), limit(6)))
-    ]);
-    const newArrival: RecipeData[] = getRecipeDataResult(getDoc);
-    const seasons: RecipeData[] = getRecipeDataResult(docSeason);
-    const pickUp: RecipeData[] = getRecipeDataResult(docPickUp);
-    const newState: HomeRecipe = { newArrival, seasons, pickUp }
-    return newState;
+  async ({ pickUpWord }, thunkApi) => {
+    try {
+      const recipesRef = collection(db, "recipes");
+      const [docNewArrival, docPickUpWord] = await Promise.all([
+        getDocs(query(recipesRef, limit(6))),
+        getDocs(query(recipesRef, where('tags', "array-contains", pickUpWord))),
+      ]);
+      const newArrival: RecipeData[] = getRecipeDataResult(docNewArrival);
+      const pickUpWords: RecipeData[] = getRecipeDataResult(docPickUpWord);
+      const newState: HomeRecipe = { newArrival, pickUpWords };
+      return newState;
+    } catch {
+      return thunkApi.rejectWithValue({ errorMessage: 'fetch error' });
+    }
   });
 
 export const getConnectionRecipe = async (tags: string[]): Promise<RecipeData[]> => {

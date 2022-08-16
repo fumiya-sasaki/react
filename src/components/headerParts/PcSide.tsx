@@ -21,11 +21,12 @@ export const Mobile = React.memo(({
       <FormControl sx={{ width: "150px" }} variant="standard">
         <InputLabel style={styles.fontCategory}>SEARCH</InputLabel>
         <Select
+          sx={styles.menuFont}
           value={selectedCategory}
           onChange={categorySerch}
         >
           {categoris.map((data) => (
-            <MenuItem key={data} value={data}>
+            <MenuItem sx={styles.menuFont} key={data} value={data}>
               {data}
             </MenuItem>
           ))}
@@ -57,4 +58,9 @@ const styles = {
     },
     paddingRight: 1,
   },
+  menuFont: {
+    fontWeight: 'bold',
+    fontStyle: "italic",
+    color: "dimgray",
+  }
 };

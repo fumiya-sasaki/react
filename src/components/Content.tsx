@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useSize } from '../hooks';
 import { RecipeData } from '../slices/recipe';
-import { serchString } from '../slices/screen/serchScreen';
+import { searchString } from '../slices/screen/searchScreen';
 import Footer from './Footer';
 import Header from './Header';
 
@@ -16,9 +16,9 @@ export const Content = () => {
     recipeData: RecipeData;
   };
 
-  const serch = (tagItem: string) => {
-      dispatch(serchString({ tag: tagItem }));
-      navigation('/serch', { state: { title: tagItem } });
+  const search = (tagItem: string) => {
+    dispatch(searchString({ tag: tagItem }));
+    navigation('/search', { state: { title: tagItem } });
   };
 
   const { isMobileSize } = useSize();
@@ -37,7 +37,7 @@ export const Content = () => {
         <Box sx={styles.box} >
           <Box sx={styles.tagsBox}>
             {tags.map((tag: string) => (
-              <IconButton key={tag} onClick={() => serch(tag)} size={'small'}>
+              <IconButton key={tag} onClick={() => search(tag)} size={'small'}>
                 <DriveFileMove /> {tag}
               </IconButton>
             ))}
@@ -54,7 +54,7 @@ export const Content = () => {
               <Box sx={styles.imgBox}>
                 {recipe.imageUrls.map((url, index) => (
                   <img key={index} src={url} alt='' style={{
-                    width: isMobileSize ? '70%' : '40%',
+                    width: isMobileSize ? '70%' : '37%',
                     height: 'auto',
                     objectFit: 'cover',
                     paddingBottom: '2%',
