@@ -41,7 +41,7 @@ export const Mobile = React.memo(({
 export default Mobile;
 const styles = {
   font: {
-    fontStyle: "italic",
+    fontFamily: 'Georgia',
     color: "dimgray",
     fontWeight: "bold",
     '&:hover': {
@@ -49,7 +49,7 @@ const styles = {
     }
   },
   fontCategory: {
-    fontStyle: "italic",
+    fontFamily: 'Georgia',
     color: "dimgray",
     fontWeight: "bold",
     fontSize: "15px",
@@ -60,7 +60,7 @@ const styles = {
   },
   menuFont: {
     fontWeight: 'bold',
-    fontStyle: "italic",
+    fontFamily: 'Georgia',
     color: "dimgray",
   }
 };

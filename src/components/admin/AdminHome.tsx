@@ -113,7 +113,7 @@ const styles = {
     width: { xs: '185px', sm: '165px' },
   },
   font: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold'
   },

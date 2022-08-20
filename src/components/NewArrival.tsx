@@ -114,12 +114,12 @@ const styles = {
     // whiteSpace: "nowrap"
   },
   font: {
-    fontStyle: "italic",
+    fontFamily: 'Georgia',
     color: "dimgray",
     fontWeight: "bold"
   },
   moreButton: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold',
     '&:hover': {

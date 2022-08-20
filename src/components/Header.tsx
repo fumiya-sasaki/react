@@ -48,7 +48,8 @@ export const Header = React.memo(({
   return (
     <>
       <Box style={styles.container}>
-        <Link to={'/'} style={styles.logoBox}> <img src={logo} alt='' width={'300px'} /></Link>
+        <Typography sx={styles.name}>Momoko Wakabayashi</Typography>
+        <Link to={'/'} style={styles.logoBox}> <img src={logo} alt='' width={'250px'} /></Link>
         <Box sx={styles.navigation}>
           {menu}
         </Box>
@@ -71,6 +72,15 @@ const styles = {
     paddingTop: 15,
     width: '100%',
   },
+  name: {
+    fontFamily: 'Georgia',
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: 'dimgray',
+    // paddingRight: 20,
+    marginTop: 2,
+    marginBottom: 2,
+  },
   logoBox: {
     display: 'flex',
     flexDirection: 'column' as 'column',
@@ -78,9 +88,9 @@ const styles = {
     justifyContent: 'center',
   },
   font: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   titleBox: {
     padding: 3,

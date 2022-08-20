@@ -82,7 +82,7 @@ const styles = {
     overflow: 'hidden',
   },
   font: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold'
   },

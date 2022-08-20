@@ -41,7 +41,7 @@ const styles = {
     hight: "100px",
   },
   font: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold',
     '&:hover': {

@@ -37,16 +37,17 @@ export const Mobile = React.memo(({
       >
         <MenuItem onClick={() => navigation('/')} sx={styles.font}>HOME</MenuItem>
         <MenuItem> <FormControl variant='standard' style={{ width: '100%', marginTop: '-20px' }}>
-          <InputLabel style={styles.fontCategory}>CATEGORY</InputLabel>
+          <InputLabel style={styles.fontCategory}>SEARCH</InputLabel>
           <Select
             value={selectedCategory}
             onChange={(event) => categorySerch(event)}
             onClose={handleClose}
             onOpen={() => setOpenCategory(true)}
             open={openCategory}
+            sx={styles.menuFont}
           >
             {categoris.map((data) => (
-              <MenuItem key={data} value={data}>
+              <MenuItem sx={styles.menuFont} key={data} value={data}>
                 {data}
               </MenuItem>
             ))}
@@ -62,7 +63,7 @@ export const Mobile = React.memo(({
 export default Mobile;
 const styles = {
   fontCategory: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold',
     fontSize: '15px',
@@ -71,7 +72,7 @@ const styles = {
     }
   },
   font: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold',
     '&:hover': {
@@ -79,4 +80,9 @@ const styles = {
     },
     paddingRight: 1,
   },
+  menuFont: {
+    fontWeight: 'bold',
+    fontFamily: 'Georgia',
+    color: "dimgray",
+  }
 };

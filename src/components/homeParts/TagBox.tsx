@@ -61,7 +61,7 @@ const styles = {
     width: '90%',
   },
   tagItem: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold',
     bgcolor: 'unset',
@@ -70,7 +70,7 @@ const styles = {
     }
   },
   font: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold'
   },

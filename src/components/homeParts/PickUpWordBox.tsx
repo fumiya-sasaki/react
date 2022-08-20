@@ -91,7 +91,7 @@ const styles = {
     overflow: 'hidden',
   },
   font: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold'
   },
@@ -99,7 +99,7 @@ const styles = {
     position: 'relative'
   },
   moreButton: {
-    fontStyle: 'italic',
+    fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold',
     '&:hover': {
