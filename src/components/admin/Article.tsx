@@ -64,10 +64,12 @@ export const Article = () => {
   };
 
   const onChangeContentImage = async (e: any, index: number) => {
-    if (e.target.files[0]) {
+    if (e.target.files) {
       const newRecipeContents: Content[] = [...recipeContents];
-      newRecipeContents[index].imageUrls.push(URL.createObjectURL(e.target.files[0]));
-      console.log(newRecipeContents);
+      const fileList: FileList = e.target.files;
+      Array.from(fileList).forEach((img: Blob | MediaSource) => {
+        newRecipeContents[index].imageUrls.push(URL.createObjectURL(img));
+      });
       setRecipeContents(newRecipeContents);
     }
   };

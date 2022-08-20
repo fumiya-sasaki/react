@@ -59,9 +59,12 @@ export const AdminConfig = () => {
   };
 
   const onChangeMainImage = (e: any) => {
-    if (e.target.files[0]) {
+    if (e.target.files) {
       const newImages = [...topImages];
-      newImages.push(URL.createObjectURL(e.target.files[0]));
+      const fileList: FileList = e.target.files;
+      Array.from(fileList).forEach((img: Blob | MediaSource) => {
+        newImages.push(URL.createObjectURL(img));
+      });
       setTopImages(newImages);
     }
   };
@@ -137,7 +140,7 @@ export const AdminConfig = () => {
       <Box sx={styles.imgBox}>
         <Button variant="contained" component="label" >
           main画像をアップロード
-          <input type="file" hidden onChange={(e) => onChangeMainImage(e)} />
+          <input type="file" hidden multiple onChange={(e) => onChangeMainImage(e)} />
         </Button>
         <Box sx={styles.imgItem}>
           {topImages.map((image, index) => (

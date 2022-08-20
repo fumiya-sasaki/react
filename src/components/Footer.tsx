@@ -1,14 +1,17 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import instagram from '../images/instagram.png';
 
 export const Footer = () => {
+  const navigation = useNavigate();
   return (
-    <Box style={styles.container}>
+    <Box sx={styles.container}>
       <a target='_blank' href='https://www.instagram.com/chiacchiere1/'><img src={instagram} alt='' width={'50px'} /></a>
-      <Typography style={styles.title}>
+      <Button onClick={() => navigation('/inquiry')} sx={styles.font}>お問い合わせ</Button>
+      <Typography sx={styles.title}>
         copyrights© chiacchiere. All Rights Reserved.
       </Typography>
-      <Typography style={styles.title}>
+      <Typography sx={styles.title}>
         当サイト内の文章・画像等の無断転載及び複製などの行為はご遠慮ください。
       </Typography>
     </Box>
@@ -22,10 +25,10 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 10,
-    paddingBottom: 40,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingTop: 1,
+    paddingBottom: 4,
+    paddingLeft: 4,
+    paddingRight: 4,
     background: "#2b2b2b",
     width: "auto",
   },
@@ -36,5 +39,14 @@ const styles = {
   image: {
     width: "100px",
     hight: "100px",
+  },
+  font: {
+    fontStyle: 'italic',
+    color: 'dimgray',
+    fontWeight: 'bold',
+    '&:hover': {
+      bgcolor: 'unset'
+    },
+    paddingRight: 1,
   },
 };

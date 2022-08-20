@@ -29,10 +29,8 @@ export const Home = React.memo(() => {
   }, [config]);
 
   useEffect(() => {
-    if (recipe.newArrival.length !== 0) {
-      setNewArrival(isMobileSize ? recipe.newArrival.slice(0, 3) : recipe.newArrival)
-      setPickUpWords(recipe.pickUpWords.slice(0, 10));
-    }
+    setNewArrival(isMobileSize ? recipe.newArrival.slice(0, 3) : recipe.newArrival)
+    setPickUpWords(recipe.pickUpWords.slice(0, 10));
   }, [recipe]);
 
   return (

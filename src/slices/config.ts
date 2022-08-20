@@ -47,11 +47,12 @@ export const setConfig = createAsyncThunk
       const deleteImages = config.topImages.filter((img) => !topImages.includes(img));
       for (let index = 0; index < topImages.length; index++) {
         if (topImages[index].indexOf("blob") !== -1) {
-          const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + index);
+          const imageNumber: number = Date.now();
+          const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + imageNumber);
           const fetchContentImage = await fetch(topImages[index]);
           const contentImageBlob = await fetchContentImage.blob();
           await uploadBytes(storageRef, contentImageBlob);
-          await getDownloadURL(ref(storage, "config/topImg/" + 'imgNumber' + index))
+          await getDownloadURL(ref(storage, "config/topImg/" + 'imgNumber' + imageNumber))
             .then((url) => {
               if (url.indexOf("blob") === -1) topImages[index] = url;
             });
@@ -64,7 +65,7 @@ export const setConfig = createAsyncThunk
         const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + storageNumber);
         await deleteObject(storageRef).then(() => console.log('OK!'));
       };
-      const newConfig: Config = { topImages, pickUpIngredients, recipeUids, season, pickUpWord: '' };
+      const newConfig: Config = { ...config, topImages, pickUpIngredients, recipeUids, season };
       await setDoc(configDoc, newConfig);
       return newConfig;
     });

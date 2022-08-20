@@ -93,11 +93,6 @@ export const RightContent = () => {
           </Box>
         ))}
       </Box>
-      <Box sx={styles.snsBox}>
-        <Typography sx={styles.font}>Official SNS</Typography>
-        <hr style={{ width: '90%' }} />
-        <a target='_blank' href='https://www.instagram.com/chiacchiere1/'><img src={instagram} alt='' width={'50px'} /></a>
-      </Box>
     </Box>
   );
 };

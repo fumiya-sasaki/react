@@ -50,11 +50,12 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
         imgIndex++
       ) {
         if (recipeData.contents[index].imageUrls[imgIndex].indexOf("blob") !== -1) {
-          const storageRef = ref(storage, "img/" + docId + "/contentImage/" + index + "/" + imgIndex);
+          const imageNumber: number = Date.now();
+          const storageRef = ref(storage, "img/" + docId + "/contentImage/" + index + "/" + imageNumber);
           const fetchContentImage = await fetch(recipeData.contents[index].imageUrls[imgIndex]);
           const contentImageBlob = await fetchContentImage.blob();
           await uploadBytes(storageRef, contentImageBlob);
-          await getDownloadURL(ref(storage, "img/" + docId + "/contentImage/" + index + "/" + imgIndex))
+          await getDownloadURL(ref(storage, "img/" + docId + "/contentImage/" + index + "/" + imageNumber))
             .then((url) => {
               if (url.indexOf("blob") === -1) {
                 recipeData.contents[index].imageUrls[imgIndex] = url;
