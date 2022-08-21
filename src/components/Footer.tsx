@@ -6,7 +6,7 @@ export const Footer = () => {
   const navigation = useNavigate();
   return (
     <Box sx={styles.container}>
-      <a target='_blank' href='https://www.instagram.com/chiacchiere1/'><img src={instagram} alt='' width={'50px'} /></a>
+      <a target='_blank' href='https://www.instagram.com/momoko_wakabayashi/'><img src={instagram} alt='' width={'50px'} /></a>
       <Button onClick={() => navigation('/inquiry')} sx={styles.font}>お問い合わせ</Button>
       <Typography sx={styles.title}>
         copyrights© chiacchiere. All Rights Reserved.
