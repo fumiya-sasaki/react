@@ -10,6 +10,7 @@ import AdminSerch from "./components/admin/AdminSearch";
 import Article from "./components/admin/Article";
 import Content from "./components/Content";
 import PrivateRoute from "./components/core/PrivateRoute";
+import ScrollToTop from "./components/core/ScrollToTop";
 import Gallery from "./components/Gallery";
 import Home from "./components/Home";
 import Inquiry from "./components/Inquiry";
@@ -25,6 +26,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
+          <ScrollToTop />
           <Routes>
             <Route path={"/"} element={<Home />} />
             <Route path={"admin/home"} element={<PrivateRoute children={<AdminHome />} />} />
