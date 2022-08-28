@@ -7,7 +7,7 @@ import { RootState } from "../../slices/store";
 import { getPickUpData } from "../../slices/admin";
 import { Config, getConfig, setConfig, changePickUpWord } from "../../slices/config";
 
-export const AdminConfig = () => {
+export const AdminConfig = React.memo(() => {
   const dispatch = useAppDispatch();
   const config: Config = useAppSelector(
     (state: RootState) => state.config
@@ -157,7 +157,7 @@ export const AdminConfig = () => {
       </Box>
     </>
   );
-};
+});
 
 export default AdminConfig;
 const styles = {

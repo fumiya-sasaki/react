@@ -1,21 +1,20 @@
 import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
+import React from "react";
 
-type TopForm = {
-  title: string;
-  introduction: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  setIntroduction: React.Dispatch<React.SetStateAction<string>>;
-  setMainImage: React.Dispatch<React.SetStateAction<string>>;
-  disabled: boolean;
-};
-
-export const TopForm: React.FC<TopForm> = ({
+export const TopForm = React.memo(({
   title,
   introduction,
   setTitle,
   setIntroduction,
   setMainImage,
   disabled,
+}: {
+  title: string;
+  introduction: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  setIntroduction: React.Dispatch<React.SetStateAction<string>>;
+  setMainImage: React.Dispatch<React.SetStateAction<string>>;
+  disabled: boolean;
 }) => {
   const onChangeMainImage = (e: any) => {
     if (e.target.files[0]) {
@@ -45,7 +44,7 @@ export const TopForm: React.FC<TopForm> = ({
       </Button>
     </Box>
   );
-};
+});
 
 export default TopForm;
 const styles = {

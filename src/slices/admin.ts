@@ -20,8 +20,8 @@ export const nextGetDataScreen = createAsyncThunk<RecipeData[], { endAt?: Date }
     return afterFilterState;
   });
 
-export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
-  "admin/setData",
+export const setRecipeData = createAsyncThunk<RecipeData[], RecipeData>(
+  "admin/setRecipeData",
   async (recipeData, thunkApi) => {
     const recipe: RecipeData[] = (thunkApi.getState() as RootState).admin;
     const category: Category = (thunkApi.getState() as RootState).category;
@@ -67,7 +67,7 @@ export const setData = createAsyncThunk<RecipeData[], SubmitRecipe>(
 
     const result: RecipeData = {
       introduction: recipeData.introduction,
-      createdAt: new Date(),
+      createdAt: recipeData.createdAt,
       uid: docId,
       mainImageUrl,
       title: recipeData.title,
@@ -124,7 +124,7 @@ export const slice = createSlice({
       .addCase(nextGetDataScreen.fulfilled, (state, action) => {
         return action.payload;
       })
-      .addCase(setData.fulfilled, (state, action) => {
+      .addCase(setRecipeData.fulfilled, (state, action) => {
         return action.payload;
       });
   },

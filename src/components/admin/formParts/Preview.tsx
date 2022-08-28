@@ -1,21 +1,20 @@
 import { Box, Button, Typography } from "@mui/material";
+import React from "react";
 import { useSize } from "../../../hooks";
 import { Content } from "../../../slices/recipe";
 
-type PreviewState = {
-  title: string;
-  introduction: string;
-  recipeContents: Content[];
-  mainImageUrl: string;
-  deleteContentImg: (index: number, imgIndex: number) => void;
-};
-
-export const Preview: React.FC<PreviewState> = ({
+export const Preview = React.memo(({
   title,
   introduction,
   recipeContents,
   mainImageUrl,
   deleteContentImg,
+}: {
+  title: string;
+  introduction: string;
+  recipeContents: Content[];
+  mainImageUrl: string;
+  deleteContentImg: (index: number, imgIndex: number) => void;
 }) => {
   const { isMobileSize } = useSize();
   return (
@@ -50,7 +49,7 @@ export const Preview: React.FC<PreviewState> = ({
       </Box>
     </Box>
   );
-};
+});
 
 export default Preview;
 const styles = {

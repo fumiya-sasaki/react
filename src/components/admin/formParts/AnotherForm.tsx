@@ -1,21 +1,20 @@
-import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
+import { Box, TextareaAutosize, TextField } from "@mui/material";
+import React from "react";
 
-type AnotherForm = {
-  tags: string;
-  category: string;
-  season: string;
-  setTags: React.Dispatch<React.SetStateAction<string>>;
-  setCategory: React.Dispatch<React.SetStateAction<string>>;
-  setSeason: React.Dispatch<React.SetStateAction<string>>;
-};
-
-export const AnotherForm: React.FC<AnotherForm> = ({
+export const AnotherForm = React.memo(({
   tags,
   category,
   season,
   setTags,
   setCategory,
   setSeason
+}: {
+  tags: string;
+  category: string;
+  season: string;
+  setTags: React.Dispatch<React.SetStateAction<string>>;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
+  setSeason: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   return (
     <Box style={styles.contentContainer}>
@@ -44,7 +43,7 @@ export const AnotherForm: React.FC<AnotherForm> = ({
       />
     </Box>
   );
-};
+});
 
 export default AnotherForm;
 const styles = {

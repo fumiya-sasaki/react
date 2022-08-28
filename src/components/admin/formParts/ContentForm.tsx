@@ -2,22 +2,20 @@ import { Box, Button, TextareaAutosize, TextField } from "@mui/material";
 import React from "react";
 import { Content } from "../../../slices/recipe";
 
-type ContentFormState = {
-  recipeContents: Content[];
-  onChangeTitle: (value: string, index: number) => void;
-  onChangeText: (value: string, index: number) => void;
-  onChangeContentImage: (e: any, index: number) => void;
-  deleteForm: (index: number) => void;
-  disabled: boolean;
-};
-
-export const ContentForm: React.FC<ContentFormState> = React.memo(({
+export const ContentForm = React.memo(({
   recipeContents,
   onChangeTitle,
   onChangeText,
   onChangeContentImage,
   deleteForm,
   disabled,
+}: {
+  recipeContents: Content[];
+  onChangeTitle: (value: string, index: number) => void;
+  onChangeText: (value: string, index: number) => void;
+  onChangeContentImage: (e: any, index: number) => void;
+  deleteForm: (index: number) => void;
+  disabled: boolean;
 }) => {
   return (
     <>
@@ -42,6 +40,7 @@ export const ContentForm: React.FC<ContentFormState> = React.memo(({
               type="file"
               hidden
               onChange={(e) => onChangeContentImage(e, index)}
+              multiple
             />
           </Button>
           <Button variant="contained" onClick={() => deleteForm(index)} disabled={disabled}>

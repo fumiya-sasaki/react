@@ -1,17 +1,18 @@
 import { Backdrop, Box, Button, CircularProgress, FormControlLabel, Switch } from '@mui/material';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setData } from '../../slices/admin';
+import { setRecipeData } from '../../slices/admin';
 import { Config, getConfig, setRecipeUids } from '../../slices/config';
-import { Content, RecipeData, SubmitRecipe } from '../../slices/recipe';
+import { Content, RecipeData } from '../../slices/recipe';
 import { RootState } from '../../slices/store';
-import AnotherForm from './fromParts/AnotherForm';
-import ContentForm from './fromParts/ContentForm';
-import Preview from './fromParts/Preview';
-import TopForm from './fromParts/TopForm';
+import AnotherForm from './formParts/AnotherForm';
+import ContentForm from './formParts/ContentForm';
+import Preview from './formParts/Preview';
+import TopForm from './formParts/TopForm';
 
-export const Article = () => {
+export const Article = React.memo(() => {
   const location = useLocation();
   type RecipeState = {
     recipeData: RecipeData;
@@ -46,8 +47,8 @@ export const Article = () => {
   const submitRecipeData = async () => {
     setIsLoading(true);
     setDisabled(true);
-    const newTags: string[] = tags.split('#').filter((item) => item !== '');
-    const newRecipeData: SubmitRecipe = {
+    const newTags: string[] = tags.split('＃').filter((item) => item !== '');
+    const newRecipeData: RecipeData = {
       uid: !recipeData.newArticle ? recipeData.uid : 0,
       title,
       mainImageUrl,
@@ -56,8 +57,10 @@ export const Article = () => {
       category,
       tags: newTags,
       season,
+      createdAt: recipeData.newArticle
+        ? recipeData.createdAt : new Date()
     };
-    await dispatch(setData(newRecipeData));
+    await dispatch(setRecipeData(newRecipeData));
     setIsLoading(false);
     setDisabled(false);
     navigation('/admin/home');
@@ -122,7 +125,6 @@ export const Article = () => {
         <TopForm
           title={title}
           introduction={introduction}
-          mainImageUrl={mainImageUrl}
           setTitle={setTitle}
           setIntroduction={setIntroduction}
           setMainImage={setMainImage}
@@ -163,7 +165,7 @@ export const Article = () => {
       </Box>
     </Box>
   );
-};
+});
 
 export default Article;
 const styles = {

@@ -28,7 +28,7 @@ export const Search = React.memo(() => {
     if (screen.length === 0) {
       dispatch(searchString({ tag: title }))
     };
-  }, [screen.length]);
+  }, [screen]);
 
   const handlePaginate = useCallback((
     e: React.ChangeEvent<unknown>,
