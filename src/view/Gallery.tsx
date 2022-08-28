@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const limit = 9;
-export const Gallery = () => {
+export const Gallery = React.memo(() => {
   const [contents, setContents] = useState<any[]>([]);
   useEffect(() => {
     const businessID = process.env.REACT_APP_BUSINESS_ID;
@@ -33,7 +33,7 @@ export const Gallery = () => {
       <Footer />
     </>
   );
-};
+});
 
 export default Gallery;
 const styles = {

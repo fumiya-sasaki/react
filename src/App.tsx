@@ -8,17 +8,18 @@ import AdminContent from "./components/admin/AdminContent";
 import AdminHome from "./components/admin/AdminHome";
 import AdminSerch from "./components/admin/AdminSearch";
 import Article from "./components/admin/Article";
-import Content from "./components/Content";
+import Content from "./view/Content";
 import PrivateRoute from "./components/core/PrivateRoute";
 import ScrollToTop from "./components/core/ScrollToTop";
-import Gallery from "./components/Gallery";
-import Home from "./components/Home";
-import Inquiry from "./components/Inquiry";
-import Login from "./components/Login";
-import NewArrival from "./components/NewArrival";
-import PickUpWord from "./components/PickUpWord";
-import Search from "./components/Search";
+import Gallery from "./view/Gallery";
+import Home from "./view/Home";
+import Inquiry from "./view/Inquiry";
+import Login from "./view/Login";
+import NewArrival from "./view/NewArrival";
+import PickUpWord from "./view/PickUpWord";
+import Search from "./view/Search";
 import { store } from "./slices/store";
+import Profile from "./view/Profile";
 
 function App() {
   const theme = useTheme();
@@ -38,8 +39,9 @@ function App() {
             <Route path={"search"} element={<Search />} />
             <Route path={"newArrival"} element={<NewArrival />} />
             <Route path={"pickUpWord"} element={<PickUpWord />} />
-            <Route path={"inquiry"} element={<Inquiry />} />
             <Route path={"gallery"} element={<Gallery />} />
+            <Route path={"inquiry"} element={<Inquiry />} />
+            {/* <Route path={"profile"} element={<Profile />} /> */}
             <Route path={"login"} element={<Login />} />
           </Routes>
         </Provider>

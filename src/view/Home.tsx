@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector, useSize } from "../hooks";
 import { getHomeRecipes, HomeRecipe, RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import NewArrivalBox from "./homeParts/NewArraivalBox";
-import MainImageBox from "./homeParts/MainImageBox";
-import PickUpWordBox from "./homeParts/PickUpWordBox";
+import NewArrivalBox from "../components/homeParts/NewArraivalBox";
+import MainImageBox from "../components/homeParts/MainImageBox";
+import PickUpWordBox from "../components/homeParts/PickUpWordBox";
 import { Config, getConfig } from "../slices/config";
 
 

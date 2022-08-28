@@ -34,6 +34,7 @@ export const Mobile = React.memo(({
       </FormControl>
       <Button sx={styles.font} onClick={() => navigation("/gallery")}>INSTAGRAM GALLERY</Button>
       <Button sx={styles.font} onClick={() => navigation("/inquiry")}>CONTACT</Button>
+      {/* <Button sx={styles.font} onClick={() => navigation("/profile")}>PROFILE</Button> */}
     </>
   );
 });

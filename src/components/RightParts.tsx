@@ -2,7 +2,7 @@ import {
   Box, Button, FormControl, IconButton, Input,
   InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { RootState } from '../slices/store';
@@ -11,7 +11,7 @@ import { Category } from '../slices/category';
 import { searchCategory, searchString } from '../slices/screen/searchScreen';
 import instagram from '../images/instagram.png';
 
-export const RightContent = () => {
+export const RightContent = React.memo(() => {
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
   const [tag, setTag] = useState<string>('');
@@ -21,7 +21,7 @@ export const RightContent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [categoris, setCategoris] = useState<string[]>([]);
 
-  const search = (tagItem?: string) => {
+  const search = useCallback((tagItem?: string) => {
     if (tagItem) {
       dispatch(searchString({ tag: tagItem }));
       navigation('/search', { state: { title: tagItem } });
@@ -29,14 +29,14 @@ export const RightContent = () => {
       dispatch(searchString({ tag }));
       navigation('/search', { state: { title: tag } });
     };
-  };
+  }, [tag]);
 
-  const categorySerch = (event: SelectChangeEvent) => {
+  const categorySerch = useCallback((event: SelectChangeEvent) => {
     const category = event.target.value as string;
     setSelectedCategory(category);
     dispatch(searchCategory({ category }));
     navigation('/search', { state: { title: category } });
-  };
+  }, []);
   useEffect(() => {
     setCategoris(category.category);
   }, [category, dispatch]);
@@ -95,7 +95,7 @@ export const RightContent = () => {
       </Box>
     </Box>
   );
-};
+});
 
 export default RightContent;
 const styles = {

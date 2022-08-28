@@ -1,15 +1,15 @@
 import { Box, Button, TextField } from "@mui/material";
-import React, { useState } from "react";
-import { auth } from "./core/firebase";
+import React, { useCallback, useState } from "react";
+import { auth } from "../components/core/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const Login = React.memo(() => {
   const navigation = useNavigate();
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
-  const loginSubmit = async () => {
+  const loginSubmit = useCallback(async () => {
     try {
       await signInWithEmailAndPassword(
         auth,
@@ -20,7 +20,7 @@ export const Login = () => {
     } catch (error) {
       alert("メールアドレスまたはパスワードが間違っています");
     }
-  };
+  }, [email, password]);
 
   return (
     <>
@@ -45,7 +45,7 @@ export const Login = () => {
       </Box>
     </>
   );
-};
+});
 
 export default Login;
 const styles = {

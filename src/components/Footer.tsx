@@ -1,8 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import instagram from '../images/instagram.png';
 
-export const Footer = () => {
+export const Footer = React.memo(() => {
   const navigation = useNavigate();
   return (
     <Box sx={styles.container}>
@@ -16,7 +17,7 @@ export const Footer = () => {
       </Typography>
     </Box>
   );
-};
+});
 
 export default Footer;
 const styles = {

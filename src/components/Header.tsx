@@ -1,5 +1,5 @@
 import { Box, SelectChangeEvent, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, useSize } from '../hooks';
 import { Category, getCategory } from '../slices/category';
@@ -33,17 +33,20 @@ export const Header = React.memo(({
     setCategoris(categoryState.category);
   }, [categoryState, dispatch]);
 
-  const categorySerch = (event: SelectChangeEvent) => {
-    const category = event.target.value as string;
-    setSelectedCategory(category);
-    dispatch(searchCategory({ category }));
-    navigation('/search', { state: { title: category } });
-  };
+  const categorySerch = useCallback(
+    (event: SelectChangeEvent) => {
+      const category = event.target.value as string;
+      setSelectedCategory(category);
+      dispatch(searchCategory({ category }));
+      navigation('/search', { state: { title: category } });
+    }, []);
 
   const { isMobileSize } = useSize();
-  const menu: JSX.Element = isMobileSize
-    ? <Mobile categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />
-    : <PcSide categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />;
+  const menu: JSX.Element = useMemo(() => {
+    return isMobileSize
+      ? <Mobile categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />
+      : <PcSide categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />
+  }, [categoris, selectedCategory]);
 
   return (
     <>

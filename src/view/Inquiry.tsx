@@ -1,10 +1,10 @@
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import React, { useCallback, useEffect, useState } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { init, send } from "emailjs-com";
 
-export const Inquiry = () => {
+export const Inquiry = React.memo(() => {
 
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -14,7 +14,7 @@ export const Inquiry = () => {
   const [isRequired, setIsRequired] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     setIsRequired(true);
     setLoading(true);
     const userID = process.env.REACT_APP_USER_ID;
@@ -34,7 +34,7 @@ export const Inquiry = () => {
         alert('送信失敗しました。もう一度送信してください。');
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (name !== "" && email !== "" && message !== "") {
@@ -46,7 +46,7 @@ export const Inquiry = () => {
   const buttonContent = !loading ? 'お問い合わせ' : <CircularProgress color='inherit' size={23} />;
   return (
     <>
-      <Header title={"お問い合わせ"} />
+      <Header title={"Contact"} />
       <Box sx={styles.container}>
         <Box sx={styles.box}>
           <TextField
@@ -96,7 +96,7 @@ export const Inquiry = () => {
       <Footer />
     </>
   );
-};
+});
 
 export default Inquiry;
 const styles = {

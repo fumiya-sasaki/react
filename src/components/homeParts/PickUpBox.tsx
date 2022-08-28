@@ -10,9 +10,6 @@ export const PickUpBox = React.memo(({
   pickUp: RecipeData[];
 }) => {
   const { isMobileSize } = useSize();
-  const width: string = isMobileSize ? 'auto' : '200px';
-  const height: string = isMobileSize ? '150px' : '160px';
-
   return (
     <Box sx={styles.newContentBox}>
       <Box sx={styles.titleBox}>
@@ -24,8 +21,8 @@ export const PickUpBox = React.memo(({
             <Box sx={styles.itemContainerPick} >
               <img src={item.mainImageUrl} alt=''
                 style={{
-                  width,
-                  height,
+                  width: isMobileSize ? 'auto' : '200px',
+                  height: isMobileSize ? '150px' : '160px',
                   paddingBottom: '20px',
                   paddingTop: '20px',
                   objectFit: 'cover'

@@ -1,11 +1,11 @@
 import { Box, Button, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector, useSize } from "../hooks";
 import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { newArrivalScreenState, nextGetDataScreen } from "../slices/screen/newArrivalScreen";
 import { DoubleArrow } from "@mui/icons-material";
 
@@ -25,9 +25,9 @@ export const NewArrival = React.memo(() => {
     setDisabled(screen.lastData);
   }, [screen.lastData]);
 
-  const getNext = () => {
+  const getNext = useCallback(() => {
     dispatch(nextGetDataScreen({ endAt: screen.recipeData[screen.recipeData.length - 1].createdAt }));
-  };
+  }, [screen.recipeData]);
 
   return (
     <>

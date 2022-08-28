@@ -4,7 +4,7 @@ import {
   MenuItem, Select, SelectChangeEvent,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 export const Mobile = React.memo(({
   categorySerch,
@@ -20,13 +20,14 @@ export const Mobile = React.memo(({
   const open = Boolean(anchorEl);
   const [openCategory, setOpenCategory] = React.useState(false);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
+  }, []);
+
+  const handleClose = useCallback(() => {
     if (openCategory) setOpenCategory(false);
     setAnchorEl(null);
-  };
+  }, [openCategory]);
   return (
     <>
       <Button onClick={handleClick} sx={styles.font}>MENU</Button>
@@ -55,6 +56,7 @@ export const Mobile = React.memo(({
         </FormControl></MenuItem>
         <MenuItem onClick={() => navigation('/gallery')} sx={styles.font}>INSTAGRAM GALLERY</MenuItem>
         <MenuItem onClick={() => navigation('/inquiry')} sx={styles.font}>CONTACT</MenuItem>
+        {/* <MenuItem onClick={() => navigation("/profile")} sx={styles.font}>PROFILE</MenuItem> */}
       </Menu>
     </>
   );

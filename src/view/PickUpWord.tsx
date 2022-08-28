@@ -1,46 +1,37 @@
 import { Box, Pagination, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector, useSize } from "../hooks";
+import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useAppSelector, useSize } from "../hooks";
 import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
-import Header from "./Header";
-import Footer from "./Footer";
-import { searchString } from "../slices/screen/searchScreen";
-import RightContent from "./RightParts";
-
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 const contentsNumber = 10;
-export const Search = () => {
-  const location = useLocation();
-  const { title } = location.state as { title: string };
+export const PickUpWord = React.memo(() => {
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [totalNumber, setTotalNumber] = useState<number>(0);
-  const dispatch = useAppDispatch();
   const { isMobileSize } = useSize();
 
-  const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.searchScreen
+  const pickUpWord: RecipeData[] = useAppSelector(
+    (state: RootState) => state.recipe.pickUpWords
   );
 
   useEffect(() => {
-    setContents(screen.slice(0, contentsNumber));
-    setTotalNumber(Math.ceil(screen.length / contentsNumber));
-    if (screen.length === 0) {
-      dispatch(searchString({ tag: title }))
-    };
-  }, [screen.length]);
+    setContents(pickUpWord.slice(0, contentsNumber));
+    setTotalNumber(Math.ceil(pickUpWord.length / contentsNumber));
+  }, [pickUpWord.length]);
 
-  const handlePaginate = (
+  const handlePaginate = useCallback((
     e: React.ChangeEvent<unknown>,
     pageNumber: number
   ) => {
-    setContents(screen.slice((pageNumber - 1) * contentsNumber,
+    setContents(pickUpWord.slice((pageNumber - 1) * contentsNumber,
       (pageNumber - 1) * contentsNumber + contentsNumber));
-  };
+  }, [pickUpWord]);
 
   return (
     <>
-      <Header title={"検索結果「 " + title + " 」"} />
+      <Header title={"PickUp"} />
       <Box sx={styles.container}>
         <Box sx={styles.leftContainer}>
           <Box sx={styles.contentContainer}>
@@ -65,14 +56,13 @@ export const Search = () => {
             onChange={(e, pageNumber) => handlePaginate(e, pageNumber)}
           />
         </Box>
-        <RightContent />
       </Box>
       <Footer />
     </>
   );
-};
+});
 
-export default Search;
+export default PickUpWord;
 const styles = {
   container: {
     display: "flex",
@@ -85,7 +75,7 @@ const styles = {
     flexDirection: "column" as "column",
     alignItems: "center",
     justifyContent: "center",
-    width: { xs: '100%', sm: "70%" },
+    width: { xs: '100%', sm: "100%" },
   },
   titleBox: {
     padding: 3,

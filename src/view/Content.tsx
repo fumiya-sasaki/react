@@ -1,14 +1,15 @@
+import React from 'react';
 import { DriveFileMove } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useSize } from '../hooks';
 import { RecipeData } from '../slices/recipe';
 import { searchString } from '../slices/screen/searchScreen';
-import Footer from './Footer';
-import Header from './Header';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
-export const Content = () => {
+export const Content = React.memo(() => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
@@ -16,10 +17,10 @@ export const Content = () => {
     recipeData: RecipeData;
   };
 
-  const search = (tagItem: string) => {
+  const search = useCallback((tagItem: string) => {
     dispatch(searchString({ tag: tagItem }));
     navigation('/search', { state: { title: tagItem } });
-  };
+  }, []);
 
   const { isMobileSize } = useSize();
   const { recipeData } = location.state as RecipeState;
@@ -71,7 +72,7 @@ export const Content = () => {
       <Footer />
     </>
   );
-};
+});
 
 export default Content;
 const styles = {
