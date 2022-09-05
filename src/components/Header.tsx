@@ -33,18 +33,10 @@ export const Header = React.memo(({
     setCategoris(categoryState.category);
   }, [categoryState, dispatch]);
 
-  const returnTop = useCallback(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
-
   const categorySerch = useCallback(
     (event: SelectChangeEvent) => {
       const category = event.target.value as string;
       setSelectedCategory(category);
-      returnTop();
       dispatch(searchCategory({ category }));
       navigation('/search', { state: { title: category } });
     }, []);

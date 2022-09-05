@@ -9,7 +9,7 @@ const contentsNumber = 10;
 export const AdminSearch = () => {
   const { isMobileSize } = useSize();
   const screen: RecipeData[] = useAppSelector(
-    (state: RootState) => state.searchScreen
+    (state: RootState) => state.searchScreen.recipeData
   );
 
   const [contents, setContents] = useState<RecipeData[]>([]);

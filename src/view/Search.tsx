@@ -6,7 +6,7 @@ import { RecipeData } from "../slices/recipe";
 import { RootState } from "../slices/store";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { searchString } from "../slices/screen/searchScreen";
+import { SearchScreenState, searchString, setIsTopScroll } from "../slices/screen/searchScreen";
 import RightContent from "../components/RightParts";
 
 const contentsNumber = 10;
@@ -18,14 +18,22 @@ export const Search = React.memo(() => {
   const dispatch = useAppDispatch();
   const { isMobileSize } = useSize();
 
-  const screen: RecipeData[] = useAppSelector(
+  const screen: SearchScreenState = useAppSelector(
     (state: RootState) => state.searchScreen
   );
-
   useEffect(() => {
-    setContents(screen.slice(0, contentsNumber));
-    setTotalNumber(Math.ceil(screen.length / contentsNumber));
-    if (screen.length === 0) {
+    if (screen.isTopScroll) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      dispatch(setIsTopScroll());
+    }
+  }, [screen.isTopScroll]);
+  useEffect(() => {
+    setContents(screen.recipeData.slice(0, contentsNumber));
+    setTotalNumber(Math.ceil(screen.recipeData.length / contentsNumber));
+    if (screen.recipeData.length === 0) {
       dispatch(searchString({ tag: title }))
     };
   }, [screen]);
@@ -34,7 +42,7 @@ export const Search = React.memo(() => {
     e: React.ChangeEvent<unknown>,
     pageNumber: number
   ) => {
-    setContents(screen.slice((pageNumber - 1) * contentsNumber,
+    setContents(screen.recipeData.slice((pageNumber - 1) * contentsNumber,
       (pageNumber - 1) * contentsNumber + contentsNumber));
   }, [screen]);
 
@@ -120,7 +128,7 @@ const styles = {
   itemContainer: {
     display: "flex",
     flexDirection: "column" as "column",
-    alignItems: "center",
+    alignItems: 'flex-start',
     justifyContent: "center",
     paddingLeft: "10px",
     width: { xs: "180px", sm: "30%" },
@@ -140,9 +148,9 @@ const styles = {
     paddingLeft: 5,
   },
   menuTitle: {
-    fontWeight: "bold",
-    color: "dimgray",
-    paddingTop: 2,
+    fontFamily: 'Georgia',
+    color: 'dimgray',
+    fontWeight: 'bold',
   },
   introduction: {
     fontWeight: "lighter",

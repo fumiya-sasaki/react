@@ -13,9 +13,6 @@ export const Content = React.memo(() => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
-  type RecipeState = {
-    recipeData: RecipeData;
-  };
 
   const search = useCallback((tagItem: string) => {
     dispatch(searchString({ tag: tagItem }));
@@ -23,7 +20,7 @@ export const Content = React.memo(() => {
   }, []);
 
   const { isMobileSize } = useSize();
-  const { recipeData } = location.state as RecipeState;
+  const { recipeData } = location.state as { recipeData: RecipeData };
   const [tags, setTags] = useState<string[]>([]);
   useEffect(() => {
     const newTsgs: string[] = [...recipeData.tags];

@@ -9,7 +9,6 @@ import { RootState } from '../slices/store';
 import { Search } from '@mui/icons-material';
 import { Category } from '../slices/category';
 import { searchCategory, searchString } from '../slices/screen/searchScreen';
-import instagram from '../images/instagram.png';
 
 export const RightContent = React.memo(() => {
   const dispatch = useAppDispatch();
@@ -21,20 +20,11 @@ export const RightContent = React.memo(() => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [categoris, setCategoris] = useState<string[]>([]);
 
-  const returnTop = useCallback(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
-
   const search = useCallback((tagItem?: string) => {
     if (tagItem) {
-      returnTop();
       dispatch(searchString({ tag: tagItem }));
       navigation('/search', { state: { title: tagItem } });
     } else {
-      returnTop();
       dispatch(searchString({ tag }));
       navigation('/search', { state: { title: tag } });
     };
@@ -42,7 +32,6 @@ export const RightContent = React.memo(() => {
 
   const categorySerch = useCallback((event: SelectChangeEvent) => {
     const category = event.target.value as string;
-    returnTop();
     setSelectedCategory(category);
     dispatch(searchCategory({ category }));
     navigation('/search', { state: { title: category } });

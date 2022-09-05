@@ -33,7 +33,8 @@ export const PickUpWordBox = React.memo(({
         >
           {pickUpWords.map((item) => (
             <Box key={item.uid} style={{ marginBottom: 50 }}>
-              <Link to={'/content/'} style={styles.itemContainerSason} state={{ recipeData: item }} >
+              <Link to={'/content/'} style={styles.itemContainerSason}
+                state={{ recipeData: item }} >
                 <img src={item.mainImageUrl} alt='' style={{
                   height: isMobileSize ? '150px' : '200px',
                   objectFit: 'cover',
@@ -44,7 +45,8 @@ export const PickUpWordBox = React.memo(({
         </Carousel>
       </Box>
       <Box sx={styles.buttonBox}>
-        <Button onClick={() => navigation('pickUpWord')} sx={styles.moreButton}>
+        <Button onClick={() => navigation('pickUpWord',
+          { state: { pickUpWords } })} sx={styles.moreButton}>
           <>more look<DoubleArrow /></></Button>
       </Box>
     </Box>

@@ -1,33 +1,30 @@
 import { Box, Pagination, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useAppSelector, useSize } from "../hooks";
+import { Link, useLocation } from "react-router-dom";
+import { useSize } from "../hooks";
 import { RecipeData } from "../slices/recipe";
-import { RootState } from "../slices/store";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 const contentsNumber = 10;
 export const PickUpWord = React.memo(() => {
+  const location = useLocation();
+  const { pickUpWords } = location.state as { pickUpWords: RecipeData[] };
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [totalNumber, setTotalNumber] = useState<number>(0);
   const { isMobileSize } = useSize();
 
-  const pickUpWord: RecipeData[] = useAppSelector(
-    (state: RootState) => state.recipe.pickUpWords
-  );
-
   useEffect(() => {
-    setContents(pickUpWord.slice(0, contentsNumber));
-    setTotalNumber(Math.ceil(pickUpWord.length / contentsNumber));
-  }, [pickUpWord.length]);
+    setContents(pickUpWords.slice(0, contentsNumber));
+    setTotalNumber(Math.ceil(pickUpWords.length / contentsNumber));
+  }, [pickUpWords.length]);
 
   const handlePaginate = useCallback((
     e: React.ChangeEvent<unknown>,
     pageNumber: number
   ) => {
-    setContents(pickUpWord.slice((pageNumber - 1) * contentsNumber,
+    setContents(pickUpWords.slice((pageNumber - 1) * contentsNumber,
       (pageNumber - 1) * contentsNumber + contentsNumber));
-  }, [pickUpWord]);
+  }, [pickUpWords]);
 
   return (
     <>
@@ -110,7 +107,7 @@ const styles = {
   itemContainer: {
     display: "flex",
     flexDirection: "column" as "column",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
     paddingLeft: "10px",
     width: { xs: "180px", sm: "30%" },
@@ -130,9 +127,10 @@ const styles = {
     paddingLeft: 5,
   },
   menuTitle: {
-    fontWeight: "bold",
-    color: "dimgray",
-    paddingTop: 2,
+    fontFamily: 'Georgia',
+    color: 'dimgray',
+    fontWeight: 'bold',
+    paddingTop: 1,
   },
   introduction: {
     fontWeight: "lighter",
