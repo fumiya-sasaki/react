@@ -1,8 +1,8 @@
 import { Box, SelectChangeEvent, Typography } from '@mui/material';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, useSize } from '../hooks';
-import { Category, getCategory } from '../slices/category';
+import { Category } from '../slices/category';
 import { searchCategory } from '../slices/screen/searchScreen';
 import { RootState } from '../slices/store';
 import logo from '../images/chiacchiere.png';
@@ -18,20 +18,7 @@ export const Header = React.memo(({
   const dispatch = useAppDispatch();
   const navigation = useNavigate();
   const categoryState: Category = useAppSelector((state: RootState) => state.category);
-  const [categoris, setCategoris] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [topTitle, setTopTitle] = useState<string>(title);
-  useEffect(() => {
-    if (categoryState.category.length === 0) dispatch(getCategory());
-  }, [dispatch]);
-
-  useEffect(() => {
-    setTopTitle(title);
-  }, [title]);
-
-  useEffect(() => {
-    setCategoris(categoryState.category);
-  }, [categoryState, dispatch]);
 
   const categorySerch = useCallback(
     (event: SelectChangeEvent) => {
@@ -44,21 +31,27 @@ export const Header = React.memo(({
   const { isMobileSize } = useSize();
   const menu: JSX.Element = useMemo(() => {
     return isMobileSize
-      ? <Mobile categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />
-      : <PcSide categorySerch={categorySerch} categoris={categoris} selectedCategory={selectedCategory} />
-  }, [categoris, selectedCategory]);
+      ? <Mobile categorySerch={categorySerch}
+        categoris={categoryState.category}
+        selectedCategory={selectedCategory} />
+      : <PcSide categorySerch={categorySerch}
+        categoris={categoryState.category}
+        selectedCategory={selectedCategory} />
+  }, [categoryState.category, selectedCategory]);
 
   return (
     <>
       <Box style={styles.container}>
         <Typography sx={styles.name}>Momoko Wakabayashi</Typography>
-        <Link to={'/'} style={styles.logoBox}> <img src={logo} alt='' width={'250px'} /></Link>
+        <Link to={'/'} style={styles.logoBox}>
+          <img src={logo} alt='' width={'250px'} />
+        </Link>
         <Box sx={styles.navigation}>
           {menu}
         </Box>
       </Box>
       <Box sx={styles.titleBox}>
-        <Typography sx={styles.font}>{topTitle}</Typography>
+        <Typography sx={styles.font}>{title}</Typography>
       </Box>
     </>
   );

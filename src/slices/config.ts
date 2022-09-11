@@ -2,6 +2,7 @@ import { deleteObject, getDownloadURL, ref, uploadBytes } from "@firebase/storag
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../components/core/firebase";
+import { getHomeRecipes } from "./recipe";
 import { RootState } from "./store";
 
 export type Config = {
@@ -23,7 +24,7 @@ const initialState: Config = {
 
 export const getConfig = createAsyncThunk(
   "config/getConfig",
-  async () => {
+  async (_, thunkApi) => {
     const configData = doc(db, "config", "topData");
     const configDoc = await getDoc(configData);
     const newRecommendations: Config = configDoc.exists()
@@ -35,6 +36,7 @@ export const getConfig = createAsyncThunk(
         pickUpWord: configDoc.data().pickUpWord,
       }
       : { recipeUids: "", season: "", pickUpIngredients: [], topImages: [], pickUpWord: '' };
+    thunkApi.dispatch(getHomeRecipes({ pickUpWord: newRecommendations.pickUpWord }));
     return newRecommendations;
   });
 
@@ -48,11 +50,11 @@ export const setConfig = createAsyncThunk
       for (let index = 0; index < topImages.length; index++) {
         if (topImages[index].indexOf("blob") !== -1) {
           const imageNumber: number = Date.now();
-          const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + imageNumber);
+          const storageRef = ref(storage, 'config/topImg/imgNumber' + imageNumber);
           const fetchContentImage = await fetch(topImages[index]);
           const contentImageBlob = await fetchContentImage.blob();
           await uploadBytes(storageRef, contentImageBlob);
-          await getDownloadURL(ref(storage, "config/topImg/" + 'imgNumber' + imageNumber))
+          await getDownloadURL(ref(storage, 'config/topImg/imgNumber' + imageNumber))
             .then((url) => {
               if (url.indexOf("blob") === -1) topImages[index] = url;
             });
@@ -62,7 +64,7 @@ export const setConfig = createAsyncThunk
         const storageNumber: string =
           deleteImages[index].slice(deleteImages[index].indexOf('imgNumber') + 9,
             deleteImages[index].indexOf('?alt='));
-        const storageRef = ref(storage, "config/topImg/" + 'imgNumber' + storageNumber);
+        const storageRef = ref(storage, 'config/topImg/imgNumber' + storageNumber);
         await deleteObject(storageRef).then(() => console.log('OK!'));
       };
       const newConfig: Config = { ...config, topImages, pickUpIngredients, recipeUids, season };

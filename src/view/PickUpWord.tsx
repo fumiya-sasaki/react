@@ -16,7 +16,7 @@ export const PickUpWord = React.memo(() => {
   useEffect(() => {
     setContents(pickUpWords.slice(0, contentsNumber));
     setTotalNumber(Math.ceil(pickUpWords.length / contentsNumber));
-  }, [pickUpWords.length]);
+  }, [pickUpWords]);
 
   const handlePaginate = useCallback((
     e: React.ChangeEvent<unknown>,

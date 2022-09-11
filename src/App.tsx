@@ -20,6 +20,7 @@ import PickUpWord from "./view/PickUpWord";
 import Search from "./view/Search";
 import { store } from "./slices/store";
 import Profile from "./view/Profile";
+import Config from "./components/core/Config";
 
 function App() {
   const theme = useTheme();
@@ -28,6 +29,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <ScrollToTop />
+          <Config />
           <Routes>
             <Route path={"/"} element={<Home />} />
             <Route path={"admin/home"} element={<PrivateRoute children={<AdminHome />} />} />
