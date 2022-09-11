@@ -1,7 +1,7 @@
 import React from 'react';
 import { DriveFileMove } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useSize } from '../hooks';
 import { RecipeData } from '../slices/recipe';
@@ -21,20 +21,13 @@ export const Content = React.memo(() => {
 
   const { isMobileSize } = useSize();
   const { recipeData } = location.state as { recipeData: RecipeData };
-  const [tags, setTags] = useState<string[]>([]);
-  useEffect(() => {
-    const newTsgs: string[] = [...recipeData.tags];
-    newTsgs.length = newTsgs.length > 4 ? 4 : newTsgs.length;
-    setTags(newTsgs);
-  }, [recipeData.tags]);
-
   return (
     <>
       <Header title={recipeData.title} />
       <Box sx={styles.container}>
         <Box sx={styles.box} >
           <Box sx={styles.tagsBox}>
-            {tags.map((tag: string) => (
+            {recipeData.tags.slice(0, 4).map((tag: string) => (
               <IconButton key={tag} onClick={() => search(tag)} size={'small'}>
                 <DriveFileMove /> {tag}
               </IconButton>
