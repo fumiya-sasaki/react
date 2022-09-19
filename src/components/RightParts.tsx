@@ -64,7 +64,7 @@ export const RightContent = React.memo(() => {
       </Box>
       <Box sx={styles.searchForm}>
         <FormControl variant='standard' style={{ width: '100%' }}>
-          <InputLabel>料理名・食材から探す</InputLabel>
+          <InputLabel sx={styles.searchInput}>料理名・食材から探す</InputLabel>
           <Input
             value={tag}
             onChange={(e) => setTag(e.target.value)}
@@ -139,6 +139,11 @@ const styles = {
     '&:hover': {
       bgcolor: '#f5f5f5'
     }
+  },
+  searchInput:{
+    fontFamily: 'Georgia',
+    color: 'dimgray',
+    fontWeight: 'bold',
   },
   snsBox: {
     display: 'flex',

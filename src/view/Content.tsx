@@ -27,9 +27,9 @@ export const Content = React.memo(() => {
       <Box sx={styles.container}>
         <Box sx={styles.box} >
           <Box sx={styles.tagsBox}>
-            {recipeData.tags.slice(0, 4).map((tag: string) => (
+            {recipeData.tags.slice(0, 3).map((tag: string) => (
               <IconButton key={tag} onClick={() => search(tag)} size={'small'}>
-                <DriveFileMove /> {tag}
+                <DriveFileMove /> <Typography sx={styles.tag}>{tag}</Typography>
               </IconButton>
             ))}
           </Box>
@@ -132,6 +132,11 @@ const styles = {
     flexWrap: 'wrap',
     paddingTop: 1,
     paddingBottom: 2,
+  },
+  tag:{
+    fontFamily: 'Georgia',
+    color: 'dimgray',
+    fontWeight: 'bold',
   },
   text: {
     whiteSpace: 'pre-wrap',

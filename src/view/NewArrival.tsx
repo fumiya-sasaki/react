@@ -82,9 +82,9 @@ const styles = {
     width: { xs: '92%', sm: "98%" },
   },
   menuTitle: {
-    width: "150px",
-    fontWeight: "bold",
-    color: "dimgray",
+    fontFamily: 'Georgia',
+    color: 'dimgray',
+    fontWeight: 'bold',
     paddingTop: 1,
   },
   moreButton: {
