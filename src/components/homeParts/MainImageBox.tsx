@@ -41,6 +41,7 @@ const styles = {
   carousel: {
     paddingTop: 2,
     width: "100%",
+    pointerEvents: 'none'
   },
   mainImageBox: {
     paddingLeft: 1,

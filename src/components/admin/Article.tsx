@@ -57,7 +57,7 @@ export const Article = React.memo(() => {
       category,
       tags: newTags,
       season,
-      createdAt: recipeData.newArticle
+      createdAt: !recipeData.newArticle
         ? recipeData.createdAt : new Date()
     };
     await dispatch(setRecipeData(newRecipeData));
