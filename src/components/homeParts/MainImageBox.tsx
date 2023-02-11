@@ -21,6 +21,7 @@ export const MainImageBox = React.memo(({
         slidesToScroll={1}
         centerMode
         autoplay
+        autoplaySpeed={2000}
       >
         {mainImages.map((img) => (
           <Box key={img} sx={styles.mainImageBox}>

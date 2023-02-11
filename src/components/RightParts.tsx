@@ -21,18 +21,27 @@ export const RightContent = React.memo(() => {
   const [categoris, setCategoris] = useState<string[]>([]);
 
   const search = useCallback((tagItem?: string) => {
+    if (selectedCategory !== '') {
+      setSelectedCategory('');
+    }
     if (tagItem) {
+      if (tag !== '') {
+        setTag('');
+      }
       dispatch(searchString({ tag: tagItem }));
       navigation('/search', { state: { title: tagItem } });
     } else {
       dispatch(searchString({ tag }));
       navigation('/search', { state: { title: tag } });
     };
-  }, [tag]);
+  }, [tag, selectedCategory]);
 
   const categorySerch = useCallback((event: SelectChangeEvent) => {
     const category = event.target.value as string;
     setSelectedCategory(category);
+    if (tag !== '') {
+      setTag('');
+    }
     dispatch(searchCategory({ category }));
     navigation('/search', { state: { title: category } });
   }, []);
@@ -71,7 +80,7 @@ export const RightContent = React.memo(() => {
             sx={styles.font}
             endAdornment={
               <InputAdornment position='end'>
-                <IconButton onClick={() => search()} edge='end' disabled={tag === '' ? true : false}>
+                <IconButton onClick={() => search()} edge='end' disabled={tag === ''}>
                   <Search />
                 </IconButton>
               </InputAdornment>
@@ -140,7 +149,7 @@ const styles = {
       bgcolor: '#f5f5f5'
     }
   },
-  searchInput:{
+  searchInput: {
     fontFamily: 'Georgia',
     color: 'dimgray',
     fontWeight: 'bold',

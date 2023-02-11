@@ -26,12 +26,11 @@ export const PickUpWordBox = React.memo(({
           swipeable={true}
           autoPlay={true}
           infiniteLoop={true}
-          // emulateTouch={true}
           centerMode={true}
           showStatus={false}
           centerSlidePercentage={40}
         >
-          {pickUpWords.map((item) => (
+          {pickUpWords.slice(0, 10).map((item) => (
             <Box key={item.uid} style={{ marginBottom: 50 }}>
               <Link to={'/content/'} style={styles.itemContainerSason}
                 state={{ recipeData: item }} >

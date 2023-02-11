@@ -1,6 +1,5 @@
 import {
-  Button, FormControl, InputLabel,
-  Menu,
+  Button, FormControl, InputLabel, Menu,
   MenuItem, Select, SelectChangeEvent,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +24,9 @@ export const Mobile = React.memo(({
   }, []);
 
   const handleClose = useCallback(() => {
-    if (openCategory) setOpenCategory(false);
+    if (openCategory) {
+      setOpenCategory(false);
+    }
     setAnchorEl(null);
   }, [openCategory]);
   return (
