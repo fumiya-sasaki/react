@@ -11,7 +11,7 @@ export const PickUpWord = React.memo(() => {
   const { pickUpWords } = location.state as { pickUpWords: RecipeData[] };
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [totalNumber, setTotalNumber] = useState<number>(0);
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
 
   useEffect(() => {
     setContents(pickUpWords.slice(0, contentsNumber));

@@ -16,7 +16,7 @@ export const Preview = React.memo(({
   mainImageUrl: string;
   deleteContentImg: (index: number, imgIndex: number) => void;
 }) => {
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   return (
     <Box style={styles.container}>
       <Typography style={styles.title}>{title}</Typography>

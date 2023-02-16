@@ -12,7 +12,7 @@ import { getCategory } from '../../slices/category';
 export const AdminHome = () => {
   const dispatch = useAppDispatch();
   const admin: RecipeData[] = useAppSelector((state: RootState) => state.admin);
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   const [contents, setContents] = useState<RecipeData[]>([]);
 
   useEffect(() => {

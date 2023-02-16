@@ -11,7 +11,7 @@ import { DoubleArrow } from "@mui/icons-material";
 export const NewArrival = React.memo(() => {
   const dispatch = useAppDispatch();
   const screen: newArrivalScreenState = useAppSelector((state: RootState) => state.newArrivalScreen);
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
 
   useEffect(() => {
     dispatch(nextGetDataScreen({}));

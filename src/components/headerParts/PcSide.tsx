@@ -4,6 +4,7 @@ import {
   MenuItem, Select, SelectChangeEvent,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSize } from "../../hooks";
 
 export const Mobile = React.memo(({
   categorySerch,
@@ -15,6 +16,7 @@ export const Mobile = React.memo(({
   selectedCategory: string;
 }) => {
   const navigation = useNavigate();
+  const isUnderMd: boolean = useSize('md');
   return (
     <>
       <Button onClick={() => navigation("/")} sx={styles.font}>HOME</Button>
@@ -32,9 +34,9 @@ export const Mobile = React.memo(({
           ))}
         </Select>
       </FormControl>
-      <Button sx={styles.font} onClick={() => navigation("/gallery")}>INSTAGRAM GALLERY</Button>
+      <Button sx={styles.font} onClick={() => navigation("/gallery")}>{isUnderMd ? 'INSTAGRAM' : 'INSTAGRAM GALLERY'}</Button>
       <Button sx={styles.font} onClick={() => navigation("/inquiry")}>CONTACT</Button>
-      {/* <Button sx={styles.font} onClick={() => navigation("/profile")}>PROFILE</Button> */}
+      <Button sx={styles.font} onClick={() => navigation("/profile")}>PROFILE</Button>
     </>
   );
 });

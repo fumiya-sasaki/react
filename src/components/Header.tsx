@@ -26,9 +26,9 @@ export const Header = React.memo(({
       setSelectedCategory(category);
       dispatch(searchCategory({ category }));
       navigation('/search', { state: { title: category } });
-    }, []);
+    }, [dispatch, navigation]);
 
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   const menu: JSX.Element = useMemo(() => {
     return isMobileSize
       ? <Mobile categorySerch={categorySerch}
@@ -37,7 +37,7 @@ export const Header = React.memo(({
       : <PcSide categorySerch={categorySerch}
         categoris={categoryState.category}
         selectedCategory={selectedCategory} />
-  }, [categoryState.category, selectedCategory]);
+  }, [categoryState.category, selectedCategory, isMobileSize]);
 
   return (
     <>
@@ -103,6 +103,6 @@ const styles = {
     flexDirection: 'row' as 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 5,
+    gap: { xs: 2, md: 5 },
   },
 };

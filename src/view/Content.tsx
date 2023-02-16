@@ -19,7 +19,7 @@ export const Content = React.memo(() => {
     navigation('/search', { state: { title: tagItem } });
   }, []);
 
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   const { recipeData } = location.state as { recipeData: RecipeData };
   return (
     <>

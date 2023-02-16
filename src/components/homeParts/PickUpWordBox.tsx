@@ -13,7 +13,7 @@ export const PickUpWordBox = React.memo(({
   pickUpWords: RecipeData[];
   pickUpWord: string;
 }) => {
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   const navigation = useNavigate();
   return (
     <Box sx={styles.newContentBox}>

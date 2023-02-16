@@ -1,4 +1,4 @@
-import { Theme, useMediaQuery } from '@mui/material';
+import { Breakpoint, Theme, useMediaQuery } from '@mui/material';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from './slices/store'
 
@@ -6,9 +6,9 @@ import type { RootState, AppDispatch } from './slices/store'
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
-export const useSize = () => {
+export const useSize = (size: number | Breakpoint = 'sm'): boolean => {
   const isMobileSize = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.down('sm')
+    theme.breakpoints.down(size)
   );
-  return { isMobileSize };
+  return isMobileSize;
 };

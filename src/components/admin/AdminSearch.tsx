@@ -7,7 +7,7 @@ import { RootState } from "../../slices/store";
 
 const contentsNumber = 10;
 export const AdminSearch = () => {
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   const screen: RecipeData[] = useAppSelector(
     (state: RootState) => state.searchScreen.recipeData
   );

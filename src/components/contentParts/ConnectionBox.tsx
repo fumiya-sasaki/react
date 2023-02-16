@@ -10,7 +10,7 @@ export const ConnectionBox = React.memo(({
 }: {
   connection: RecipeData[];
 }) => {
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   return (
     <Box sx={styles.newContentBox}>
       <Box sx={styles.titleBox}>

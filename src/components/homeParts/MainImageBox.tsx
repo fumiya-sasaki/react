@@ -9,7 +9,7 @@ export const MainImageBox = React.memo(({
 }: {
   mainImages: string[];
 }) => {
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
 
   return (
     <Box sx={styles.carousel}>

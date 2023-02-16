@@ -43,7 +43,7 @@ function App() {
             <Route path={"pickUpWord"} element={<PickUpWord />} />
             <Route path={"gallery"} element={<Gallery />} />
             <Route path={"inquiry"} element={<Inquiry />} />
-            {/* <Route path={"profile"} element={<Profile />} /> */}
+            <Route path={"profile"} element={<Profile />} />
             <Route path={"login"} element={<Login />} />
           </Routes>
         </Provider>

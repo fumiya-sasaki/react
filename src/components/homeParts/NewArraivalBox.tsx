@@ -11,7 +11,7 @@ export const NewArrivalBox = React.memo(({
   contents: RecipeData[];
 }) => {
   const navigation = useNavigate();
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
 
   return (
     <Box sx={styles.newContentBox}>

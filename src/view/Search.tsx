@@ -19,7 +19,7 @@ export const Search = React.memo(() => {
   const [contents, setContents] = useState<RecipeData[]>([]);
   const [totalNumber, setTotalNumber] = useState<number>(0);
   const dispatch = useAppDispatch();
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
 
   useEffect(() => {
     if (screen.isTopScroll) {
@@ -34,7 +34,7 @@ export const Search = React.memo(() => {
     if (screen.recipeData.length === 0) {
       dispatch(searchString({ tag: title }))
     };
-  }, [dispatch]);
+  }, [screen.recipeData.length, title, dispatch]);
 
   useEffect(() => {
     setContents(screen.recipeData.slice(0, contentsNumber));

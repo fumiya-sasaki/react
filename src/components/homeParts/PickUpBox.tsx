@@ -9,7 +9,7 @@ export const PickUpBox = React.memo(({
 }: {
   pickUp: RecipeData[];
 }) => {
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   return (
     <Box sx={styles.newContentBox}>
       <Box sx={styles.titleBox}>

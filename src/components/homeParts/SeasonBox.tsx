@@ -10,7 +10,7 @@ export const SeasonBox = React.memo(({
 }: {
   season: RecipeData[];
 }) => {
-  const { isMobileSize } = useSize();
+  const isMobileSize = useSize();
   return (
     <Box sx={styles.newContentBox}>
       <Box sx={styles.titleBox}>
